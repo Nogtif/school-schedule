@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
+* {
+    box-sizing: border-box;
+	font-family: 'Jost', sans-serif;
+    outline: none;
+}
+
+body {
+    background-color: #F4F6F8;
+    margin: 0;
+    padding: 0;
+}
