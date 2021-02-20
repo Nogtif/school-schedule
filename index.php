@@ -15,6 +15,12 @@
         <a href="./" class="navbar-brand">EDT</a>
     </nav>
 
+    <?php
+    $day = new App\Day(time());
+    echo $day->__toString();
+
+    ?>
+
 
 
 </body>
