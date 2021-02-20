@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<?php require_once './src/Weeks.php' ?>
+<?php require_once './src/Day.php' ?>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +15,7 @@
         <a href="./" class="navbar-brand">EDT</a>
     </nav>
 
-    
+
 
 </body>
 </html>
