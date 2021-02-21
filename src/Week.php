@@ -11,7 +11,7 @@ class Week {
     /** Constructeur de la classe Week qui modélise une semaine.
      * @param string $date > la date courante.
      */
-    public function __construct(?string $date) {
+    public function __construct(string $date) {
         $this->currentDay = $date;
         $this->firstDay = Week::getMonday($date);
     }
