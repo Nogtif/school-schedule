@@ -4,13 +4,8 @@ namespace App;
 
 class Semaine {
 
-
-    private $tabDays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
     private $date, $day, $start, $end;
-
-    /** Constructeur de la classe Day.
-     * @param string $date : la date du jour.
-     */    
+ 
     public function __construct(string $date) {
         $this->date = $date;
         $this->day = 'Lundi';
@@ -19,7 +14,7 @@ class Semaine {
     }
 
     public function getWeeks(): int {
-        return 1;
+        return 0;
 
     }
 
