@@ -16,10 +16,13 @@
     </nav>
 
     <?php
-    $day = new App\Day(time());
+    $day = new App\Semaine(time());
     echo $day->__toString();
-
     ?>
+
+    <table>
+
+    </table>
 
 
 

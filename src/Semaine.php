@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Day {
+class Semaine {
 
 
     private $tabDays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -18,8 +18,12 @@ class Day {
         $this->end = '20:00';
     }
 
+    public function getWeeks(): int {
+        return 1;
 
-    public function __toString() {
+    }
+
+    public function __toString(): string {
         return $this->day . ' '. date('j/m/y', $this->date);
 
     }
