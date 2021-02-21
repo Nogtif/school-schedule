@@ -16,7 +16,7 @@
     </nav>
 
     <?php
-    $day = new App\Week(time());
+    $day = new App\Week($_GET['date'] ?? null);
     echo date('Y-d', $day->getCurrentDay());
     ?>
 
