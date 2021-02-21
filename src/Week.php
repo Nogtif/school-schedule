@@ -16,14 +16,14 @@ class Week {
         if($date == null) $date = time();
 
         $this->currentDay = $date;
-        $this->firstDay = Week::getMonday($date);
+        $this->firstDay = $this->getStartWeek($date);
     }
 
     /** Méthode qui calcul la date du premier jour de la semaine en fonction de celle donnée en paramètre.
      * @param string $day
      * @return string : renvoie la date du premier jour de la semaine
      */
-    private static function getMonday(string $day):string {
+    private function getStartWeek(string $day):string {
         // Calcul de l'écart entre le jour actuel et le lundi.
         $rel = 1 - date('N', $day);
         return strtotime("$rel days", $day);
@@ -41,6 +41,10 @@ class Week {
      */
     public function getCurrentDay():string {
         return $this->currentDay;
+    }
+
+    public function printDay(string $day):string {
+        return date('l j/m/Y', $day);      
     }
 }
 
