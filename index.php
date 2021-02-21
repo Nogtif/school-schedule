@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<?php require_once './src/Day.php' ?>
+<?php require_once './src/Week.php' ?>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
@@ -16,15 +16,13 @@
     </nav>
 
     <?php
-    $day = new App\Semaine(time());
-    echo $day->__toString();
+    $day = new App\Week(time());
+    echo date('Y-d', $day->getCurrentDay());
     ?>
 
     <table>
 
     </table>
-
-
 
 </body>
 </html>
