@@ -20,7 +20,7 @@ class Week {
     }
 
     /** Méthode qui calcul la date du premier jour de la semaine en fonction de celle donnée en paramètre.
-     * @param string $day
+     * @param string $day > la date courante.
      * @return string : renvoie la date du premier jour de la semaine
      */
     private function getStartWeek(string $day):string {
@@ -43,6 +43,10 @@ class Week {
         return $this->currentDay;
     }
 
+    /** Méthode qui affiche la date donnée en paramètre.
+     * @param string $day > le jour.
+     * @return string l'affichage au format date.
+     */
     public function printDay(string $day):string {
         return date('l j/m/Y', $day);      
     }

@@ -7,7 +7,10 @@ require_once './src/Week.php'
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Projet : Emploi du temps</title>
+    <meta property="og:title" content="Projet : Emploi du temps">
+    <meta property="og:type" content="website">
+    <meta name="author" content="Carpentier Quentin & Krogulec Paul-Joseph">
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" href="./assets/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="./assets/css/style.css">
@@ -32,22 +35,15 @@ require_once './src/Week.php'
                 $i = 0;
                 foreach($pHour as $dt) {
                     echo '<tr><td class="hour">';
-                    echo ($i%2!=0)? $dt->format('H:i'): $dt->format('H:i');
+                    echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
                     echo '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
              
                     $i++;
                 }
-                ?>
-                
+                ?>                
             </tbody>
         </table>
     </div>
-
-
-
-
-
-
 
 </body>
 </html>
