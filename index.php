@@ -16,34 +16,36 @@ require_once './src/Week.php'
     <link type="text/css" rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
+
+    <nav></nav>
     <?php
     $week = new App\Week($_GET['date'] ?? null);
+
+    echo $week->toString();
     ?>
-    <div class="wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <td>&nbsp;</td>
-                    <?php for($i = 0; $i < 7;$i++) { ?>
-                        <td><?= $week->printDay($week->getFirstDay() + ($i * 86400)) ?></td>
-                    <?php } ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
-                $i = 0;
-                foreach($pHour as $dt) {
-                    echo '<tr><td class="hour">';
-                    echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
-                    echo '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-             
-                    $i++;
-                }
-                ?>                
-            </tbody>
-        </table>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <td>&nbsp;</td>
+                <?php for($i = 0; $i < 7;$i++) { ?>
+                    <td><?= $week->printDay($week->getFirstDay() + ($i * 86400)) ?></td>
+                <?php } ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
+            $i = 0;
+            foreach($pHour as $dt) {
+                echo '<tr><td class="hour">';
+                echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
+                echo '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+            
+                $i++;
+            }
+            ?>                
+        </tbody>
+    </table>
 
 </body>
 </html>

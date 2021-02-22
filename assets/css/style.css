@@ -27,18 +27,25 @@ table {
     margin: 0 auto;
     position: relative;
     border-spacing: 1; 
+    border: 0;
     box-shadow: 0px 0px 7px 5px rgba(0,0,0,0.04);
 }
 
-thead td {
-    border: 1px solid #FFF5BF;
+table td {
+    width: calc(100% / 7);
+}
+
+table td:first-child {
+    width: 0;
 }
 
 thead td {
     text-align: center;
     font-weight: 600;
     font-size: 14px;
+    border: 1px solid #FFF5BF;
 }
+
 thead tr { 
     height:60px;
     background:#FFED86;

@@ -6,7 +6,7 @@ namespace App;
 class Week {
 
     // On déclare les variables...
-    private $currentDay, $firstDay;
+    private $currentDay, $firstDay, $numWeek;
 
     /** Constructeur de la classe Week qui modélise une semaine.
      * @param string $date > la date courante.
@@ -17,6 +17,7 @@ class Week {
 
         $this->currentDay = $date;
         $this->firstDay = $this->getStartWeek($date);
+        $this->numWeek = date('W', $this->currentDay);
     }
 
     /** Méthode qui calcul la date du premier jour de la semaine en fonction de celle donnée en paramètre.
@@ -49,6 +50,10 @@ class Week {
      */
     public function printDay(string $day):string {
         return date('l j/m/Y', $day);      
+    }
+
+    public function toString():string {
+        return 'S' .$this->numWeek. ' '. date('j/m/Y', $this->currentDay);
     }
 }
 
