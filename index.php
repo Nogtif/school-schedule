@@ -17,33 +17,46 @@ require_once './src/Week.php'
 </head>
 <body>
 
-    <nav></nav>
-    <?php
-    $week = new App\Week($_GET['week'] ?? null);
-    ?>
-    <table>
-        <thead>
-            <tr>
-                <td>&nbsp;</td>
-                <?php for($i = 0; $i < 7;$i++) { ?>
-                    <td><?= $week->printDay($week->getFirstDay() + ($i * 86400)) ?></td>
-                <?php } ?>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-            $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
-            $i = 0;
-            foreach($pHour as $dt) {
-                echo '<tr><td class="hour">';
-                echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
-                echo '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-            
-                $i++;
-            }
-            ?>                
-        </tbody>
-    </table>
+    <nav class="navbar navbar-light">
+        <a class="navbar-brand">Emploi du temps</a>
+    </nav>
 
+    <div class="main">
+    
+        <div class="sidebar">
+            <div class="sidebar-title" >Liste des ressources</div>
+            <a href="#"></a>
+        </div>
+
+        <div class="content">
+            <?php
+            $week = new App\Week($_GET['week'] ?? null);
+            ?>
+            <table>
+                <thead>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <?php for($i = 0; $i < 7;$i++) { ?>
+                            <td><?= $week->printDay($week->getFirstDay() + ($i * 86400)) ?></td>
+                            <?php } ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                    $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
+                    $i = 0;
+                    foreach($pHour as $dt) {
+                        echo '<tr><td class="hour">';
+                        echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
+                        echo '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+                        
+                        $i++;
+                    }
+                    ?>                
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 </body>
 </html>
