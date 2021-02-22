@@ -11,10 +11,10 @@ class Week {
     /** Constructeur de la classe Week qui modélise une semaine.
      * @param string $date > la date courante.
      */
-    public function __construct(?int $week = null, ?int $year = null) {
+    public function __construct(int $week = null, int $year = null) {
 
         // Si les valeurs sont null, on met celles courantes.
-        if($week == null) $week = intval(date('W'));
+        if($week == null || $week < 1) $week = intval(date('W'));
         if($year == null) $year = intval(date('Y'));
 
         // On affecte les valeurs.
@@ -53,6 +53,15 @@ class Week {
      */
     public function printDay(string $day):string {
         return date('l j/m/Y', $day);      
+    }
+
+
+    public function previousWeek() {
+        $this->numWeek--;
+    }
+
+    public function nextWeek() {
+        $this->numWeek++;
     }
 
     /** Méthode qui affiche une semaine.
