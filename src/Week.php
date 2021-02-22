@@ -13,7 +13,7 @@ class Week {
      */
     public function __construct(int $week = null) {
 
-        // Si les valeurs sont null, on met celles courantes.
+        // Si la semaine est null ou trop éloignée, on met celle courante.
         if($week == null || $week < intval(date('W')) - 4 || $week > intval(date('W')) + 4) $week = intval(date('W'));
 
         // On affecte les valeurs.
