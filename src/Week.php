@@ -55,6 +55,9 @@ class Week {
         return date('l j/m/Y', $day);      
     }
 
+    /** Méthode qui affiche une semaine.
+     * @return string : la semaine.
+     */
     public function toString():string {
         return 'S' .$this->numWeek. ' '. date('j/m/Y', $this->firstDay);
     }

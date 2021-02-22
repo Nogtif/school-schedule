@@ -19,7 +19,7 @@ require_once './src/Week.php'
 
     <nav></nav>
     <?php
-    $week = new App\Week();
+    $week = new App\Week($_GET['week'] ?? null, $_GET['year'] ?? null);
     ?>
     <table>
         <thead>
