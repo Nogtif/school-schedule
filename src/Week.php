@@ -13,9 +13,11 @@ class Week {
      */
     public function __construct(?int $week = null, ?int $year = null) {
 
-        if($week == null) $week = date('W', time());
-        if($year == null) $year = date('Y', time());
+        // Si les valeurs sont null, on met celles courantes.
+        if($week == null) $week = intval(date('W'));
+        if($year == null) $year = intval(date('Y'));
 
+        // On affecte les valeurs.
         $this->numWeek = $week;
         $this->year = $year;
         $this->firstDay = $this->getStartWeek();
@@ -25,10 +27,10 @@ class Week {
      * @return string : le premier jour de la semaine.
      */
     private function getStartWeek():string {
-        $firstDayInYear = date("N", mktime(0, 0, 0, 1, 1, $this->year));
+        $firstDayInYear = date("N", mktime(0,0,0,1,1, $this->year));
 
         if($firstDayInYear < 5) {
-            $shift =-($firstDayInYear - 1) * 86400;
+            $shift =- ($firstDayInYear - 1) * 86400;
         } else {
             $shift = (8 - $firstDayInYear) * 86400;
         }
