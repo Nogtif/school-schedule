@@ -11,15 +11,14 @@ class Week {
     /** Constructeur de la classe Week qui modélise une semaine.
      * @param string $date > la date courante.
      */
-    public function __construct(int $week = null, int $year = null) {
+    public function __construct(int $week = null) {
 
         // Si les valeurs sont null, on met celles courantes.
-        if($week == null || $week < 1) $week = intval(date('W'));
-        if($year == null) $year = intval(date('Y'));
+        if($week == null || $week < intval(date('W')) - 4 || $week > intval(date('W')) + 4) $week = intval(date('W'));
 
         // On affecte les valeurs.
         $this->numWeek = $week;
-        $this->year = $year;
+        $this->year = intval(date('Y'));
         $this->firstDay = $this->getStartWeek();
     }
 
