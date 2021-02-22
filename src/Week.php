@@ -49,17 +49,20 @@ class Week {
 
     /** Méthode qui affiche la date donnée en paramètre.
      * @param string $day > le jour.
-     * @return string l'affichage au format date.
+     * @return string : l'affichage au format date.
      */
     public function printDay(string $day):string {
         return date('l j/m/Y', $day);      
     }
 
-
+    /** Méthode qui navigue vers la semaine précédente.
+     */
     public function previousWeek() {
         $this->numWeek--;
     }
 
+    /** Méthode qui navigue vers la semaine suivante.
+     */
     public function nextWeek() {
         $this->numWeek++;
     }
