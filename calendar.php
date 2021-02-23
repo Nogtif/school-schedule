@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <?php 
 require_once './src/Week.php';
-
-
 $week = new App\Week($_GET['week'] ?? null);
 ?>
 <html lang="fr-FR">
