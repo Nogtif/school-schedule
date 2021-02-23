@@ -8,7 +8,7 @@ $week = new App\Week($_GET['week'] ?? null);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projet : Emploi du temps</title>
+    <title>EDT : Université d'Artois</title>
     <link type="image/x-icon" rel="shortcut icon" href="./assets/img/favicon.ico"/>
     <meta property="og:title" content="Projet : Emploi du temps">
     <meta property="og:type" content="website">
