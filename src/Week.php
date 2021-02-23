@@ -7,6 +7,8 @@ class Week {
 
     // On déclare les variables...
     private $numWeek, $year, $firstDay;
+    private $months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    private $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
     /** Constructeur de la classe Week qui modélise une semaine.
      * @param string $date > la date courante.
@@ -46,6 +48,10 @@ class Week {
         return $this->firstDay;
     }
 
+    public function getDay(int $n):string {
+        return $this->days[$n];
+    }
+
     /** Méthode qui affiche la date donnée en paramètre.
      * @param string $day > le jour.
      * @return string : l'affichage au format date.
@@ -70,7 +76,7 @@ class Week {
      * @return string : la semaine.
      */
     public function toString():string {
-        return 'S' .$this->numWeek. ' '. date('j/m/Y', $this->firstDay);
+        return $this->months[intval(date('m', $this->firstDay))-1]. ' '. date('j', $this->firstDay). ' - '. date('j', $this->firstDay + (6 * 86400)). ', '. $this->year;
     }
 }
 

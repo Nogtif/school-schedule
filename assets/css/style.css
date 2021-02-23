@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:300,400,600");
+
 * {
     box-sizing: border-box;
 	font-family: 'Jost', sans-serif;
@@ -6,71 +8,118 @@
 }
 
 body {
-    background-color: #fff;
+    background-color: #F5F6FA;
     margin: 0;
     padding: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
 nav.navbar {
     background-color: #fff;
-    border-bottom: 1px solid #ECEFF1;
-    padding: 8px;
-    height: 60px;
+    padding: 8px 20px;
+    height: 70px;
+    box-shadow: 0px 0px 7px 5px rgba(0,0,0,0.04);
 }
 
-.main {
+.logo {
+    float: left;
+    height: 40px;
+    line-height: 40px;
+}
+
+.logo img {
+    width: auto;
+    height: 30px;
+    max-width: 100%;
+    max-height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.title-logo {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: sans-serif;
+    color: #000;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.container {
+    margin-top: 30px;
+    max-width: 98%;
+}
+
+.box-content {
     position: relative;
     width: 100%;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
 }
 
-.sidebar {
-    height: calc(100vh - 60px);
-    width: 250px;
-    float: left;
-    padding-top: 60px;
-    background-color: #fff;
-    border-right: 1px solid #ECEFF1;
-    overflow: auto;
+.box-content::after {
+    content: '';
+    clear: both;
+    display: table;
 }
-  
-.sidebar a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
+
+.side-box {
+    min-width: 300px;
+}
+
+.content-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+    height: 40px;
+    font-weight: 600;
+}
+
+.content-title::after {
+    content: '';
+    margin-top: 5px;
+    border-bottom: 3px solid #E74830;
+    width: 70%;
     display: block;
 }
 
-.sidebar a:hover {
-    color: #f1f1f1;
-}
-
-.content {
+.calendar {
     float: left;
-    width: calc(100% - 250px);
-    height: calc(100vh - 60px);
-    overflow: auto;
+    width: calc(100% - 100px);
+    height: 100vh;
+    margin-left: 80px;
 }
 
-.wrapper{
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.calendar-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 30px;
 }
+
+.calendar .box-content {
+    padding: 0;
+}
+
 
 table {
     width: 100%;
     height: calc(100vh - 60px);
+    min-height: 1000px;
     border-collapse: collapse;
     background-color: #fff;
     border-radius: 5px;
     margin: 0 auto;
     position: relative;
-    border-spacing: 1; 
+    border-spacing: 1;
     border: 0;
-    box-shadow: 0px 0px 7px 5px rgba(0,0,0,0.04);
+    border-radius: 8px;
 }
+
 
 table td {
     width: calc(100% / 7);
@@ -84,18 +133,48 @@ thead td {
     text-align: center;
     font-weight: 600;
     font-size: 14px;
-    border: 1px solid #FFF5BF;
+    color: #707A88;
+    padding: 15px;
+}
+
+thead td.active {
+    color: #E74830;
+}
+
+.numDay {
+    font-size: 22px;
+    font-family: "Quattrocento Sans", sans-serif;
+    font-weight: normal;
+    display: block;
+}
+
+.nameDay {
+    font-weight: 100;
+    text-transform: uppercase;
+}
+
+tbody td {
+    position: relative;
+}
+
+thead td:first-child {
+    border-left: none;
+    border-radius: 10px 0 0 0;
+}
+
+thead td:last-child {
+    border-radius: 0 10px 0 0;
 }
 
 thead tr { 
     height:60px;
-    background:#FFED86;
+    background:#FBFBFC;
     font-size:16px;
 }
 
 tbody tr {
     width: 100%;
-    border-bottom: 1px solid #ECECEC;
+    border-bottom: 1px solid #F2F3F7;
 }
 
 tbody tr:last-child {
@@ -105,11 +184,17 @@ tbody tr:last-child {
 tbody td:first-child {
     padding: 3px 20px;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 11px;
     text-align: center;
 }
 
+tbody td span {
+    position: absolute;
+    top: -5px;
+    left: -50px;
+    color: #B6B8BC;
+}
+
 tbody td {
-    
-    border-right: 1px solid #ECECEC;
+    border-right: 1px solid #F2F3F7;
 }
