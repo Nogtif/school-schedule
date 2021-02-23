@@ -153,6 +153,12 @@ thead td.active {
     text-transform: uppercase;
 }
 
+.table-scroll {
+    width: 100%;
+    overflow-y: auto;
+    display: block;
+}
+
 tbody td {
     position: relative;
 }

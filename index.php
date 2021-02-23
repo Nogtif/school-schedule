@@ -21,7 +21,6 @@ $week = new App\Week($_GET['week'] ?? null);
 </head>
 <body>
 
-    
     <?php require_once('./views/header.php') ?>
 
     <div class="container">
@@ -50,19 +49,20 @@ $week = new App\Week($_GET['week'] ?? null);
                                     <?php } ?>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php 
-                                $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
-                                $i = 0;
-                                foreach($pHour as $dt) {
-                                    echo '<tr><td class="hour"><span>';
-                                    echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
-                                    echo '</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-                                    
-                                    $i++;
-                                }
-                                ?>                
-                            </tbody>
+                                <tbody>
+                                    <?php 
+                                    $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
+                                    $i = 0;
+                                    foreach($pHour as $dt) {
+                                        echo '<tr><td class="hour"><span>';
+                                        echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
+                                        echo '</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+                                        
+                                        $i++;
+                                    }
+                                    ?>                
+                                </tbody>
+                            </div>
                         </table>
                     </div>
                 </div>
