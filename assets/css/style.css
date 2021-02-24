@@ -10,6 +10,7 @@
 body {
     background-color: #F5F6FA;
     margin: 0;
+	font-family: 'Jost', sans-serif;
     padding: 0;
 }
 
@@ -232,4 +233,61 @@ tbody td span {
 
 tbody td {
     border-right: 1px solid #F2F3F7;
+}
+
+
+/** LOGIN */
+.wrapper{
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.login {
+    background-color: #fff;
+    width: 450px;
+    border-radius: 8px;
+	padding: 35px 50px;
+    box-shadow: 0px 0px 7px 5px rgba(0,0,0,0.04);
+}
+
+.login h2 {
+	text-align: center;
+	margin-bottom: 20px;
+	font-weight: 700;
+	font-size: 24px;
+}
+
+.login label {
+    display: block;
+    line-height: 1.5;
+}
+
+.login input {
+	padding: 15px;
+	width: 100%;
+	border: none;
+	font-size: 16px;
+	border-radius: 3px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+	background: #F1F3F4;
+	padding-right: 35px;
+    border: 1px solid transparent;
+}
+
+.login input:focus {
+    border-color: #E74830;
+}
+
+.login input[type=submit] {
+	background: #E74830;
+	padding-right: 35px;
+}
+
+.login span {
+    text-align: center;
+    color: red;
+    display: block;
 }
