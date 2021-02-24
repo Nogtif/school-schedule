@@ -35,8 +35,8 @@ $week = new App\Week($_GET['week'] ?? null);
                     <div class="d-flex flex-row align-items-center justify-content-between">
                         <h1 class="calendar-title"><?= $week->toString(); ?></h1>
                         <div class="calendar-nav">
-                            <a href="?week=<?= $week->previousWeek()->getWeek(); ?>" class="btn btn-primary">&lt;</a>
-                            <a href="?week=<?= $week->nextWeek()->getWeek(); ?>" class="btn btn-primary">&gt;</a>
+                            <a href="?week=<?= $week->previousWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) - 4) echo ' disabled' ?>">&lt;</a>
+                            <a href="?week=<?= $week->nextWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) + 4) echo ' disabled' ?>">&gt;</a>
                         </div>
                     </div>
                     <div class="box-content">
@@ -46,7 +46,7 @@ $week = new App\Week($_GET['week'] ?? null);
                                     <?php for($i = 0; $i < 7;$i++) { 
                                     $day = $week->getFirstDay() + ($i * 86400);
                                     ?>
-                                    <td <?php if(intval(date('j', $day)) == intval(date('j', time()))) echo 'class="active"'; ?>>
+                                    <td <?php if(intval(date('jm', $day)) == intval(date('jm', time()))) echo 'class="active"'; ?>>
                                         <span class="numDay"><?= date('j', $day) ?></span>
                                         <span class="nameDay"><?= $week->getDay($i) ?></span>
                                     </td>
