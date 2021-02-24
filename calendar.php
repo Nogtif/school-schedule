@@ -73,6 +73,7 @@ $week = new App\Week($_GET['week'] ?? null);
             </div>
         </div>
     </div>
+    
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
     
