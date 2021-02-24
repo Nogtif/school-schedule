@@ -17,6 +17,22 @@ a {
     text-decoration: none;
 }
 
+.btn-primary {
+    color: #fff;
+    background-color: #E74830;
+    border-color: #E74830;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    color: #fff;
+    background-color: #c73b25;
+    border-color: #c73b25;
+}
+
+.btn-primary:focus, .btn-primary:active:focus {
+    box-shadow: 0 0 0 0.25rem rgb(231 72 48 / 50%);
+}
+
 nav.navbar {
     background-color: #fff;
     padding: 8px 20px;
@@ -103,6 +119,10 @@ nav.navbar {
 
 .calendar .box-content {
     padding: 0;
+}
+
+.calendar-nav {
+    margin-top: -20px;
 }
 
 

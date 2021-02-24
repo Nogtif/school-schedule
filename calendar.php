@@ -31,8 +31,14 @@ $week = new App\Week($_GET['week'] ?? null);
             </div>
             
             <div class="col-md-9">
-                <div class="calendar">
-                    <h1 class="calendar-title"><?= $week->toString(); ?></h1>
+                <div id="navigation-calendar" class="calendar">
+                    <div class="d-flex flex-row align-items-center justify-content-between">
+                        <h1 class="calendar-title"><?= $week->toString(); ?></h1>
+                        <div class="calendar-nav">
+                            <a href="?week=<?= $week->previousWeek()->getWeek(); ?>" class="btn btn-primary">&lt;</a>
+                            <a href="?week=<?= $week->nextWeek()->getWeek(); ?>" class="btn btn-primary">&gt;</a>
+                        </div>
+                    </div>
                     <div class="box-content">
                         <table>
                             <thead>
@@ -67,6 +73,8 @@ $week = new App\Week($_GET['week'] ?? null);
             </div>
         </div>
     </div>
+	<!-- JS -->
+	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
     
 </body>
 </html>

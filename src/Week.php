@@ -41,6 +41,10 @@ class Week {
         return $timestamp;
     }
 
+    public function getWeek():int {
+        return $this->numWeek;
+    }
+
     /** Méthode qui renvoie la date du premier jour de la semaine.
      * @return string : le premier jour.
      */
@@ -62,14 +66,14 @@ class Week {
 
     /** Méthode qui navigue vers la semaine précédente.
      */
-    public function previousWeek() {
-        $this->numWeek--;
+    public function previousWeek():Week {
+        return new Week($this->numWeek - 1);
     }
 
     /** Méthode qui navigue vers la semaine suivante.
      */
-    public function nextWeek() {
-        $this->numWeek++;
+    public function nextWeek():Week {
+        return new Week($this->numWeek + 1);
     }
 
     /** Méthode qui affiche une semaine.
