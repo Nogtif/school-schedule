@@ -64,10 +64,17 @@ $week = new App\Week($_GET['week'] ?? null);
                                         
                                         $i++;
                                     }
-                                    ?>                
+                                    ?>
                                 </tbody>
                             </div>
                         </table>
+
+                        
+                        <div>
+                            <div class="bloc-test">
+                                ALGO5
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
