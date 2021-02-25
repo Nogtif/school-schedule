@@ -14,7 +14,7 @@ $msg_error = '';
 if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
 
     // On vérifie si l'usager est bien enregistré.
-    $verif = $bdd->prepare('SELECT * FROM Usagers WHERE IdentifiantLogin = ? LIMIT 0,1');
+    $verif = $bdd->prepare('SELECT * FROM Usagers WHERE UsagerID = ? LIMIT 0,1');
 	$verif->execute(array($_POST['identifiant']));
     $userExist = $verif->fetch();
 
@@ -22,7 +22,6 @@ if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
     if($userExist && password_verify($_POST['mdp'], $userExist['MotDePasse'])) {
 
         $_SESSION['id'] = $userExist['UsagerID'];
-        $_SESSION['username'] = $userExist['IdentifiantLogin'];
         $_SESSION['password'] = $userExist['MotDePasse'];
         $_SESSION['nom'] = $userExist['Nom'];
         $_SESSION['prenom'] = $userExist['Prenom'];
