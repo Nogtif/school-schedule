@@ -262,14 +262,15 @@ tbody td {
 
 .login label {
     display: block;
-    line-height: 1.5;
+    line-height: 1.8;
 }
 
 .login input {
+    font-family: sans-serif;
 	padding: 15px;
 	width: 100%;
 	border: none;
-	font-size: 16px;
+	font-size: 14px;
     margin-bottom: 15px;
     border-radius: 3px;
 	background: #F1F3F4;
