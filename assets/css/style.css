@@ -136,7 +136,6 @@ nav.navbar {
     margin-top: -20px;
 }
 
-
 table {
     width: 100%;
     height: calc(100vh - 60px);
@@ -150,7 +149,6 @@ table {
     border: 0;
     border-radius: 8px;
 }
-
 
 table td {
     width: calc(100% / 7);
