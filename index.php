@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php 
 $msg_error = '';
+
 ?>
 <html lang="fr-FR">
 <head>
