@@ -1,10 +1,39 @@
 <!DOCTYPE html>
 <?php 
-
 require_once('./config.php');
+
+// Si l'utilisateur est déjà connecté, on le redirige.
+if(isOnline()) {
+    header('Location: ./calendar.php');
+}
+
+// Variables globales
 $msg_error = '';
 
+// Lors de la connexion...
+if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
 
+    // On vérifie si l'usager est bien enregistré.
+    $verif = $bdd->prepare('SELECT * FROM Usagers WHERE identifiant = ? LIMIT 0,1');
+	$verif->execute(array($_POST['identifiant']));
+    $userExist = $verif->fetch();
+
+    if($userExist && password_verify($_POST['mdp'], $userExist['mot_de_passe'])) {
+
+        $_SESSION['id'] = $userExist['id_usager'];
+        $_SESSION['username'] = $userExist['identifiant'];
+        $_SESSION['password'] = $userExist['mot_de_passe'];
+        $_SESSION['nom'] = $userExist['nom_usager'];
+        $_SESSION['prenom'] = $userExist['prenom_usager'];
+        $_SESSION['role'] = $userExist['id_role'];
+        $_SESSION['promo'] = $userExist['id_promo'];
+
+        header('Location: ./calendar.php');
+    } else {
+        $msg_error = 'Identifiant ou Mot de passe invalide !';
+    }
+
+}
 ?>
 <html lang="fr-FR">
 <head>
@@ -24,9 +53,9 @@ $msg_error = '';
     <div class="wrapper">
         <div class="content login">
             <h2>Service d'Authentification</h2>
-            <form method="post" action="index.php">
-                <label for="username">Identifiant</label>
-                <input type="text" name="username" required>
+            <form method="post" action="">
+                <label for="identifiant">Identifiant</label>
+                <input type="text" name="identifiant" required>
                 <label for="mdp">Mot de passe</label>
                 <input type="password" name="mdp" required>
                 <input class="btn btn-primary" type="submit" name="mylogin" value="Connexion">

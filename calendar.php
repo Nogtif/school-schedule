@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <?php 
-require_once './src/Week.php';
+require_once('./config.php');
+require_once('./src/Week.php');
+
+if(!isOnline()) {
+    header('Location: ./');
+}
 $week = new App\Week($_GET['week'] ?? null);
 ?>
 <html lang="fr-FR">
@@ -68,13 +73,6 @@ $week = new App\Week($_GET['week'] ?? null);
                                 </tbody>
                             </div>
                         </table>
-
-                        
-                        <div>
-                            <div class="bloc-test">
-                                ALGO5
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
