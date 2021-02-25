@@ -1,67 +1,68 @@
 /* Table des Formations. 
-    -- id_form : l'id de la formation (clé primaire).
-    -- nom_form : le nom de la formation.
+    -- FormationID : l'id de la formation (clé primaire).
+    -- NomFormation : le nom de la formation.
 */
 DROP TABLE IF EXISTS Formations;
 CREATE TABLE Formations (
-    id_form INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_form VARCHAR(25) NOT NULL
+    FormationID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomFormation VARCHAR(25) NOT NULL
 );
 
 /* Table des Promotions. 
-    -- id_promo : l'id du role (clé primaire).
-    -- nom_promo : le role de l'usager.
+    -- PromotionID : l'id de la promo (clé primaire).
+    -- NomPromotion : le nom du role.
+    -- FormationID : l'id de la formation.
+    (clée étrangère associant la promotion à une formation : FormationID)
 */
 DROP TABLE IF EXISTS Promotions;
 CREATE TABLE Promotions (
-    id_promo INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_promo VARCHAR(25) NOT NULL,
-    id_form INTEGER NOT NULL,
-    CONSTRAINT promo_formation_fk FOREIGN KEY (id_form) REFERENCES Formations(id_form) ON DELETE CASCADE
-
+    PromotionID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomPromotion VARCHAR(25) NOT NULL,
+    FormationID INTEGER NOT NULL,
+    CONSTRAINT promo_formation_fk FOREIGN KEY (FormationID) REFERENCES Formations(FormationID) ON DELETE CASCADE
 );
 
 /* Table des roleUsager. 
-    -- id_role : l'id du role (clé primaire).
-    -- nom_role : le role de l'usager.
+    -- RangID : l'id du role (clé primaire).
+    -- NomRang : le role de l'usager.
 */
-DROP TABLE IF EXISTS RoleUsagers;
-CREATE TABLE RoleUsagers (
-    id_role INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_role VARCHAR(25) NOT NULL
+DROP TABLE IF EXISTS Rangs;
+CREATE TABLE Rangs (
+    RangID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomRang VARCHAR(25) NOT NULL
 );
 
 /* Table des Salles. 
-    -- id_usager : l'id de l'usager (clé primaire).
-    -- identifiant : l'identifiant prenom_nom.
-    -- mot_de_passe : le mot de passe.
-    -- nom_usager : son nom.
-    -- prenom_usager : son prénom.
-    -- id_role : son type (Etudiant, Enseignant, Admin)
-    (clée étrangère associé la l'id_role de la table RoleUsagers)
-    -- id_promo : sa promo (L3-INFO, L2-MATH, ...)
-    (clée étrangère associé la l'id_promo de la table Promotions)
+    -- UsagerID : l'id de l'usager (clé primaire).
+    -- IdentifiantLogin : l'identifiant prenom_nom.
+    -- MotDePasse : le mot de passe.
+    -- Nom : son nom.
+    -- Prenom : son prénom.
+    -- RangID : son rang (Etudiant, Enseignant, Admin)
+    (clée étrangère associant un usager à son rang : RangID)
+    -- PromotionID : sa promo (L3-INFO, L2-MATH, ...)
+    (clée étrangère associant un étudiant à sa promotion : PromotionID)
 */
 DROP TABLE IF EXISTS Usagers;
 CREATE TABLE Usagers (
-    id_usager INTEGER PRIMARY KEY AUTOINCREMENT,
-    identifiant VARCHAR(30) NOT NULL,
-    mot_de_passe VARCHAR(255) NOT NULL,
-    nom_usager VARCHAR(15) NOT NULL,
-    prenom_usager VARCHAR(20) NOT NULL,
-    id_role INTEGER NOT NULL,
-    id_promo INTEGER DEFAULT NULL,
-    CONSTRAINT usager_type_fk FOREIGN KEY (id_role) REFERENCES RoleUsagers(id_role) ON DELETE CASCADE
+    UsagerID INTEGER PRIMARY KEY AUTOINCREMENT,
+    IdentifiantLogin VARCHAR(30) NOT NULL,
+    MotDePasse VARCHAR(255) NOT NULL,
+    Nom VARCHAR(15) NOT NULL,
+    Prenom VARCHAR(20) NOT NULL,
+    RangID INTEGER NOT NULL,
+    PromotionID INTEGER DEFAULT NULL,
+    CONSTRAINT usager_rang_fk FOREIGN KEY (RangID) REFERENCES Rangs(RangID) ON DELETE CASCADE
 );
 
 /* Table des Salles. 
-    -- id_salle : l'id de la salle (clé primaire).
-    -- nom_salle : le nom de la salle.
+    -- SalleID : l'id de la salle (clé primaire).
+    -- NomSalle : le nom de la salle.
 */
 DROP TABLE IF EXISTS Salles;
 CREATE TABLE Salles (
-    id_salle INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_salle VARCHAR NOT NULL
+    SalleID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomSalle VARCHAR NOT NULL
 );
 
 /* Table des types de cours. 
@@ -70,34 +71,46 @@ CREATE TABLE Salles (
 */
 DROP TABLE IF EXISTS TypeCours;
 CREATE TABLE TypeCours (
-    id_type INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_type VARCHAR NOT NULL
+    TypeID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomType VARCHAR NOT NULL
 );
 
 /* Table des Cours. 
-    -- id_cour : l'id de l'usager (clé primaire).
-    -- nom_cour : le nom du cours.
-    -- date_cour : la date du cour.
-    -- heure_debut : l'heure de début du cour.
-    -- heure_fin : l'heure de fin du cour.
-    -- type_cour : le type (Cours, TD, TP).
-    (clée étrangère associé la l'id_type de la table TypeCours)
-    -- id_enseignant : l'id de l'enseignant.
-    (clée étrangère associé la l'id_usager de la table Usagers)
-    -- id_salle : l'id de la salle.
-    (clée étrangère associé la l'id_salle de la table Salles)
+    -- CourID : l'id de l'usager (clé primaire).
+    -- NomCour : le nom du cours.
+    -- DateCour : la date du cour.
+    -- HeureDebut : l'heure de début du cour.
+    -- HeureFin : l'heure de fin du cour.
+    -- EnseignantID : l'id de l'enseignant.
+    (clée étrangère associant un cour à son enseignant : EnseignantID)
+    -- TypeID : le type (Cours, TD, TP).
+    (clée étrangère associant un cour à son type : TypeID)
+    -- SalleID : l'id de la salle.
+    (clée étrangère associant un étudiant à sa promotion : SalleID)
 */
 DROP TABLE IF EXISTS Cours;
 CREATE TABLE Cours (
-    id_cour INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_cour VARCHAR(25) NOT NULL,
-    date_cour VARCHAR NOT NULL, 
-    heure_debut time NOT NULL,
-    heure_fin time NOT NULL,
-    type_cour INTEGER NOT NULL,
-    id_enseignant INTEGER,
-    id_salle INTEGER NOT NULL,
-    CONSTRAINT cour_type_fk FOREIGN KEY (type_cour) REFERENCES TypeCours(id_type) ON DELETE CASCADE,
-    CONSTRAINT cour_enseignant_fk FOREIGN KEY (id_enseignant) REFERENCES Usagers(id_usager) ON DELETE CASCADE,
-    CONSTRAINT cour_salle_fk FOREIGN KEY (id_salle) REFERENCES Salle(id_salle) ON DELETE CASCADE
+    CourID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomCour VARCHAR(25) NOT NULL,
+    DateCour VARCHAR NOT NULL, 
+    HeureDebut time NOT NULL,
+    HeureFin time NOT NULL,
+    EnseignantID INTEGER,
+    TypeID INTEGER NOT NULL,
+    SalleID INTEGER NOT NULL,
+    CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
+    CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
+    CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salle(SalleID) ON DELETE CASCADE
+);
+
+/* Association entre une promotion et leurs cours.
+    -- PromotionID : l'id de la promo (clé primaire).
+    -- CourID : l'id du cour (clé primaire).
+    (clés étrangères associant PromotionID avec la table Promotions et CourID avec la table Cours).
+*/
+DROP TABLE IF EXISTS Etudier;
+CREATE TABLE Etudier (
+    PromotionID INTEGER REFERENCES Promotions(PromotionID) ON DELETE CASCADE,
+    CourID INTEGER REFERENCES Cours(CourID) ON DELETE CASCADE,
+    CONSTRAINT etudier_pk PRIMARY KEY (PromotionID, CourID)
 );

@@ -18,6 +18,7 @@ if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
 	$verif->execute(array($_POST['identifiant']));
     $userExist = $verif->fetch();
 
+    // Si l'usager existe et que le mot de passe correspond, on le connecte.
     if($userExist && password_verify($_POST['mdp'], $userExist['mot_de_passe'])) {
 
         $_SESSION['id'] = $userExist['id_usager'];
@@ -28,11 +29,12 @@ if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
         $_SESSION['role'] = $userExist['id_role'];
         $_SESSION['promo'] = $userExist['id_promo'];
 
+        // Une fois l'usager connecté, on le redirige.
         header('Location: ./calendar.php');
+    // Sinon, on affiche le message d'erreur.
     } else {
         $msg_error = 'Identifiant ou Mot de passe invalide !';
     }
-
 }
 ?>
 <html lang="fr-FR">

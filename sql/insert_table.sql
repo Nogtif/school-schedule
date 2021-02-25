@@ -1,15 +1,15 @@
-INSERT INTO Formations(id_form, nom_form) VALUES
+INSERT INTO Formations(FormationID, NomFormation) VALUES
 (1, 'Maths'), (2, 'Info'), (3, 'SVT'), (4, 'Chimie');
 
-INSERT INTO Promotions(id_promo, nom_promo, id_form) VALUES
+INSERT INTO Promotions(PromotionID, NomPromotion, FormationID) VALUES
 (1, 'L1-MATH', 1), (2, 'L1-INFO', 2), (3, 'L1-SVT', 3), (4, 'L1-CHIMIE', 4),
 (5, 'L2-MATH', 1), (6, 'L2-INFO', 2), (7, 'L2-SVT', 3), (8, 'L2-CHIMIE', 4),
 (9, 'L3-MATH', 1), (10, 'L3-INFO', 2), (11, 'L3-SVT', 3), (12, 'L3-CHIMIE', 4);
 
-INSERT INTO RoleUsagers(id_role, nom_role) VALUES
+INSERT INTO Rangs(RangID, NomRang) VALUES
 (1, 'Etudiant'), (2, 'Enseignant'), (3, 'Admin');
 
-INSERT INTO Usagers(id_usager, identifiant, mot_de_passe, nom_usager, prenom_usager, id_role, id_promo) VALUES
+INSERT INTO Usagers(UsagerID, IdentifiantLogin, MotDePasse, Nom, Prenom, RangID, PromotionID) VALUES
 (1, 'root_root', '$2y$10$ELIrDcMQzQgWujKGLkLfNusgJ52qhaEPB0x..dLT4nog4jihziol.', 'Root', 'Root', 3, NULL),
 /** INFO */
 (2, 'anne_parrain', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Parrain', 'Anne', 2, NULL),
@@ -47,15 +47,16 @@ INSERT INTO Usagers(id_usager, identifiant, mot_de_passe, nom_usager, prenom_usa
 (26, 'julien_caronboily', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Caron-Boily', 'Julien', 2, NULL),
 (27, 'catherine_vincent', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Vincent', 'Catherine', 2, NULL),
 
+/** ETUDIANTS */
 (28, 'quentin_carpentier', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Carpentier', 'Quentin', 1, 10),
 (29, 'pauljoseph_krogulec', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Krogulec', 'Paul-Joseph', 1, 10);
 
 
-INSERT INTO Salles(id_salle, nom_salle) VALUES
+INSERT INTO Salles(SalleID, NomSalle) VALUES
 (1, 'S16'),
 (2, 'S19'),
 (3, 'S23'),
 (4, 'S25');
 
-INSERT INTO TypeCours(id_type, nom_type) VALUES
+INSERT INTO TypeCours(TypeID, NomType) VALUES
 (1, 'CM'), (2, 'TD'), (3, 'TP');
