@@ -1,17 +1,24 @@
-/* Table des Salles. 
-    -- id_usager : l'id de l'usager (clé primaire).
-    -- identifiant : l'identifiant prenom_nom.
-    -- mot_de_passe : le mot de passe.
-    -- type_usager : son type (Etudiant, Enseignant, Admin)
-    (clée étrangère associé la l'id_role de la table RoleUsagers)
+/* Table des Formations. 
+    -- id_form : l'id de la formation (clé primaire).
+    -- nom_form : le nom de la formation.
 */
-DROP TABLE IF EXISTS Usagers;
-CREATE TABLE Usagers (
-    id_usager INTEGER PRIMARY KEY AUTOINCREMENT,
-    identifiant VARCHAR(25) NOT NULL,
-    mot_de_passe VARCHAR NOT NULL,
-    type_usager INTEGER NOT NULL DEFAULT 1,
-    CONSTRAINT usager_type_fk FOREIGN KEY (type_usager) REFERENCES RoleUsagers(id_role) ON DELETE CASCADE
+DROP TABLE IF EXISTS Formations;
+CREATE TABLE Formations (
+    id_form INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom_form VARCHAR(25) NOT NULL
+);
+
+/* Table des Promotions. 
+    -- id_promo : l'id du role (clé primaire).
+    -- nom_promo : le role de l'usager.
+*/
+DROP TABLE IF EXISTS Promotions;
+CREATE TABLE Promotions (
+    id_promo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom_promo VARCHAR(25) NOT NULL,
+    id_form INTEGER NOT NULL,
+    CONSTRAINT promo_formation_fk FOREIGN KEY (id_form) REFERENCES Formations(id_form) ON DELETE CASCADE
+
 );
 
 /* Table des roleUsager. 
@@ -25,13 +32,46 @@ CREATE TABLE RoleUsagers (
 );
 
 /* Table des Salles. 
+    -- id_usager : l'id de l'usager (clé primaire).
+    -- identifiant : l'identifiant prenom_nom.
+    -- mot_de_passe : le mot de passe.
+    -- nom_usager : son nom.
+    -- prenom_usager : son prénom.
+    -- id_role : son type (Etudiant, Enseignant, Admin)
+    (clée étrangère associé la l'id_role de la table RoleUsagers)
+    -- id_promo : sa promo (L3-INFO, L2-MATH, ...)
+    (clée étrangère associé la l'id_promo de la table Promotions)
+*/
+DROP TABLE IF EXISTS Usagers;
+CREATE TABLE Usagers (
+    id_usager INTEGER PRIMARY KEY AUTOINCREMENT,
+    identifiant VARCHAR(30) NOT NULL,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    nom_usager VARCHAR(15) NOT NULL,
+    prenom_usager VARCHAR(20) NOT NULL,
+    id_role INTEGER NOT NULL,
+    id_promo INTEGER DEFAULT NULL,
+    CONSTRAINT usager_type_fk FOREIGN KEY (id_role) REFERENCES RoleUsagers(id_role) ON DELETE CASCADE
+);
+
+/* Table des Salles. 
     -- id_salle : l'id de la salle (clé primaire).
     -- nom_salle : le nom de la salle.
 */
 DROP TABLE IF EXISTS Salles;
 CREATE TABLE Salles (
     id_salle INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_salle VARCHAR(25) NOT NULL
+    nom_salle VARCHAR NOT NULL
+);
+
+/* Table des types de cours. 
+    -- id_type : l'id du type du cour (clé primaire).
+    -- nom_type : le nom du type du cour.
+*/
+DROP TABLE IF EXISTS TypeCours;
+CREATE TABLE TypeCours (
+    id_type INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom_type VARCHAR NOT NULL
 );
 
 /* Table des Cours. 
@@ -60,26 +100,4 @@ CREATE TABLE Cours (
     CONSTRAINT cour_type_fk FOREIGN KEY (type_cour) REFERENCES TypeCours(id_type) ON DELETE CASCADE,
     CONSTRAINT cour_enseignant_fk FOREIGN KEY (id_enseignant) REFERENCES Usagers(id_usager) ON DELETE CASCADE,
     CONSTRAINT cour_salle_fk FOREIGN KEY (id_salle) REFERENCES Salle(id_salle) ON DELETE CASCADE
-);
-
-/* Table des types de cours. 
-    -- id_type : l'id du type du cour (clé primaire).
-    -- nom_type : le nom du type du cour.
-*/
-DROP TABLE IF EXISTS TypeCours;
-CREATE TABLE TypeCours (
-    id_type INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_type VARCHAR(25) NOT NULL
-);
-
-/* Association entre les cours et leurs enseignants.
-    -- id_cour : l'id du cour (clé primaire).
-    -- id_usager : l'id de l'étudiant (clé primaire).
-    (clés étrangères associant l'id d'un cour avec la table Cours et l'id de l'étudiant avec la table Usagers).
-*/
-DROP TABLE IF EXISTS Etudier;
-CREATE TABLE Etudier (
-    id_cour INTEGER REFERENCES Cours(id_cour) ON DELETE CASCADE,
-    id_etudiant INTEGER REFERENCES Usagers(id_usager) ON DELETE CASCADE,
-    CONSTRAINT etudier_pk PRIMARY KEY (id_cour, id_etudiant)
 );

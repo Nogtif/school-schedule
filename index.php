@@ -29,6 +29,15 @@ $msg_error = '';
                 <input class="btn btn-primary" type="submit" name="mylogin" value="Connexion">
             </form>
             <span><?= $msg_error; ?></span>
+
+            <?php 
+            $mdp = password_hash("hello", PASSWORD_DEFAULT);
+            if(password_verify('rasmuslerdorf', $mdp)) {
+                echo "ok";
+            }
+            ?>
+
+            <?= password_hash("root", PASSWORD_DEFAULT); ?>
         </div>
     </div>
 </body>
