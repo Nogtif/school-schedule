@@ -14,20 +14,20 @@ $msg_error = '';
 if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
 
     // On vérifie si l'usager est bien enregistré.
-    $verif = $bdd->prepare('SELECT * FROM Usagers WHERE identifiant = ? LIMIT 0,1');
+    $verif = $bdd->prepare('SELECT * FROM Usagers WHERE IdentifiantLogin = ? LIMIT 0,1');
 	$verif->execute(array($_POST['identifiant']));
     $userExist = $verif->fetch();
 
     // Si l'usager existe et que le mot de passe correspond, on le connecte.
-    if($userExist && password_verify($_POST['mdp'], $userExist['mot_de_passe'])) {
+    if($userExist && password_verify($_POST['mdp'], $userExist['MotDePasse'])) {
 
-        $_SESSION['id'] = $userExist['id_usager'];
-        $_SESSION['username'] = $userExist['identifiant'];
-        $_SESSION['password'] = $userExist['mot_de_passe'];
-        $_SESSION['nom'] = $userExist['nom_usager'];
-        $_SESSION['prenom'] = $userExist['prenom_usager'];
-        $_SESSION['role'] = $userExist['id_role'];
-        $_SESSION['promo'] = $userExist['id_promo'];
+        $_SESSION['id'] = $userExist['UsagerID'];
+        $_SESSION['username'] = $userExist['IdentifiantLogin'];
+        $_SESSION['password'] = $userExist['MotDePasse'];
+        $_SESSION['nom'] = $userExist['Nom'];
+        $_SESSION['prenom'] = $userExist['Prenom'];
+        $_SESSION['rang'] = $userExist['RangID'];
+        $_SESSION['promo'] = $userExist['PromotionID'];
 
         // Une fois l'usager connecté, on le redirige.
         header('Location: ./calendar.php');
