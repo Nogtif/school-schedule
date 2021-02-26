@@ -7,7 +7,7 @@ if(isOnline()) {
     header('Location: ./calendar.php');
 }
 
-// Variables globales
+// Variable affiant le message d'erreur.
 $msg_error = '';
 
 // Lors de la connexion...
