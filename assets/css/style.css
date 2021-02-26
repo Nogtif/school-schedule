@@ -1,22 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:300,400,600");
 
-::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-    overflow: visible;
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    border: solid transparent;
-    background-color: #455AF7;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: #2C45F5;
-}
-
 
 * {
     box-sizing: border-box;
@@ -27,6 +11,22 @@ body {
     background-color: #F5F6FA;
     margin: 0;
     padding: 0;
+}
+
+body::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    overflow: visible;
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    border: solid transparent;
+    background-color: #455AF7;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #2C45F5;
 }
 
 a {
