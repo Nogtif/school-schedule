@@ -99,7 +99,7 @@ CREATE TABLE Cours (
     SalleID INTEGER NOT NULL,
     CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
     CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
-    CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salle(SalleID) ON DELETE CASCADE
+    CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
 );
 
 /* Association entre une promotion et leurs cours.

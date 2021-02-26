@@ -2,12 +2,15 @@
 <?php 
 require_once('./config.php');
 require_once('./src/Week.php');
+require_once('./src/Events.php');
 
 if(!isOnline()) {
     header('Location: ./');
 }
 
 $week = new App\Week($_GET['week'] ?? null);
+$events = new App\Events($bdd);
+$allEvents = $events->getEventsBetween($week->getFirstDay(), time());
 ?>
 <html lang="fr-FR">
 <head>
@@ -91,6 +94,20 @@ $week = new App\Week($_GET['week'] ?? null);
                             </tbody>
                         </div>
                     </table>
+
+                    <div class="calendar-events">
+                        <?php foreach($allEvents as $events) { ?>
+                                
+                            <div class="events-day">
+                                <?php foreach($events as $event) { ?>
+                                    <div class="event">
+                                        <p><?= $event['NomCour'] ?></p>
+                                    </div>
+                                <?php } ?>
+                                    
+                            </div>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         </div>

@@ -60,3 +60,11 @@ INSERT INTO Salles(SalleID, NomSalle) VALUES
 
 INSERT INTO TypeCours(TypeID, NomType) VALUES
 (1, 'CM'), (2, 'TD'), (3, 'TP');
+
+INSERT INTO Cours(CourID, NomCour, DateCour, HeureDebut, HeureFin, EnseignantID, TypeID, SalleID) VALUES
+(1, 'Technologies Emergentes', '1613948400', '10:15', '11:15', 'karim_tabia', 1, 4),
+(2, 'Technologies Emergentes', '1613948400', '11:15', '12:15', 'karim_tabia', 2, 4),
+(3, 'LCPF', '1613948400', '14:00', '15:30', 'tiago_delima', 2, 3);
+
+INSERT INTO Etudier(PromotionID, CourID) VALUES
+(10, 1), (10, 2), (10, 3);

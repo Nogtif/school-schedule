@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:300,400,600");
 
-
 * {
     box-sizing: border-box;
     outline: none;
@@ -208,7 +207,6 @@ header {
     font-size: 15px;
     font-weight: 600;
     margin-left: 10px;
-    text-transform: uppercase;
     padding: 7px 40px 10px 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.03);
@@ -322,6 +320,23 @@ tbody td span {
 
 tbody td {
     border-right: 1px solid #F2F3F7;
+}
+
+
+.calendar-events {
+    position: absolute;
+    top: 80px;
+    width: 100%;
+}
+
+.calendar-events .events-day {
+    width: calc(100% / 7);
+}
+
+.calendar-events .events-day .event {
+    width: 100%;
+    background-color: grey;
+    border: 1px solid #000;
 }
 
 
