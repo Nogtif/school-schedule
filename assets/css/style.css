@@ -324,11 +324,13 @@ tbody td {
 }
 
 .calendar-events .events-day {
-    display: grid;
-    grid-template-rows: repeat(25, 30px);
+    position: relative;
 }
 
 .calendar-events .events-day .event {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     background-color: grey;
     border-radius: 1px;

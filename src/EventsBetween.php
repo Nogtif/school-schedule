@@ -19,7 +19,7 @@ class EventsBetween {
     }
 
     public function getEvents(string $promo):array {
-        $events = [];
+        $events = array();
         $sPromo = $this->bdd->query('SELECT * FROM Cours 
             INNER JOIN Matieres ON Cours.MatiereID = Matieres.MatiereID 
             INNER JOIN Promotions ON Matieres.PromotionID = Promotions.PromotionID 
