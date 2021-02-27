@@ -8,7 +8,7 @@
 
     <div class="navigation">
         <ul>
-            <li><a href="./calendar.php" <?= (basename($_SERVER['PHP_SELF']) == 'calendar.php') ? 'class="active"' : '' ?>><i class="mdi mdi-calendar"></i> <span>Emploi du temps</span></a></li>
+            <li><a href="./planning.php" <?= (basename($_SERVER['PHP_SELF']) == 'planning.php') ? 'class="active"' : '' ?>><i class="mdi mdi-calendar"></i> <span>Emploi du temps</span></a></li>
 
             <?php if($_SESSION['rang'] > 1) { ?>
                 <li><a href="./cours.php" <?= (basename($_SERVER['PHP_SELF']) == 'cours.php') ? 'class="active"' : '' ?>><i class="mdi mdi-notebook-outline"></i> <span>Gerer mes cours</span></a></li>

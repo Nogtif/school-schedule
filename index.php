@@ -4,7 +4,7 @@ require_once('./config.php');
 
 // Si l'utilisateur est déjà connecté, on le redirige.
 if(isOnline()) {
-    header('Location: ./calendar.php');
+    header('Location: ./planning.php');
 }
 
 // Variable affiant le message d'erreur.
