@@ -2,15 +2,16 @@
 <?php 
 require_once('./config.php');
 require_once('./src/Week.php');
-require_once('./src/Events.php');
+require_once('./src/EventsBetween.php');
 
 if(!isOnline()) {
     header('Location: ./');
 }
 
 $week = new App\Week($_GET['week'] ?? null);
-$events = new App\Events($bdd);
-$allEvents = $events->getEventsBetween($week->getFirstDay(), $week->getLastDay());
+$events = new App\EventsBetween($bdd,$week->getFirstDay(), $week->getLastDay());
+
+$promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
 ?>
 <html lang="fr-FR">
 <head>
@@ -47,21 +48,19 @@ $allEvents = $events->getEventsBetween($week->getFirstDay(), $week->getLastDay()
                         <a href="?week=<?= $week->previousWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) - 4) echo ' disabled' ?>"><i class="mdi mdi-chevron-left"></i></a>  
                         <a href="?week=<?= $week->nextWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) + 4) echo ' disabled' ?>"><i class="mdi mdi-chevron-right"></i></a>
                         
-                        <form method="GET" action="">
-                            <select name="promotion" class="form-select">
-                                <option value="default">Promotions</option>
-                                <?php
-                                $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
-                                while($aPromo = $sPromo->fetch()) {
-                                    if($_SESSION['promo'] == $aPromo['PromotionID']) {
-                                        echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
-                                    } else {
-                                        echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
-                                    }
+                        <select name="promo" class="form-select">
+                            <option value="default">Promotions</option>
+                            <?php
+                            $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
+                            while($aPromo = $sPromo->fetch()) {
+                                if($_SESSION['promo'] == $aPromo['PromotionID']) {
+                                    echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
+                                } else {
+                                    echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
                                 }
-                                ?>
-                            </select>
-                        </form>
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
 
@@ -96,7 +95,7 @@ $allEvents = $events->getEventsBetween($week->getFirstDay(), $week->getLastDay()
                     </table>
 
                     <div class="calendar-events">
-                        <?php foreach($allEvents as $events) { ?>
+                        <?php foreach($events->getEvents($promo) as $events) { ?>
                                 
                             <div class="events-day">
                                 <?php foreach($events as $event) { ?>
