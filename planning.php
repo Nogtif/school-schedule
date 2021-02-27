@@ -95,11 +95,11 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
                     </table>
 
                     <div class="calendar-events">
-                        <?php foreach($events->getEvents($promo) as $events) { ?>
+                        <?php $i = 1; foreach($events->getEvents($promo) as $events) { ?>
                                 
                             <div class="events-day">
                                 <?php foreach($events as $event) { ?>
-                                    <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>;top: <?php echo ((abs(strtotime(date("8:00")) - strtotime($event['HeureDebut']))/3600)*60);?>px;height: <?php echo (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut']))/3600)*60;?>px!important;">
+                                    <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>;left:<?= $i-1?>px;margin-right:<?=$i?>px;top: <?php echo ((abs(strtotime(date("8:00")) - strtotime($event['HeureDebut']))/3600)*70);?>px;height: <?php echo (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut']))/3600)*70;?>px!important;">
                                         <b><?= str_replace(':', 'h', $event['HeureDebut']) . ' ' . str_replace(':', 'h', $event['HeureFin']) ?></b>
                                         <span><?= $event['NomType'] . ' - ' . $event['NomMatiere'] ?></span>
                                         <span><?= $event['NomSalle'] ?></span>
@@ -107,7 +107,7 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
                                     </div>
                                 <?php } ?>
                             </div>
-                        <?php } ?>
+                        <?php $i++; } ?>
                     </div>
                 </div>
             </div>
