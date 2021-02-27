@@ -29,7 +29,7 @@ if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
         $_SESSION['promo'] = $userExist['PromotionID'];
 
         // Une fois l'usager connecté, on le redirige.
-        header('Location: ./calendar.php');
+        header('Location: ./planning.php');
     // Sinon, on affiche le message d'erreur.
     } else {
         $msg_error = 'Identifiant ou Mot de passe invalide !';
