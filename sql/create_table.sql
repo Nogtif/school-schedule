@@ -77,39 +77,40 @@ CREATE TABLE TypeCours (
 /* Table des Cours. 
     -- CourID : l'id de l'usager (clé primaire).
     -- NomCour : le nom du cours.
-    -- DateCour : la date du cour.
-    -- HeureDebut : l'heure de début du cour.
-    -- HeureFin : l'heure de fin du cour.
     -- EnseignantID : l'id de l'enseignant.
     (clée étrangère associant un cour à son enseignant : EnseignantID)
-    -- TypeID : le type (Cours, TD, TP).
-    (clée étrangère associant un cour à son type : TypeID)
-    -- SalleID : l'id de la salle.
-    (clée étrangère associant un étudiant à sa promotion : SalleID)
 */
 DROP TABLE IF EXISTS Cours;
 CREATE TABLE Cours (
     CourID INTEGER PRIMARY KEY AUTOINCREMENT,
     NomCour VARCHAR(25) NOT NULL,
-    DateCour VARCHAR NOT NULL, 
-    HeureDebut time NOT NULL,
-    HeureFin time NOT NULL,
     EnseignantID INTEGER,
-    TypeID INTEGER NOT NULL,
-    SalleID INTEGER NOT NULL,
-    CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
-    CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
-    CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
+    CouleurCour VARCHAR(10),
+    CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE
 );
 
 /* Association entre une promotion et leurs cours.
     -- PromotionID : l'id de la promo (clé primaire).
     -- CourID : l'id du cour (clé primaire).
     (clés étrangères associant PromotionID avec la table Promotions et CourID avec la table Cours).
+    -- DateCour : la date du cour.
+    -- HeureDebut : l'heure de début du cour.
+    -- HeureFin : l'heure de fin du cour.
+    -- TypeID : le type (Cours, TD, TP).
+    (clée étrangère associant un cour à son type : TypeID)
+    -- SalleID : l'id de la salle.
+    (clée étrangère associant un étudiant à sa promotion : SalleID)
 */
-DROP TABLE IF EXISTS Etudier;
-CREATE TABLE Etudier (
+DROP TABLE IF EXISTS Programmer;
+CREATE TABLE Programmer (
     PromotionID INTEGER REFERENCES Promotions(PromotionID) ON DELETE CASCADE,
     CourID INTEGER REFERENCES Cours(CourID) ON DELETE CASCADE,
-    CONSTRAINT etudier_pk PRIMARY KEY (PromotionID, CourID)
+    DateCour VARCHAR(30) NOT NULL,
+    HeureDebut time NOT NULL,
+    HeureFin time NOT NULL,
+    TypeID INTEGER NOT NULL,
+    SalleID INTEGER NOT NULL,
+    CONSTRAINT etudier_pk PRIMARY KEY (PromotionID, CourID),
+    CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
+    CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
 );

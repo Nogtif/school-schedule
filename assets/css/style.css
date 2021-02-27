@@ -325,7 +325,7 @@ tbody td {
 
 .calendar-events {
     position: absolute;
-    top: 80px;
+    top: 83px;
     width: 100%;
 }
 
@@ -336,7 +336,18 @@ tbody td {
 .calendar-events .events-day .event {
     width: 100%;
     background-color: grey;
-    border: 1px solid #000;
+    border-radius: 3px;
+    padding: 8px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.calendar-events .events-day .event b {
+    font-size: 11px;
+}
+
+.calendar-events .events-day .event span {
+    display: block;
 }
 
 
