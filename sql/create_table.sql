@@ -80,13 +80,15 @@ CREATE TABLE TypeCours (
     -- EnseignantID : l'id de l'enseignant.
     (clée étrangère associant un cour à son enseignant : EnseignantID)
 */
-DROP TABLE IF EXISTS Cours;
-CREATE TABLE Cours (
-    CourID INTEGER PRIMARY KEY AUTOINCREMENT,
-    NomCour VARCHAR(25) NOT NULL,
+DROP TABLE IF EXISTS Matieres;
+CREATE TABLE Matieres (
+    MatiereID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomMatiere VARCHAR(25) NOT NULL,
     EnseignantID INTEGER,
-    CouleurCour VARCHAR(10),
-    CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE
+    CouleurMatiere VARCHAR(10) NOT NULL,
+    PromotionID INTEGER NOT NULL,
+    CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
+    CONSTRAINT cour_promo_fk FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID) ON DELETE CASCADE
 );
 
 /* Association entre une promotion et leurs cours.
@@ -101,16 +103,16 @@ CREATE TABLE Cours (
     -- SalleID : l'id de la salle.
     (clée étrangère associant un étudiant à sa promotion : SalleID)
 */
-DROP TABLE IF EXISTS Programmer;
-CREATE TABLE Programmer (
-    PromotionID INTEGER REFERENCES Promotions(PromotionID) ON DELETE CASCADE,
-    CourID INTEGER REFERENCES Cours(CourID) ON DELETE CASCADE,
+DROP TABLE IF EXISTS Cours;
+CREATE TABLE Cours (
+    CourID INTEGER PRIMARY KEY AUTOINCREMENT,
+    MatiereID INTEGER NOT NULL,
     DateCour VARCHAR(30) NOT NULL,
     HeureDebut time NOT NULL,
     HeureFin time NOT NULL,
     TypeID INTEGER,
     SalleID INTEGER,
-    CONSTRAINT etudier_pk PRIMARY KEY (PromotionID, CourID),
+    CONSTRAINT cour_matiere_fk FOREIGN KEY (MatiereID) REFERENCES Matieres(MatiereID) ON DELETE CASCADE,
     CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
     CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
 );

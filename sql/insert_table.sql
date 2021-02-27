@@ -19,6 +19,7 @@ INSERT INTO Usagers(UsagerID, MotDePasse, Nom, Prenom, RangID, PromotionID) VALU
 ('said_jabbour', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Jabbour', 'Said', 2, NULL),
 ('daniel_leberre', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'le Berre', 'Daniel', 2, NULL),
 ('thibault_lietard', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Lietard', 'Thibault', 2, NULL),
+('zied_bouraoui', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Bouraoui', 'Zied', 2, NULL),
 
 /** MATH */
 ('jerome_buresi', '$2y$10$.UJns9D.TmqZvR3PRXLEPunieZDVwuCksLRhunrTL8tk28xAArIxC', 'Buresi', 'Jerome', 2, NULL),
@@ -61,17 +62,18 @@ INSERT INTO Salles(SalleID, NomSalle) VALUES
 INSERT INTO TypeCours(TypeID, NomType) VALUES
 (1, 'CM'), (2, 'TD'), (3, 'TP');
 
-INSERT INTO Cours(CourID, NomCour, EnseignantID, CouleurCour) VALUES
-(1, 'Technologies Emergentes', 'karim_tabia', '#66FFFF'),
-(2, 'Technologies Emergentes', 'karim_tabia', '#66FFFF'),
-(3, 'LCPF', 'tiago_delima', '#99CCFF'),
-(4, 'Prog Web 2', 'johan_koitka', '#33CCFF'),
-(5, 'COO', 'daniel_leberre', '#CCFFFF'),
-(6, 'Anglais 6', 'tiago_delima', '#CCCCFF');
+INSERT INTO Matieres(MatiereID, NomMatiere, EnseignantID, CouleurMatiere, PromotionID) VALUES
+(1, 'COO', 'daniel_leberre', '#CCFFFF', 10),
+(2, 'LCPF', 'tiago_delima', '#99CCFF', 10),
+(3, 'Prog Web 2', 'johan_koitka', '#33CCFF', 10),
+(4, 'Technologies Emergentes', 'karim_tabia', '#66FFFF', 10),
+(5, 'Anglais 6', 'tiago_delima', '#CCCCFF', 10),
+(6, 'Stage', 'zied_bouraoui', '#33FFCC', 10);
 
-INSERT INTO Programmer(PromotionID, CourID, DateCour, HeureDebut, HeureFin, TypeID, SalleID) VALUES
-(10, 1, '1613948400', '10:15', '11:15', 1, 4),
-(10, 2, '1613948400', '11:15', '12:15', 2, 4),
-(10, 3, '1613948400', '14:00', '15:30', 1, 3),
-(10, 4, '1614038400', '14:00', '15:30', 1, 3),
-(10, 5, '1614038400', '15:45', '17:30', 2, NULL);
+
+INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, TypeID, SalleID) VALUES
+(1, 4, '1613948400', '10:15', '11:15', 1, 4),
+(2, 4, '1613948400', '11:15', '12:15', 2, 4),
+(3, 2, '1613948400', '14:00', '15:30', 1, 3),
+(4, 3, '1614038400', '14:00', '15:30', 1, 3),
+(5, 1, '1614038400', '15:45', '17:30', 2, NULL);

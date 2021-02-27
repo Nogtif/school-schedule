@@ -20,12 +20,12 @@ class EventsBetween {
 
     public function getEvents(string $promo):array {
         $events = [];
-        $sPromo = $this->bdd->query('SELECT * FROM Programmer 
-            INNER JOIN Cours ON Programmer.CourID = Cours.CourID 
-            INNER JOIN Promotions ON Programmer.PromotionID = Promotions.PromotionID 
-            INNER JOIN Usagers ON Cours.EnseignantID = Usagers.UsagerID 
-            LEFT JOIN Salles ON Programmer.SalleID = Salles.SalleID 
-            LEFT JOIN TypeCours ON TypeCours.TypeID = Programmer.TypeID 
+        $sPromo = $this->bdd->query('SELECT * FROM Cours 
+            INNER JOIN Matieres ON Cours.MatiereID = Matieres.MatiereID 
+            INNER JOIN Promotions ON Matieres.PromotionID = Promotions.PromotionID 
+            INNER JOIN Usagers ON Matieres.EnseignantID = Usagers.UsagerID 
+            LEFT JOIN Salles ON Cours.SalleID = Salles.SalleID 
+            LEFT JOIN TypeCours ON TypeCours.TypeID = Cours.TypeID 
             WHERE Promotions.PromotionID  = \''. $promo.'\' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay
         );
         while($aPromo = $sPromo->fetch()) {

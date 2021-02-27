@@ -99,9 +99,9 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
                                 
                             <div class="events-day">
                                 <?php foreach($events as $event) { ?>
-                                    <div class="event" style="background-color: <?= $event['CouleurCour'] ?>">
+                                    <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>">
                                         <b><?= str_replace(':', 'h', $event['HeureDebut']) . ' ' . str_replace(':', 'h', $event['HeureFin']) ?></b>
-                                        <span><?= $event['NomType'] . ' - ' . $event['NomCour'] ?></span>
+                                        <span><?= $event['NomType'] . ' - ' . $event['NomMatiere'] ?></span>
                                         <span><?= $event['NomSalle'] ?></span>
                                         <span><?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
                                     </div>
