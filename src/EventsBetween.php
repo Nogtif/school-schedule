@@ -18,22 +18,28 @@ class EventsBetween {
         $this->lastDay = $lastDay;
     }
 
-    public function getEvents(string $promo):array {
+    private function genereList():array {
         $events = array();
+        for($i = 0; $i < 7; $i++) {
+            $events[date('j', $this->firstDay + ($i * 86400))] = array();
+        }
+        return $events;
+    }
+
+    public function getEvents(string $promo):array {
+        $events = $this->genereList();
         $sPromo = $this->bdd->query('SELECT * FROM Cours 
             INNER JOIN Matieres ON Cours.MatiereID = Matieres.MatiereID 
             INNER JOIN Promotions ON Matieres.PromotionID = Promotions.PromotionID 
             INNER JOIN Usagers ON Matieres.EnseignantID = Usagers.UsagerID 
             LEFT JOIN Salles ON Cours.SalleID = Salles.SalleID 
             LEFT JOIN TypeCours ON TypeCours.TypeID = Cours.TypeID 
-            WHERE Promotions.PromotionID  = \''. $promo.'\' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay
+            WHERE Promotions.PromotionID  = \''. $promo.'\' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay. ' ORDER BY Cours.DateCour'
         );
         while($aPromo = $sPromo->fetch()) {
-            if(!isset($events[$aPromo['DateCour']])) {
-                $events[$aPromo['DateCour']] = [$aPromo];
-            } else {
-                $events[$aPromo['DateCour']][] = $aPromo;
-            }
+            $events[date('j', $aPromo['DateCour'])][] = $aPromo;
+        
+                
         }
         return $events;
     }
