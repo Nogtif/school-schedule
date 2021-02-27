@@ -95,15 +95,17 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
                     </table>
 
                     <div class="calendar-events">
-                        <?php foreach($events->getEvents($promo) as $events) { ?>
+                        <?php foreach($events->getEvents($promo) as $events) { $i = 0;?>
                                 
                             <div class="events-day">
                                 <?php foreach($events as $event) { ?>
-                                    <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>;min-height: <?php echo (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut']))/3600)*30;?>px">
-                                        <b><?= str_replace(':', 'h', $event['HeureDebut']) . ' ' . str_replace(':', 'h', $event['HeureFin']) ?></b>
-                                        <span><?= $event['NomType'] . ' - ' . $event['NomMatiere'] ?></span>
-                                        <span><?= $event['NomSalle'] ?></span>
-                                        <span><?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
+                                    <div style="padding-top: <?php echo ((abs(strtotime(date("8:00")) - strtotime($event['HeureDebut']))/3600)*60)-(30*$i++);?>px">
+                                        <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>;height: <?php echo (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut']))/3600)*60;?>px!important;">
+                                            <b><?= str_replace(':', 'h', $event['HeureDebut']) . ' ' . str_replace(':', 'h', $event['HeureFin']) ?></b>
+                                            <span><?= $event['NomType'] . ' - ' . $event['NomMatiere'] ?></span>
+                                            <span><?= $event['NomSalle'] ?></span>
+                                            <span><?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
+                                        </div>
                                     </div>
                                 <?php } ?>
                             </div>
