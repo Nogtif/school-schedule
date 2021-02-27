@@ -101,9 +101,9 @@ $allEvents = $events->getEventsBetween($week->getFirstDay(), time());
                             <div class="events-day">
                                 <?php foreach($events as $event) { ?>
                                     <div class="event" style="background-color: <?= $event['CouleurCour'] ?>">
-                                        <b><?= $event['HeureDebut'] ?> <?= $event['HeureFin'] ?></b>
-                                        <span><?= $event['TypeID'] . ' - ' . $event['NomCour'] ?></span>
-                                        <span><?= $event['SalleID'] ?></span>
+                                        <b><?= str_replace(':', 'h', $event['HeureDebut']) . ' ' . str_replace(':', 'h', $event['HeureFin']) ?></b>
+                                        <span><?= $event['NomType'] . ' - ' . $event['NomCour'] ?></span>
+                                        <span><?= $event['NomSalle'] ?></span>
                                         <span><?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
                                     </div>
                                 <?php } ?>
