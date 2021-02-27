@@ -10,11 +10,11 @@ class Events {
 
     public function getEventsBetween(String $start, String $end):array {
         $events = [];
-        $sPromo = $this->bdd->query('SELECT * FROM Cours 
-            INNER JOIN Programmer ON Cours.CourID = Programmer.CourID 
+        $sPromo = $this->bdd->query('SELECT * FROM Programmer 
+            INNER JOIN Cours ON Programmer.CourID = Cours.CourID 
             INNER JOIN Usagers ON Cours.EnseignantID = Usagers.UsagerID 
-            INNER JOIN Salles ON Programmer.SalleID = Salles.SalleID 
-            INNER JOIN TypeCours ON Programmer.TypeID = TypeCours.TypeID 
+            LEFT JOIN Salles ON Programmer.SalleID = Salles.SalleID 
+            LEFT JOIN TypeCours ON TypeCours.TypeID = Programmer.TypeID 
             WHERE DateCour BETWEEN ' .$start. ' AND ' . $end
         );
         while($aPromo = $sPromo->fetch()) {

@@ -327,11 +327,10 @@ tbody td {
     position: absolute;
     top: 83px;
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
 }
 
-.calendar-events .events-day {
-    width: calc(100% / 7);
-}
 
 .calendar-events .events-day .event {
     width: 100%;
@@ -340,6 +339,10 @@ tbody td {
     padding: 8px;
     text-align: center;
     font-size: 12px;
+}
+
+.calendar-events .events-day .event:focus-within {
+    border: 1px solid;
 }
 
 .calendar-events .events-day .event b {

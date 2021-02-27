@@ -108,8 +108,8 @@ CREATE TABLE Programmer (
     DateCour VARCHAR(30) NOT NULL,
     HeureDebut time NOT NULL,
     HeureFin time NOT NULL,
-    TypeID INTEGER NOT NULL,
-    SalleID INTEGER NOT NULL,
+    TypeID INTEGER,
+    SalleID INTEGER,
     CONSTRAINT etudier_pk PRIMARY KEY (PromotionID, CourID),
     CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
     CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE

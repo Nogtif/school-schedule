@@ -52,6 +52,13 @@ class Week {
         return $this->firstDay;
     }
 
+    /** Méthode qui renvoie la date du dernier jour de la semaine.
+     * @return string : le premier jour.
+     */
+    public function getLastDay():string {
+        return $this->firstDay + (6 * 86400);
+    }
+
     public function getDay(int $n):string {
         return $this->days[$n];
     }
@@ -80,7 +87,7 @@ class Week {
      * @return string : la semaine.
      */
     public function toString():string {
-        return $this->months[intval(date('m', $this->firstDay))-1]. ' '. date('j', $this->firstDay). ' - '. date('j', $this->firstDay + (6 * 86400)). ', '. $this->year;
+        return $this->months[intval(date('m', $this->firstDay))-1]. ' '. date('j', $this->firstDay). ' - '. date('j', $this->getLastDay()). ', '. $this->year;
     }
 }
 

@@ -10,7 +10,7 @@ if(!isOnline()) {
 
 $week = new App\Week($_GET['week'] ?? null);
 $events = new App\Events($bdd);
-$allEvents = $events->getEventsBetween($week->getFirstDay(), time());
+$allEvents = $events->getEventsBetween($week->getFirstDay(), $week->getLastDay());
 ?>
 <html lang="fr-FR">
 <head>
@@ -107,7 +107,6 @@ $allEvents = $events->getEventsBetween($week->getFirstDay(), time());
                                         <span><?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
                                     </div>
                                 <?php } ?>
-                                    
                             </div>
                         <?php } ?>
                     </div>

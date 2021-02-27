@@ -65,11 +65,13 @@ INSERT INTO Cours(CourID, NomCour, EnseignantID, CouleurCour) VALUES
 (1, 'Technologies Emergentes', 'karim_tabia', '#66FFFF'),
 (2, 'Technologies Emergentes', 'karim_tabia', '#66FFFF'),
 (3, 'LCPF', 'tiago_delima', '#99CCFF'),
-(4, 'Prog Web 2', 'tiago_delima', '#99CCFF'),
-(4, 'COO', 'tiago_delima', '#99CCFF'),
-(4, 'COO', 'tiago_delima', '#99CCFF');
+(4, 'Prog Web 2', 'johan_koitka', '#33CCFF'),
+(5, 'COO', 'daniel_leberre', '#CCFFFF'),
+(6, 'Anglais 6', 'tiago_delima', '#CCCCFF');
 
 INSERT INTO Programmer(PromotionID, CourID, DateCour, HeureDebut, HeureFin, TypeID, SalleID) VALUES
 (10, 1, '1613948400', '10:15', '11:15', 1, 4),
-(10, 2, '1613948400', '11:15', '12:15', 2, 4), 
-(10, 3, '1613948400', '14:00', '15:30', 1, 3);
+(10, 2, '1613948400', '11:15', '12:15', 2, 4),
+(10, 3, '1613948400', '14:00', '15:30', 1, 3),
+(10, 4, '1614038400', '14:00', '15:30', 1, 3),
+(10, 5, '1614038400', '15:45', '17:30', 2, NULL);
