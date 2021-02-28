@@ -109,12 +109,18 @@ header {
 
 .navigation a span {
     vertical-align: middle;
-    
 }
 
 .right-tools a {
     font-size: 14px;
     padding: 8px 20px;
+}
+
+footer {
+    text-align: center;
+    margin: 20px auto;
+    font-weight: 600;
+    font-size: 13px;
 }
 
 /** PAGE */
@@ -173,12 +179,11 @@ header {
 }
 
 .btn-primary.disabled {
-    background-color: #F5B7AD;
-    border-color: #F5B7AD;
+    background-color: #C2CAFC;
+    border-color: #C2CAFC;
 }
 
 .calendar {
-    float: left;
     width: calc(100% - 100px);
     margin-left: 80px;
 }

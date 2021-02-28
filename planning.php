@@ -117,6 +117,9 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
         </div>
     </div>
 
+    <!-- FOOTER -->
+    <?php require_once('./views/footer.php') ?>
+
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
