@@ -1,5 +1,4 @@
 <?php 
-
 namespace Planning;
 
 /** Classe Week qui représente une semaine. */
@@ -59,6 +58,11 @@ class Week {
         return $this->firstDay + (6 * 86400);
     }
 
+    /** Méthode qui prend en paramètre un indice du tableau des noms de jour de la semaine,
+     * et renvoie ce jour.
+     * @param int $n > l'indice du tableau.
+     * @return string : le nom du jour.
+     */
     public function getDay(int $n):string {
         return $this->days[$n];
     }
@@ -72,12 +76,14 @@ class Week {
     }
 
     /** Méthode qui navigue vers la semaine précédente.
+     * @return Week : une nouvelle semaine.
      */
     public function previousWeek():Week {
         return new Week($this->numWeek - 1);
     }
 
     /** Méthode qui navigue vers la semaine suivante.
+     * @return Week : une nouvelle semaine.
      */
     public function nextWeek():Week {
         return new Week($this->numWeek + 1);
@@ -90,5 +96,4 @@ class Week {
         return $this->months[intval(date('m', $this->firstDay))-1]. ' '. date('j', $this->firstDay). ' - '. date('j', $this->getLastDay()). ', '. $this->year;
     }
 }
-
 ?>
