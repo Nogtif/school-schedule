@@ -84,10 +84,8 @@ DROP TABLE IF EXISTS Matieres;
 CREATE TABLE Matieres (
     MatiereID INTEGER PRIMARY KEY AUTOINCREMENT,
     NomMatiere VARCHAR(25) NOT NULL,
-    EnseignantID INTEGER,
     CouleurMatiere VARCHAR(10) NOT NULL,
     PromotionID INTEGER NOT NULL,
-    CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
     CONSTRAINT cour_promo_fk FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID) ON DELETE CASCADE
 );
 
@@ -110,9 +108,11 @@ CREATE TABLE Cours (
     DateCour VARCHAR(30) NOT NULL,
     HeureDebut time NOT NULL,
     HeureFin time NOT NULL,
+    EnseignantID INTEGER,
     TypeID INTEGER,
     SalleID INTEGER,
     CONSTRAINT cour_matiere_fk FOREIGN KEY (MatiereID) REFERENCES Matieres(MatiereID) ON DELETE CASCADE,
+    CONSTRAINT cour_enseignant_fk FOREIGN KEY (EnseignantID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
     CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
     CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
 );

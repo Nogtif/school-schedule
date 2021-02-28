@@ -65,20 +65,20 @@ INSERT INTO Salles(SalleID, NomSalle) VALUES
 INSERT INTO TypeCours(TypeID, NomType) VALUES
 (1, 'CM'), (2, 'TD'), (3, 'TP');
 
-INSERT INTO Matieres(MatiereID, NomMatiere, EnseignantID, CouleurMatiere, PromotionID) VALUES
-(1, 'COO', 'daniel_leberre', '#E88436', 10),
-(2, 'LCPF', 'tiago_delima', '#74568F', 10),
-(3, 'Prog Web 2', 'johan_koitka', '#467BAD', 10),
-(4, 'Technologies Emergentes', 'karim_tabia', '#A1B9B2', 10),
-(5, 'Anglais 6', 'tiago_delima', '#CCCCFF', 10),
-(6, 'Stage', 'zied_bouraoui', '#33FFCC', 10);
+INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere, PromotionID) VALUES
+(1, 'COO', '#E88436', 10),
+(2, 'LCPF', '#74568F', 10),
+(3, 'Prog Web 2', '#467BAD', 10),
+(4, 'Technologies Emergentes', '#A1B9B2', 10),
+(5, 'Anglais 6', '#CCCCFF', 10),
+(6, 'Stage', '#33FFCC', 10);
 
 
-INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, TypeID, SalleID) VALUES
-(1, 4, '1613948400', '10:15', '11:15', 1, 4),
-(2, 4, '1613948400', '11:15', '12:15', 2, 4),
-(3, 2, '1613948400', '14:00', '15:30', 1, 3),
-(4, 3, '1614038400', '09:30', '10:30', 2, 6),
-(5, 3, '1614038400', '14:00', '15:30', 1, 3),
-(6, 1, '1614038400', '15:45', '17:30', 2, NULL),
-(10, 2, '1614211200', '09:00', '10:30', 2, 5);
+INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, EnseignantID, TypeID, SalleID) VALUES
+(1, 4, '1613948400', '10:15', '11:15', 'karim_tabia', 1, 4),
+(2, 4, '1613948400', '11:15', '12:15', 'karim_tabia', 2, 4),
+(3, 2, '1613948400', '14:00', '15:30', 'tiago_delima', 1, 3),
+(4, 3, '1614038400', '09:30', '10:30', 'johan_koitka', 2, 6),
+(5, 3, '1614038400', '14:00', '15:30', 'johan_koitka', 1, 3),
+(6, 1, '1614038400', '15:45', '17:30', 'daniel_leberre', 2, NULL),
+(10, 2, '1614211200', '09:00', '10:30', 'thibault_lietard', 2, 5);

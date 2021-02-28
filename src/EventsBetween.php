@@ -31,7 +31,7 @@ class EventsBetween {
         $sPromo = $this->bdd->query('SELECT * FROM Cours 
             INNER JOIN Matieres ON Cours.MatiereID = Matieres.MatiereID 
             INNER JOIN Promotions ON Matieres.PromotionID = Promotions.PromotionID 
-            INNER JOIN Usagers ON Matieres.EnseignantID = Usagers.UsagerID 
+            INNER JOIN Usagers ON Cours.EnseignantID = Usagers.UsagerID 
             LEFT JOIN Salles ON Cours.SalleID = Salles.SalleID 
             LEFT JOIN TypeCours ON TypeCours.TypeID = Cours.TypeID 
             WHERE Promotions.PromotionID  = \''. $promo.'\' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay. ' ORDER BY Cours.DateCour'
