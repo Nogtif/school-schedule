@@ -8,10 +8,8 @@ if(!isOnline()) {
     header('Location: ./login.php');
 }
 
-$week = new Planning\Week($_GET['week'] ?? null);
-$events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
+$nbWeek = date('W');
 
-$promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
 ?>
 <html lang="fr-FR">
 <head>
@@ -41,77 +39,28 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
             </div>
 
             <div id="navigation-calendar" class="calendar">
-                <div class="d-flex flex-row align-items-center justify-content-between">
-                    <h1 class="calendar-title"><?= $week->toString(); ?></h1>
 
-                    <div >
-                        <a href="?week=<?= $week->previousWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) - 4) echo ' disabled' ?>"><i class="mdi mdi-chevron-left"></i></a>  
-                        <a href="?week=<?= $week->nextWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) + 4) echo ' disabled' ?>"><i class="mdi mdi-chevron-right"></i></a>
-                        
-                        <select name="promo" class="form-select">
-                            <option value="default">Promotions</option>
-                            <?php
-                            $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
-                            while($aPromo = $sPromo->fetch()) {
-                                if($_SESSION['promo'] == $aPromo['PromotionID']) {
-                                    echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
-                                } else {
-                                    echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
-                                }
+                <div class="planning-tools">
+                    <a href="JavaScript:Void(0)" data-id="<?= $nbWeek - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
+                    <a href="JavaScript:Void(0)" data-id="<?= $nbWeek + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
+                    
+                    <select name="promo" class="form-select">
+                        <option value="default">Promotions</option>
+                        <?php
+                        $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
+                        while($aPromo = $sPromo->fetch()) {
+                            if($_SESSION['promo'] == $aPromo['PromotionID']) {
+                                echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
+                            } else {
+                                echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
                             }
-                            ?>
-                        </select>
-                    </div>
+                        }
+                        ?>
+                    </select>
                 </div>
 
-                <div class="box-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <?php for($i = 0; $i < 7;$i++) { 
-                                    $day = $week->getFirstDay() + ($i * 86400);
-                                    ?>
-                                    <td <?php if(intval(date('jm', $day)) == intval(date('jm', time()))) echo 'class="active"'; ?>>
-                                        <span class="numDay"><?= date('j', $day) ?></span>
-                                        <span class="nameDay"><?= $week->getDay($i) ?></span>
-                                    </td>
-                                <?php } ?>
-                            </tr>
-                        </thead>
-                            <tbody>
-                                <?php 
-                                $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
-                                $i = 0;
-                                foreach($pHour as $dt) {
-                                    echo '<tr><td class="hour"><span>';
-                                    echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
-                                    echo '</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-                                    
-                                    $i++;
-                                }
-                                ?>
-                            </tbody>
-                        </div>
-                    </table>
+                <div id="target-content">
 
-                    <div class="calendar-events">
-                        <?php $i = 1; foreach($events->getEvents($_GET['promo'] ?? $promo) as $events) { ?>
-                                
-                            <div class="events-day">
-                                <?php foreach($events as $event) { 
-                                    $top = (abs(strtotime(date("8:00")) - strtotime($event['HeureDebut'])) / 3600) * 70;
-                                    $height = (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut'])) / 3600) * 70;
-                                    ?>
-                                    <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>;top: <?= $top ?>px;left:<?= $i-1 ?>px;margin-right: <?= $i ?>px;height: <?= $height ?>px!important;">
-                                        <span><?= str_replace(':', 'h', $event['HeureDebut']) . ' - ' . str_replace(':', 'h', $event['HeureFin']) ?></span>
-                                        <b><?= $event['NomType'] . ' - ' . $event['NomMatiere'] ?></b>
-                                        <span><?= $event['NomSalle'] . (isset($event['NomSalle']) ? ' : ' : '') ?>
-                                        <?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        <?php $i++; } ?>
-                    </div>
                 </div>
             </div>
         </div>
@@ -123,6 +72,29 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#target-content").load("planning.php");
+            var currentWeek = $(".nextPage").attr("data-id") - 1;
+            $(".btn").click(function(){
+                var id = $(this).attr("data-id");
+                $.ajax({
+                    url: "planning.php",
+                    type: "GET",
+                    data: {
+                        week : id
+                    },
+                    cache: false,
+                    success: function(dataResult){
+                        $("#target-content").html(dataResult);
+                        $(".previousPage").attr("data-id", (currentWeek - 4 <= id - 1 ) ? id - 1 : id);
+                        $(".nextPage").attr("data-id", (currentWeek + 4 >= (parseInt(id) + 1)) ? (parseInt(id) + 1).toString() : id);
+                    }
+                });
+            });
+        });
+    </script>
     
 </body>
 </html>

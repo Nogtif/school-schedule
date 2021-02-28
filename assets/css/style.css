@@ -189,6 +189,7 @@ footer {
 .calendar {
     width: calc(100% - 100px);
     margin-left: 80px;
+    position: relative;
 }
 
 .calendar-title {
@@ -199,9 +200,16 @@ footer {
     margin: 20px 0;
 }
 
+.planning-tools {
+    position: absolute;
+    top: 15px;
+    right: 0;
+}
+
 .nav-week {
     font-size: 2rem;
 }
+
 
 .calendar form {
     display: inline;
@@ -232,6 +240,8 @@ footer {
 .calendar-nav {
     margin-top: -20px;
 }
+
+
 
 table {
     width: 100%;
