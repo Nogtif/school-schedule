@@ -1,6 +1,6 @@
 <?php 
 
-namespace App;
+namespace Planning;
 
 /** Classe Week qui représente une semaine. */
 class Week {

@@ -1,11 +1,11 @@
 <?php 
-namespace App;
+namespace Planning;
 require_once('./config/pdo.php');
 
-class EventsBetween {
+class Events {
 
     // On déclare les variables...
-    private $db, $firstDay, $lastDay, $tabCours;
+    private $bdd, $firstDay, $lastDay;
 
     /** Constructeur de la classe Week qui modélise une semaine.
      * @param \PDO $db > la base de donnée.

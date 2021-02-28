@@ -2,14 +2,14 @@
 <?php 
 require_once('./config.php');
 require_once('./src/Week.php');
-require_once('./src/EventsBetween.php');
+require_once('./src/Events.php');
 
 if(!isOnline()) {
     header('Location: ./');
 }
 
-$week = new App\Week($_GET['week'] ?? null);
-$events = new App\EventsBetween($bdd,$week->getFirstDay(), $week->getLastDay());
+$week = new Planning\Week($_GET['week'] ?? null);
+$events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
 
 $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
 ?>
