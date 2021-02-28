@@ -1,68 +1,128 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
+require_once('./src/Week.php');
+require_once('./src/Events.php');
 
-// Si l'utilisateur est déjà connecté, on le redirige.
-if(isOnline()) {
-    header('Location: ./planning.php');
+if(!isOnline()) {
+    header('Location: ./login.php');
 }
 
-// Variable affiant le message d'erreur.
-$msg_error = '';
+$week = new Planning\Week($_GET['week'] ?? null);
+$events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
 
-// Lors de la connexion...
-if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
-
-    // On vérifie si l'usager est bien enregistré.
-    $verif = $bdd->prepare('SELECT * FROM Usagers WHERE UsagerID = ? LIMIT 0,1');
-	$verif->execute(array($_POST['identifiant']));
-    $userExist = $verif->fetch();
-
-    // Si l'usager existe et que le mot de passe correspond, on le connecte.
-    if($userExist && password_verify($_POST['mdp'], $userExist['MotDePasse'])) {
-
-        $_SESSION['id'] = $userExist['UsagerID'];
-        $_SESSION['password'] = $userExist['MotDePasse'];
-        $_SESSION['nom'] = $userExist['Nom'];
-        $_SESSION['prenom'] = $userExist['Prenom'];
-        $_SESSION['rang'] = $userExist['RangID'];
-        $_SESSION['promo'] = $userExist['PromotionID'];
-
-        // Une fois l'usager connecté, on le redirige.
-        header('Location: ./planning.php');
-    // Sinon, on affiche le message d'erreur.
-    } else {
-        $msg_error = 'Identifiant ou Mot de passe invalide !';
-    }
-}
+$promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
 ?>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentification : Université d'Artois</title>
+    <title>EDT : Université d'Artois</title>
     <link type="image/x-icon" rel="shortcut icon" href="./assets/img/favicon.ico"/>
-    <meta property="og:title" content="Authentification : Université d'Artois">
+    <meta property="og:title" content="EDT : Université d'Artois">
     <meta property="og:type" content="website">
     <meta name="author" content="Carpentier Quentin & Krogulec Paul-Joseph">
     <!-- CSS -->
+    <link type="text/css" rel="stylesheet" href="./assets/css/icons.min.css">
     <link type="text/css" rel="stylesheet" href="./assets/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-    <div class="wrapper">
-        <div class="content login">
-            <h2>Service d'Authentification</h2>
-            <form method="post" action="">
-                <label for="identifiant">Identifiant</label>
-                <input type="text" name="identifiant" required>
-                <label for="mdp">Mot de passe</label>
-                <input type="password" name="mdp" required>
-                <input class="btn btn-primary" type="submit" name="mylogin" value="Connexion">
-            </form>
-            <span><?= $msg_error; ?></span>
+
+    <!-- HEADER -->
+    <?php require_once('./views/header.php') ?>
+
+    <!-- PAGE -->
+    <div class="container">
+        <div class="main-grid">
+            <div class="list-ressources">
+                <!-- à remplir-->
+            </div>
+
+            <div id="navigation-calendar" class="calendar">
+                <div class="d-flex flex-row align-items-center justify-content-between">
+                    <h1 class="calendar-title"><?= $week->toString(); ?></h1>
+
+                    <div >
+                        <a href="?week=<?= $week->previousWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) - 4) echo ' disabled' ?>"><i class="mdi mdi-chevron-left"></i></a>  
+                        <a href="?week=<?= $week->nextWeek()->getWeek(); ?>" class="btn btn-primary<?php if($week->getWeek() == intval(date('W')) + 4) echo ' disabled' ?>"><i class="mdi mdi-chevron-right"></i></a>
+                        
+                        <select name="promo" class="form-select">
+                            <option value="default">Promotions</option>
+                            <?php
+                            $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
+                            while($aPromo = $sPromo->fetch()) {
+                                if($_SESSION['promo'] == $aPromo['PromotionID']) {
+                                    echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
+                                } else {
+                                    echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="box-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <?php for($i = 0; $i < 7;$i++) { 
+                                    $day = $week->getFirstDay() + ($i * 86400);
+                                    ?>
+                                    <td <?php if(intval(date('jm', $day)) == intval(date('jm', time()))) echo 'class="active"'; ?>>
+                                        <span class="numDay"><?= date('j', $day) ?></span>
+                                        <span class="nameDay"><?= $week->getDay($i) ?></span>
+                                    </td>
+                                <?php } ?>
+                            </tr>
+                        </thead>
+                            <tbody>
+                                <?php 
+                                $pHour = new DatePeriod(new DateTime('08:00'), new DateInterval("PT30M"), 24);
+                                $i = 0;
+                                foreach($pHour as $dt) {
+                                    echo '<tr><td class="hour"><span>';
+                                    echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
+                                    echo '</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+                                    
+                                    $i++;
+                                }
+                                ?>
+                            </tbody>
+                        </div>
+                    </table>
+
+                    <div class="calendar-events">
+                        <?php $i = 1; foreach($events->getEvents($_GET['promo'] ?? $promo) as $events) { ?>
+                                
+                            <div class="events-day">
+                                <?php foreach($events as $event) { 
+                                    $top = (abs(strtotime(date("8:00")) - strtotime($event['HeureDebut'])) / 3600) * 70;
+                                    $height = (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut'])) / 3600) * 70;
+                                    ?>
+                                    <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>;top: <?= $top ?>px;left:<?= $i-1 ?>px;margin-right: <?= $i ?>px;height: <?= $height ?>px!important;">
+                                        <span><?= str_replace(':', 'h', $event['HeureDebut']) . ' - ' . str_replace(':', 'h', $event['HeureFin']) ?></span>
+                                        <b><?= $event['NomType'] . ' - ' . $event['NomMatiere'] ?></b>
+                                        <span><?= $event['NomSalle'] . (isset($event['NomSalle']) ? ' : ' : '') ?>
+                                        <?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        <?php $i++; } ?>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- FOOTER -->
+    <?php require_once('./views/footer.php') ?>
+
+    
+	<!-- JS -->
+	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+    
 </body>
 </html>

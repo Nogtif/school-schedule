@@ -61,7 +61,7 @@ header {
     vertical-align: middle;
 }
 
-.logo span {    
+.logo span {
 	font-family: 'Jost', sans-serif;
     font-size: 22px;
     vertical-align: middle;
@@ -161,6 +161,9 @@ footer {
     display: block;
 }
 
+.btn {
+    font-weight: 600;
+}
 
 .btn-primary {
     color: #fff;
@@ -385,6 +388,7 @@ tbody td {
 }
 
 .login h2 {
+	font-family: 'Jost', sans-serif;
 	text-align: center;
 	margin-bottom: 20px;
 	font-weight: 700;
@@ -394,6 +398,7 @@ tbody td {
 .login label {
     display: block;
     line-height: 1.8;
+    font-size: 14px;
 }
 
 .login input {
