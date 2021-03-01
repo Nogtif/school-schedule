@@ -28,29 +28,27 @@ if(!isOnline()) {
 
     <!-- PAGE -->
     <div class="container">
-        <div class="main-grid">
-            <div class="planning">
-                <div class="planning-tools">
-                    <a href="javascript:void(0)" data-id="<?= date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
-                    <a href="javascript:void(0)" data-id="<?= date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
-                    
-                    <select name="promo" class="form-select">
-                        <option value="0">Promotions</option>
-                        <?php
-                        $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
-                        while($aPromo = $sPromo->fetch()) {
-                            if($_SESSION['promo'] == $aPromo['PromotionID']) {
-                                echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
-                            } else {
-                                echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
-                            }
+        <div class="planning">
+            <div class="planning-tools">
+                <a href="javascript:void(0)" data-id="<?= date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
+                <a href="javascript:void(0)" data-id="<?= date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
+                
+                <select name="promo" class="form-select">
+                    <option value="0">Promotions</option>
+                    <?php
+                    $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
+                    while($aPromo = $sPromo->fetch()) {
+                        if($_SESSION['promo'] == $aPromo['PromotionID']) {
+                            echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
+                        } else {
+                            echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
                         }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="planning-page"></div>
+                    }
+                    ?>
+                </select>
             </div>
+
+            <div class="planning-page"></div>
         </div>
     </div>
 

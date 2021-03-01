@@ -11,7 +11,7 @@
             <li><a href="./" <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'class="active"' : '' ?>><i class="mdi mdi-calendar"></i> <span>Emploi du temps</span></a></li>
 
             <?php if($_SESSION['rang'] > 1) { ?>
-                <li><a href="./cours.php" <?= (basename($_SERVER['PHP_SELF']) == 'cours.php') ? 'class="active"' : '' ?>><i class="mdi mdi-notebook-outline"></i> <span>Gerer mes cours</span></a></li>
+                <li><a href="./gestion.php" <?= (basename($_SERVER['PHP_SELF']) == 'gestion.php') ? 'class="active"' : '' ?>><i class="mdi mdi-notebook-outline"></i> <span>Gestion des cours</span></a></li>
             <?php } ?>
 
             <?php if($_SESSION['rang'] > 2) { ?>
