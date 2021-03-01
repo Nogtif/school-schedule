@@ -1,10 +1,11 @@
 <?php 
+require_once('./config.php');
 require_once('./src/Week.php');
 require_once('./src/Events.php');
 
 $week = new Planning\Week($_GET['week'] ?? null);
 $events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
-$promo = 10;
+$promo = $_GET['promo'] ?? ($_SESSION['promo'] ?? 0);
 ?>
 
 <h1 class="planning-title"><?= $week->toString() ?></h1>
@@ -37,7 +38,7 @@ $promo = 10;
     </table>
 
     <div class="planning-events">
-        <?php $i = 1; foreach($events->getEvents($_GET['promo'] ?? $promo) as $events) { ?>
+        <?php $i = 1; foreach($events->getEvents($promo) as $events) { ?>
             <div class="events-day">
                 <?php foreach($events as $event) { 
                     $top = (abs(strtotime(date("8:00")) - strtotime($event['HeureDebut'])) / 3600) * 70;

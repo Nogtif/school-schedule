@@ -31,11 +31,11 @@ if(!isOnline()) {
         <div class="main-grid">
             <div class="planning">
                 <div class="planning-tools">
-                    <a href="JavaScript:Void(0)" data-id="<?= date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
-                    <a href="JavaScript:Void(0)" data-id="<?= date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
+                    <a href="javascript:void(0)" data-id="<?= date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
+                    <a href="javascript:void(0)" data-id="<?= date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
                     
                     <select name="promo" class="form-select">
-                        <option value="default">Promotions</option>
+                        <option value="0">Promotions</option>
                         <?php
                         $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
                         while($aPromo = $sPromo->fetch()) {
