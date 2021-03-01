@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
-require_once('./src/Week.php');
-require_once('./src/Events.php');
 
 if(!isOnline()) {
     header('Location: ./login.php');
 }
-
-$nbWeek = date('W');
-
 ?>
 <html lang="fr-FR">
 <head>
@@ -34,15 +29,10 @@ $nbWeek = date('W');
     <!-- PAGE -->
     <div class="container">
         <div class="main-grid">
-            <div class="list-ressources">
-                <!-- à remplir-->
-            </div>
-
-            <div id="navigation-calendar" class="calendar">
-
+            <div class="planning">
                 <div class="planning-tools">
-                    <a href="JavaScript:Void(0)" data-id="<?= $nbWeek - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
-                    <a href="JavaScript:Void(0)" data-id="<?= $nbWeek + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
+                    <a href="JavaScript:Void(0)" data-id="<?= date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
+                    <a href="JavaScript:Void(0)" data-id="<?= date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
                     
                     <select name="promo" class="form-select">
                         <option value="default">Promotions</option>
@@ -59,7 +49,7 @@ $nbWeek = date('W');
                     </select>
                 </div>
 
-                <div id="target-content">
+                <div class="planning-page">
 
                 </div>
             </div>
@@ -68,16 +58,14 @@ $nbWeek = date('W');
 
     <!-- FOOTER -->
     <?php require_once('./views/footer.php') ?>
-
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
-
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
-            $("#target-content").load("planning.php");
+            $(".planning-page").load("planning.php");
             var currentWeek = $(".nextPage").attr("data-id") - 1;
-            $(".btn").click(function(){
+            $(".btn").click(function() {
                 var id = $(this).attr("data-id");
                 $.ajax({
                     url: "planning.php",
@@ -85,16 +73,14 @@ $nbWeek = date('W');
                     data: {
                         week : id
                     },
-                    cache: false,
-                    success: function(dataResult){
-                        $("#target-content").html(dataResult);
+                    success: function(dataResult) {
+                        $(".planning-page").html(dataResult);
                         $(".previousPage").attr("data-id", (currentWeek - 4 <= id - 1 ) ? id - 1 : id);
                         $(".nextPage").attr("data-id", (currentWeek + 4 >= (parseInt(id) + 1)) ? (parseInt(id) + 1).toString() : id);
                     }
                 });
             });
         });
-    </script>
-    
+    </script>    
 </body>
 </html>

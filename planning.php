@@ -1,17 +1,14 @@
 <?php 
-
 require_once('./src/Week.php');
 require_once('./src/Events.php');
 
 $week = new Planning\Week($_GET['week'] ?? null);
 $events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
-
 $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
 ?>
 
-<h1 class="calendar-title"><?= $week->toString() ?></h1>
+<h1 class="planning-title"><?= $week->toString() ?></h1>
 <div class="box-content">
-    
     <table>
         <thead>
             <tr>
@@ -33,7 +30,6 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
                     echo '<tr><td class="hour"><span>';
                     echo ($i%2!=0) ? $dt->format('H:i') : $dt->format('H:i');
                     echo '</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-                    
                     $i++;
                 }
                 ?>
@@ -41,9 +37,8 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
         </div>
     </table>
 
-    <div class="calendar-events">
+    <div class="planning-events">
         <?php $i = 1; foreach($events->getEvents($_GET['promo'] ?? $promo) as $events) { ?>
-                
             <div class="events-day">
                 <?php foreach($events as $event) { 
                     $top = (abs(strtotime(date("8:00")) - strtotime($event['HeureDebut'])) / 3600) * 70;
