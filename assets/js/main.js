@@ -1,4 +1,4 @@
-$(function() {
+$('.planning').ready(function() {
     // on charge la page du planning.
     $(".planning-page").load("planning.php");
     // on récupère la semaine courante.

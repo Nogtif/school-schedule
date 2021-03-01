@@ -2,6 +2,7 @@
 <?php 
 require_once('./config.php');
 
+// Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
     header('Location: ./login.php');
 }
@@ -22,7 +23,6 @@ if(!isOnline()) {
     <link type="text/css" rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-
     <!-- HEADER -->
     <?php require_once('./views/header.php') ?>
 
@@ -57,6 +57,6 @@ if(!isOnline()) {
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="./assets/js/planning.js"></script>
+    <script type="text/javascript" src="./assets/js/main.js"></script>
 </body>
 </html>

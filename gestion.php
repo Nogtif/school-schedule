@@ -2,8 +2,14 @@
 <?php 
 require_once('./config.php');
 
+// Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
     header('Location: ./login.php');
+}
+
+// Redirection vers l'index si l'usager n'est ni un enseignant, ni un administrateur.
+if($_SESSION['rang'] < 2) {
+    header('Location: ./');
 }
 ?>
 <html lang="fr-FR">
@@ -22,7 +28,6 @@ if(!isOnline()) {
     <link type="text/css" rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-
     <!-- HEADER -->
     <?php require_once('./views/header.php') ?>
 
@@ -30,8 +35,6 @@ if(!isOnline()) {
     <div class="container">
 
         <div class="row">
-
-
             <div class="col-md-7">
                 <div class="box-content">
 
