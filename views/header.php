@@ -24,5 +24,4 @@
     <div class="right-tools">
         <a href="./logout.php" class="btn btn-primary">Déconnexion</a>
     </div>
-
 </header>

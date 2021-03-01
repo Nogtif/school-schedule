@@ -59,21 +59,6 @@ if(!isOnline()) {
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(".planning-page").load("planning.php");
-            var currentWeek = $(".nextPage").attr("data-id") - 1;
-            $(".btn").click(function() {
-                var id = $(this).attr("data-id");
-                $.get('planning.php', {week : id, promo : 10},
-                    function(dataResult) {
-                        $(".planning-page").html(dataResult);
-                        $(".previousPage").attr("data-id", (currentWeek - 4 <= id - 1 ) ? id - 1 : id);
-                        $(".nextPage").attr("data-id", (currentWeek + 4 >= (parseInt(id) + 1)) ? (parseInt(id) + 1).toString() : id);
-                    }
-                );
-            });
-        });
-    </script>    
+    <script type="text/javascript" src="./assets/js/planning.js"></script>
 </body>
 </html>
