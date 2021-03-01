@@ -309,6 +309,16 @@ footer {
 
 .planning tbody tr:last-child {
     border:0;
+    padding: 0;
+    height: 0;
+}
+
+.planning tbody tr:last-child td {
+    padding: 0;
+}
+
+.planning tbody tr:last-child td span {
+    top: -12px;
 }
 
 .planning tbody td:first-child {
@@ -320,7 +330,7 @@ footer {
 
 .planning tbody td span {
     position: absolute;
-    top: -5px;
+    top: -8px;
     left: -50px;
     color: #B6B8BC;
 }
