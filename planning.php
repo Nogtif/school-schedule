@@ -4,7 +4,7 @@ require_once('./src/Events.php');
 
 $week = new Planning\Week($_GET['week'] ?? null);
 $events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
-$promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
+$promo = 10;
 ?>
 
 <h1 class="planning-title"><?= $week->toString() ?></h1>
@@ -14,12 +14,11 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
             <tr>
                 <?php for($i = 0; $i < 7;$i++) { 
                     $day = $week->getFirstDay() + ($i * 86400);
-                    ?>
-                    <td <?php if(intval(date('jm', $day)) == intval(date('jm', time()))) echo 'class="active"'; ?>>
-                        <span class="numDay"><?= date('j', $day) ?></span>
-                        <span class="nameDay"><?= $week->getDay($i) ?></span>
-                    </td>
-                <?php } ?>
+                    echo '<td ' . ((intval(date('jm', $day)) == intval(date('jm', time()))) ? 'class="active"' : '') . '>';
+                    echo '<span class="numDay">'. date('j', $day) .'</span>';
+                    echo '<span class="nameDay">'. $week->getDay($i) .'</span>';
+                    echo '</td>';
+                } ?>
             </tr>
         </thead>
             <tbody>
@@ -43,14 +42,13 @@ $promo = isset($_SESSION['promo']) ? $_SESSION['promo'] : 10;
                 <?php foreach($events as $event) { 
                     $top = (abs(strtotime(date("8:00")) - strtotime($event['HeureDebut'])) / 3600) * 70;
                     $height = (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut'])) / 3600) * 70;
-                    ?>
-                    <div class="event" style="background-color: <?= $event['CouleurMatiere'] ?>;top: <?= $top ?>px;left:<?= $i-1 ?>px;margin-right: <?= $i ?>px;height: <?= $height ?>px!important;">
-                        <span><?= str_replace(':', 'h', $event['HeureDebut']) . ' - ' . str_replace(':', 'h', $event['HeureFin']) ?></span>
-                        <b><?= $event['NomType'] . ' - ' . $event['NomMatiere'] ?></b>
-                        <span><?= $event['NomSalle'] . (isset($event['NomSalle']) ? ' : ' : '') ?>
-                        <?= $event['Prenom'] . ' ' . $event['Nom'] ?></span>
-                    </div>
-                <?php } ?>
+
+                    echo '<div class="event" style="background-color:'.$event['CouleurMatiere'].';top:'.$top.'px;left:'.($i-1).'px;height:'. $height.'px!important">';
+                    echo '<span>'. str_replace(':', 'h', $event['HeureDebut']) .' - '. str_replace(':', 'h', $event['HeureFin']). '</span>';
+                    echo '<b>'. $event['NomType'] . ' - ' . $event['NomMatiere']. '</b>';
+                    echo '<span>'. $event['NomSalle'] . ((isset($event['NomSalle'])) ? ' : ': '') .$event['Prenom'] . ' ' . $event['Nom']. '<span>';
+                    echo '</div>';
+                } ?>
             </div>
         <?php $i++; } ?>
     </div>

@@ -49,9 +49,7 @@ if(!isOnline()) {
                     </select>
                 </div>
 
-                <div class="planning-page">
-
-                </div>
+                <div class="planning-page"></div>
             </div>
         </div>
     </div>
@@ -67,18 +65,13 @@ if(!isOnline()) {
             var currentWeek = $(".nextPage").attr("data-id") - 1;
             $(".btn").click(function() {
                 var id = $(this).attr("data-id");
-                $.ajax({
-                    url: "planning.php",
-                    type: "GET",
-                    data: {
-                        week : id
-                    },
-                    success: function(dataResult) {
+                $.get('planning.php', {week : id, promo : 10},
+                    function(dataResult) {
                         $(".planning-page").html(dataResult);
                         $(".previousPage").attr("data-id", (currentWeek - 4 <= id - 1 ) ? id - 1 : id);
                         $(".nextPage").attr("data-id", (currentWeek + 4 >= (parseInt(id) + 1)) ? (parseInt(id) + 1).toString() : id);
                     }
-                });
+                );
             });
         });
     </script>    
