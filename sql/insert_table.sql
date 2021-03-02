@@ -96,19 +96,16 @@ INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, UsagerID, T
 INSERT INTO Promotions_Usager(UsagerID, PromotionID) VALUES 
 ('jerome_buresi',1), ('baptiste_calmes',1), ('fatma_jeeawock',1), ('etienne_matheron',1), ('fabrice_derrien',1),
 ('jerome_buresi',5), ('baptiste_calmes',5), ('fatma_jeeawock',5), ('etienne_matheron',5), ('fabrice_derrien',5),
-('jerome_buresi',9), ('baptiste_calmes',9), ('fatma_jeeawock',9), ('etienne_matheron',9), ('fabrice_derrien',9);
+('jerome_buresi',9), ('baptiste_calmes',9), ('fatma_jeeawock',9), ('etienne_matheron',9), ('fabrice_derrien',9),
 
-INSERT INTO Promotions_Usager(UsagerID, PromotionID) VALUES 
 ('anne_parrain',2), ('karim_tabia',2), ('tiago_delima',2), ('johan_koitka',2), ('said_jabbour',2), ('daniel_leberre',2), ('thibault_lietard',2), ('zied_bouraoui',2),
 ('anne_parrain',6), ('karim_tabia',6), ('tiago_delima',6), ('johan_koitka',6), ('said_jabbour',6), ('daniel_leberre',6), ('thibault_lietard',6), ('zied_bouraoui',6),
-('anne_parrain',10), ('karim_tabia',10), ('tiago_delima',10), ('johan_koitka',10), ('said_jabbour',10), ('daniel_leberre',10), ('thibault_lietard',10), ('zied_bouraoui',10);
+('anne_parrain',10), ('karim_tabia',10), ('tiago_delima',10), ('johan_koitka',10), ('said_jabbour',10), ('daniel_leberre',10), ('thibault_lietard',10), ('zied_bouraoui',10),
 
-INSERT INTO Promotions_Usager(UsagerID, PromotionID) VALUES 
 ('rachel_desfeux',3), ('sylvie_berger',3), ('anne_marchyllie',3), ('laurence_brehon',3), ('fabien_gosselet',3), ('sebastien_leroy',3),
 ('rachel_desfeux',7), ('sylvie_berger',7), ('anne_marchyllie',7), ('laurence_brehon',7), ('fabien_gosselet',7), ('sebastien_leroy',7),
-('rachel_desfeux',11), ('sylvie_berger',11), ('anne_marchyllie',11), ('laurence_brehon',11), ('fabien_gosselet',11), ('sebastien_leroy',11);
+('rachel_desfeux',11), ('sylvie_berger',11), ('anne_marchyllie',11), ('laurence_brehon',11), ('fabien_gosselet',11), ('sebastien_leroy',11),
 
-INSERT INTO Promotions_Usager(UsagerID, PromotionID) VALUES 
 ('virginie_thery',4), ('herve_bricout',4), ('bastien_leger',4), ('sebastien_tilloy',4), ('pascale_boizumault',4), ('frederic_boizumault',4),
 ('virginie_thery',8), ('herve_bricout',8), ('bastien_leger',8), ('sebastien_tilloy',8), ('pascale_boizumault',8), ('frederic_boizumault',8),
 ('virginie_thery',12), ('herve_bricout',12), ('bastien_leger',12), ('sebastien_tilloy',12), ('pascale_boizumault',12), ('frederic_boizumault',12),
