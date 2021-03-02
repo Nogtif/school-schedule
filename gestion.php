@@ -16,10 +16,6 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
 
 // Ajout d'un cours
-if(isset($_POST['add_cours'])) {
-    if(!empty($_POST['promotion']) && )
-
-}
 ?>
 <html lang="fr-FR">
 <head>
@@ -52,7 +48,7 @@ if(isset($_POST['add_cours'])) {
                     </form>
                     <hr>
                     <?php 
-                    $where = 'WHERE UsagerID ='. $_SESSION['id'] . ' AND NomMatiere LIKE \'%'. $last_search.'%\'';
+                    $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
                     $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) LEFT JOIN TypeCours USING(TypeID) '.$where.' ORDER BY DateCour DESC');
                     while($aCours = $sCours->fetch()) {
                         echo $aCours['NomType'] . ' ' . $aCours['NomMatiere'] .  '<br>';

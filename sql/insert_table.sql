@@ -1,7 +1,10 @@
-INSERT INTO Promotions(NomPromotion) VALUES
-('L1-MATH'), ('L1-INFO'), ('L1-SVT'), ('L1-CHIMIE'),
-('L2-MATH'), ('L2-INFO'), ('L2-SVT'), ('L2-CHIMIE'),
-('L3-MATH'), ('L3-INFO'), ('L3-SVT'), ('L3-CHIMIE');
+INSERT INTO Formations(FormationID, NomFormation) VALUES
+(1, 'Math'), (2, 'Info'), (3, 'SVT'), (4, 'Chimie');
+
+INSERT INTO Promotions(NomPromotion, FormationID) VALUES
+('L1-MATH', 1), ('L1-INFO', 2), ('L1-SVT', 3), ('L1-CHIMIE', 4),
+('L2-MATH', 1), ('L2-INFO', 2), ('L2-SVT', 3), ('L2-CHIMIE', 4),
+('L3-MATH', 1), ('L3-INFO', 2), ('L3-SVT', 3), ('L3-CHIMIE', 4);
 
 INSERT INTO Rangs(RangID, NomRang) VALUES
 (1, 'Etudiant'), (2, 'Enseignant'), (3, 'Admin');
@@ -74,23 +77,23 @@ INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere, PromotionID) VALUES
 (5, 'Anglais 6', '#AF4343', 10),
 (6, 'Stage', '#339966', 10);
 
-INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, UsagerID, TypeID, SalleID) VALUES
-(1, 4, '1614556800', '10:15', '11:15', 'karim_tabia', 1, 4),
-(2, 4, '1614556800', '11:15', '12:15', 'karim_tabia', 2, 4),
-(3, 2, '1614556800', '14:00', '15:30', 'tiago_delima', 1, 3),
+INSERT INTO Cours(CourID, DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, SalleID) VALUES
+(1, '1614556800', '10:15', '11:15', 4, 'karim_tabia', 1, 4),
+(2, '1614556800', '11:15', '12:15', 4, 'karim_tabia', 2, 4),
+(3, '1614556800', '14:00', '15:30', 2, 'tiago_delima', 1, 3),
 
-(4, 3, '1614643200', '09:30', '10:30', 'johan_koitka', 2, 8),
-(5, 3, '1614643200', '14:00', '15:30', 'johan_koitka', 1, 3),
-(6, 1, '1614643200', '15:45', '17:30', 'daniel_leberre', 2, NULL),
+(4, '1614643200', '09:30', '10:30', 3, 'johan_koitka', 2, 8),
+(5, '1614643200', '14:00', '15:30', 3, 'johan_koitka', 1, 3),
+(6, '1614643200', '15:45', '17:30', 1, 'daniel_leberre', 2, 3),
 
-(7, 1, '1614729600', '08:45', '10:45', 'thibault_lietard', 3, 5),
-(8, 2, '1614729600', '11:00', '13:00', 'thibault_lietard', 3, 5),
-(9, 5, '1614729600', '14:30', '16:30', 'catherine_vincent', 3, 10),
+(7, '1614729600', '08:45', '10:45', 1, 'thibault_lietard', 3, 5),
+(8, '1614729600', '11:00', '13:00', 2, 'thibault_lietard', 3, 5),
+(9, '1614729600', '14:30', '16:30', 5, 'catherine_vincent', 3, 10),
 
-(10, 2, '1614816000', '09:00', '10:30', 'thibault_lietard', 2, 7),
-(11, 3, '1614816000', '10:45', '12:45', 'johan_koitka', 3, 5),
-(12, 4, '1614816000', '13:45', '15:30', 'karim_tabia', 3, 7),
-(13, 6, '1614902400', '14:00', '18:00', null, null, 4);
+(10, '1614816000', '09:00', '10:30', 2, 'thibault_lietard', 2, 7),
+(11, '1614816000', '10:45', '12:45', 3, 'johan_koitka', 3, 5),
+(12, '1614816000', '13:45', '15:30', 4, 'karim_tabia', 3, 7),
+(13, '1614902400', '14:00', '18:00', 6, 'zied_bouraoui', 1, 4);
 
 INSERT INTO Appartient(UsagerID, PromotionID) VALUES 
 ('jerome_buresi',1), ('baptiste_calmes',1), ('fatma_jeeawock',1), ('etienne_matheron',1), ('fabrice_derrien',1),
