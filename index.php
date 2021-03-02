@@ -4,7 +4,7 @@ require_once('./config.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
-    header('Location: ./login.php');
+    header('Location: ./login');
 }
 ?>
 <html lang="fr-FR">

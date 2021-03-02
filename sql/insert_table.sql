@@ -74,7 +74,6 @@ INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere, PromotionID) VALUES
 (5, 'Anglais 6', '#AF4343', 10),
 (6, 'Stage', '#339966', 10);
 
-
 INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, UsagerID, TypeID, SalleID) VALUES
 (1, 4, '1614556800', '10:15', '11:15', 'karim_tabia', 1, 4),
 (2, 4, '1614556800', '11:15', '12:15', 'karim_tabia', 2, 4),
@@ -93,7 +92,7 @@ INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, UsagerID, T
 (12, 4, '1614816000', '13:45', '15:30', 'karim_tabia', 3, 7),
 (13, 6, '1614902400', '14:00', '18:00', null, null, 4);
 
-INSERT INTO Promotions_Usager(UsagerID, PromotionID) VALUES 
+INSERT INTO Appartient(UsagerID, PromotionID) VALUES 
 ('jerome_buresi',1), ('baptiste_calmes',1), ('fatma_jeeawock',1), ('etienne_matheron',1), ('fabrice_derrien',1),
 ('jerome_buresi',5), ('baptiste_calmes',5), ('fatma_jeeawock',5), ('etienne_matheron',5), ('fabrice_derrien',5),
 ('jerome_buresi',9), ('baptiste_calmes',9), ('fatma_jeeawock',9), ('etienne_matheron',9), ('fabrice_derrien',9),

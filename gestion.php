@@ -4,7 +4,7 @@ require_once('./config.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
-    header('Location: ./login.php');
+    header('Location: ./login');
 }
 
 // Redirection vers l'index si l'usager n'est ni un enseignant, ni un administrateur.
@@ -63,7 +63,7 @@ $last_search = '';
                                 <label for="">Promotion</label>
                                 <select name="promotion" class="form-control" id="promo">
                                     <?php 
-                                    $sPromo = $bdd->query('SELECT p.* FROM Promotions_Usager pu INNER JOIN Promotions p ON p.PromotionID=pu.PromotionID WHERE UsagerID="'.$_SESSION['id'].'"');
+                                    $sPromo = $bdd->query('SELECT p.* FROM Appartient pu INNER JOIN Promotions p ON p.PromotionID=pu.PromotionID WHERE UsagerID="'.$_SESSION['id'].'"');
                                     while($aPromo = $sPromo->fetch()) {
                                         echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
                                     } ?>                                

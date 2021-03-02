@@ -107,11 +107,14 @@ CREATE TABLE Cours (
     CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS Promotions_Usager;
-CREATE TABLE Promotions_Usager(
-    UsagerID VARCHAR(30) NOT NULL,
-    PromotionID INTEGER NOT NULL,
-    PRIMARY KEY (UsagerID,PromotionID),
-    CONSTRAINT promotions_usager_fk FOREIGN KEY (UsagerID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
-    CONSTRAINT usager_promotions_fk FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID) ON DELETE CASCADE
+/* Association entre les usagers et les promotions.
+    -- UsagerID : l'id de l'usager (clé primaire).
+    -- PromotionID : l'id de la promotion (clé primaire).
+    (clés étrangères associant l'id d'un usager avec la table Usagers et l'id d'une promotion à la table Promotions).
+*/
+DROP TABLE IF EXISTS Appartient;
+CREATE TABLE Appartient(
+    UsagerID VARCHAR(30) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
+    PromotionID INTEGER REFERENCES Promotions(PromotionID) ON DELETE CASCADE,
+    CONSTRAINT appartient_pk PRIMARY KEY (UsagerID, PromotionID)
 );
