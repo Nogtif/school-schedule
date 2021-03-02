@@ -12,7 +12,7 @@ if($_SESSION['rang'] < 2) {
     header('Location: ./');
 }
 
-$last_search = '';
+$last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 ?>
 <html lang="fr-FR">
 <head>
@@ -45,9 +45,9 @@ $last_search = '';
                     </form>
                     <hr>
                     <?php 
-                    $sql = 'WHERE NomMatiere LIKE \'%'.$last_search.'%\' ';
-                    $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) LEFT JOIN TypeCours USING(TypeID)' . $sql. ' ORDER BY DateCour DESC');
-                    while($aCours = $sCours->fetch(PDO::FETCH_ASSOC)) {
+                    $where = 'WHERE UsagerID="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
+                    $sCours = $bdd->query('SELECT * FROM Cours c INNER JOIN Matieres m USING(MatiereID) LEFT JOIN TypeCours USING(TypeID) '.$where.' ORDER BY DateCour DESC');
+                    while($aCours = $sCours->fetch()) {
                         echo $aCours['NomType'] . ' ' . $aCours['NomMatiere'] .  '<br>';
                     } ?>   
 
@@ -63,7 +63,7 @@ $last_search = '';
                                 <label for="">Promotion</label>
                                 <select name="promotion" class="form-control" id="promo">
                                     <?php 
-                                    $sPromo = $bdd->query('SELECT p.* FROM Appartient pu INNER JOIN Promotions p ON p.PromotionID=pu.PromotionID WHERE UsagerID="'.$_SESSION['id'].'"');
+                                    $sPromo = $bdd->query('SELECT p.* FROM Appartient pu INNER JOIN Promotions p USING(PromotionID) WHERE UsagerID="'.$_SESSION['id'].'"');
                                     while($aPromo = $sPromo->fetch()) {
                                         echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
                                     } ?>                                
@@ -74,7 +74,7 @@ $last_search = '';
                                 <label for="">Matière</label>
                                 <select name="matiere" id="" class="form-control" id="matiere">
                                     <?php 
-                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m ON m.MatiereID=c.MatiereID WHERE c.UsagerID="'.$_SESSION['id'].'"');
+                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m USING(MatiereID) WHERE c.UsagerID="'.$_SESSION['id'].'"');
                                     
                                     while($aMatieres = $sMatieres->fetch()) {
                                         echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
