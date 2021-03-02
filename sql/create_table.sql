@@ -4,10 +4,24 @@
     -- FormationID : l'id de la formation.
     (clée étrangère associant la promotion à une formation : FormationID)
 */
+DROP TABLE IF EXISTS Formations;
+CREATE TABLE Formations (
+    FormationID INTEGER  PRIMARY KEY AUTOINCREMENT,
+    NomFormation VARCHAR(25) NOT NULL
+);
+
+/* Table des Promotions. 
+    -- PromotionID : l'id de la promo (clé primaire).
+    -- NomPromotion : le nom du role.
+    -- FormationID : l'id de la formation.
+    (clée étrangère associant la promotion à une formation : FormationID)
+*/
 DROP TABLE IF EXISTS Promotions;
 CREATE TABLE Promotions (
     PromotionID INTEGER  PRIMARY KEY AUTOINCREMENT,
-    NomPromotion VARCHAR(25) NOT NULL
+    NomPromotion VARCHAR(25) NOT NULL,
+    FormationID INTEGER NOT NULL,
+    CONSTRAINT formation_fk FOREIGN KEY (FormationID) REFERENCES Formations(FormationID) ON DELETE CASCADE
 );
 
 /* Table des roleUsager. 
