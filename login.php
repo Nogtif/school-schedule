@@ -14,7 +14,7 @@ $msg_error = '';
 if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
 
     // On vérifie si l'usager est bien enregistré.
-    $verif = $bdd->prepare('SELECT * FROM Usagers INNER JOIN Appartient ON Usagers.UsagerID = Appartient.UsagerID WHERE Usagers.UsagerID = ? LIMIT 0,1');
+    $verif = $bdd->prepare('SELECT * FROM Usagers LEFT JOIN Appartient USING(UsagerID) WHERE UsagerID = ? LIMIT 0,1');
 	$verif->execute(array($_POST['identifiant']));
     $userExist = $verif->fetch();
 
