@@ -1,13 +1,3 @@
-/* Table des Formations. 
-    -- FormationID : l'id de la formation (clé primaire).
-    -- NomFormation : le nom de la formation.
-*/
-DROP TABLE IF EXISTS Formations;
-CREATE TABLE Formations (
-    FormationID INTEGER PRIMARY KEY AUTOINCREMENT,
-    NomFormation VARCHAR(25) NOT NULL
-);
-
 /* Table des Promotions. 
     -- PromotionID : l'id de la promo (clé primaire).
     -- NomPromotion : le nom du role.
@@ -16,10 +6,8 @@ CREATE TABLE Formations (
 */
 DROP TABLE IF EXISTS Promotions;
 CREATE TABLE Promotions (
-    PromotionID INTEGER PRIMARY KEY AUTOINCREMENT,
-    NomPromotion VARCHAR(25) NOT NULL,
-    FormationID INTEGER NOT NULL,
-    CONSTRAINT promo_formation_fk FOREIGN KEY (FormationID) REFERENCES Formations(FormationID) ON DELETE CASCADE
+    PromotionID INTEGER  PRIMARY KEY AUTOINCREMENT,
+    NomPromotion VARCHAR(25) NOT NULL
 );
 
 /* Table des roleUsager. 
@@ -50,7 +38,6 @@ CREATE TABLE Usagers (
     Nom VARCHAR(15) NOT NULL,
     Prenom VARCHAR(20) NOT NULL,
     RangID INTEGER NOT NULL,
-    PromotionID INTEGER DEFAULT NULL,
     CONSTRAINT usager_rang_fk FOREIGN KEY (RangID) REFERENCES Rangs(RangID) ON DELETE CASCADE
 );
 
@@ -118,4 +105,13 @@ CREATE TABLE Cours (
     CONSTRAINT cour_enseignant_fk FOREIGN KEY (UsagerID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
     CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
     CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS Promotions_Usager;
+CREATE TABLE Promotions_Usager(
+    UsagerID VARCHAR(30) NOT NULL,
+    PromotionID INTEGER NOT NULL,
+    PRIMARY KEY (UsagerID,PromotionID),
+    CONSTRAINT promotions_usager_fk FOREIGN KEY (UsagerID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
+    CONSTRAINT usager_promotions_fk FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID) ON DELETE CASCADE
 );
