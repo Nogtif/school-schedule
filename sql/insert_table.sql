@@ -78,7 +78,7 @@ INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere, PromotionID) VALUES
 (6, 'Stage', '#339966', 10);
 
 
-INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, EnseignantID, TypeID, SalleID) VALUES
+INSERT INTO Cours(CourID, MatiereID, DateCour, HeureDebut, HeureFin, UsagerID, TypeID, SalleID) VALUES
 (1, 4, '1614556800', '10:15', '11:15', 'karim_tabia', 1, 4),
 (2, 4, '1614556800', '11:15', '12:15', 'karim_tabia', 2, 4),
 (3, 2, '1614556800', '14:00', '15:30', 'tiago_delima', 1, 3),
