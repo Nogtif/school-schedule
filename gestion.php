@@ -74,11 +74,11 @@ $last_search = '';
                                 <label for="">Matière</label>
                                 <select name="matiere" id="" class="form-control" id="matiere">
                                     <?php 
-                                    $sMatieres = $bdd->query('SELECT * FROM Matieres');
+                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m ON m.MatiereID=c.MatiereID WHERE c.UsagerID="'.$_SESSION['id'].'"');
+                                    
                                     while($aMatieres = $sMatieres->fetch()) {
                                         echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
                                     } ?> 
-                                    <option value="1">COO</option>
                                 </select>
                             </div>
 
@@ -112,9 +112,12 @@ $last_search = '';
                                 <div class="form-group">
                                     <label for="date">Type de cours</label>
                                     <select name="type" class="form-control">
-                                        <option value="cm">CM</option>
-                                        <option value="td">TD</option>
-                                        <option value="tp">TP</option>
+                                    <?php 
+                                            $query = $bdd->query("SELECT * FROM TypeCours");
+                                            while ($row = $query->fetch()){
+                                                echo '<option value="' . $row['TypeID'].'">' . $row['NomType'] . '</option>';
+                                            }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -124,7 +127,14 @@ $last_search = '';
 
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
-                                    <input type="text" name="salle" class="form-control">
+                                    <select name="salle" class="form-control">
+                                        <?php 
+                                            $query = $bdd->query("SELECT * FROM Salles");
+                                            while ($row = $query->fetch()){
+                                                echo '<option value="' . $row['SalleID'].'">' . $row['NomSalle'] . '</option>';
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                                 
                             </div>
