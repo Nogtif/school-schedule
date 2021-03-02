@@ -8,14 +8,14 @@
 
     <div class="navigation">
         <ul>
-            <li><a href="./" <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'class="active"' : '' ?>><i class="mdi mdi-calendar"></i> <span>Emploi du temps</span></a></li>
+            <li><a href="./" <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'class="active"' : null ?>><i class="mdi mdi-calendar"></i> <span>Emploi du temps</span></a></li>
 
             <?php if($_SESSION['rang'] > 1) { ?>
-                <li><a href="./gestion" <?= (basename($_SERVER['PHP_SELF']) == 'gestion.php') ? 'class="active"' : '' ?>><i class="mdi mdi-notebook-outline"></i> <span>Gestion des cours</span></a></li>
+                <li><a href="./gestion" <?= (basename($_SERVER['PHP_SELF']) == 'gestion.php') ? 'class="active"' : null ?>><i class="mdi mdi-notebook-outline"></i> <span>Gestion des cours</span></a></li>
             <?php } ?>
 
             <?php if($_SESSION['rang'] > 2) { ?>
-                <li><a href="./admin" <?= (basename($_SERVER['PHP_SELF']) == 'admin.php') ? 'class="active"' : '' ?>><i class="mdi mdi-view-grid-outline"></i> <span>Administration</span></a></li>
+                <li><a href="./admin" <?= (basename($_SERVER['PHP_SELF']) == 'admin.php') ? 'class="active"' : null ?>><i class="mdi mdi-view-grid-outline"></i> <span>Administration</span></a></li>
             <?php } ?>
         </ul>
 

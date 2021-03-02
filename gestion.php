@@ -11,6 +11,8 @@ if(!isOnline()) {
 if($_SESSION['rang'] < 2) {
     header('Location: ./');
 }
+
+$last_search = '';
 ?>
 <html lang="fr-FR">
 <head>
@@ -37,6 +39,17 @@ if($_SESSION['rang'] < 2) {
         <div class="row">
             <div class="col-md-7">
                 <div class="box-content">
+                    <form method="GET" action="" class="form-search">
+                        <input type="text" name="search" placeholder="Rechercher un cours..." class="form-control">
+                        <input type="submit" value="Rechercher" class="btn btn-primary">
+                    </form>
+                    <hr>
+                    <?php 
+                    $sql = 'WHERE NomMatiere LIKE \'%'.$last_search.'%\' ';
+                    $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) LEFT JOIN TypeCours USING(TypeID)' . $sql. ' ORDER BY DateCour DESC');
+                    while($aCours = $sCours->fetch(PDO::FETCH_ASSOC)) {
+                        echo $aCours['NomType'] . ' ' . $aCours['NomMatiere'] .  '<br>';
+                    } ?>   
 
                 </div>
             </div>
@@ -45,35 +58,74 @@ if($_SESSION['rang'] < 2) {
                     <div class="content-title">Ajouter un cours</div>
 
                     <form method="POST" action="">
-
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="">Promotion</label>
-                                <select name="promotion" class="form-control">
-                                
+                                <select name="promotion" class="form-control" id="promo">
+                                    <?php 
+                                    $sPromo = $bdd->query('SELECT * FROM Promotions');
+                                    while($aPromo = $sPromo->fetch()) {
+                                        echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
+                                    } ?>                                
                                 </select>
-                            </div>
-
-                            
+                            </div>                            
                             <div class="col-md-6">
                                 
                                 <label for="">Matière</label>
-                                <select name="matiere" id="" class="form-control">
+                                <select name="matiere" id="" class="form-control" id="matiere">
+                                    <?php 
+                                    $sMatieres = $bdd->query('SELECT * FROM Matieres');
+                                    while($aMatieres = $sMatieres->fetch()) {
+                                        echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
+                                    } ?> 
                                     <option value="1">COO</option>
                                 </select>
                             </div>
-                        </div>
 
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="date">Date du cours</label>
+                                    <label for="date">Date</label>
                                     <input type="date" name="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="date">Heure de début</label>
+                                    <input type="time" name="date" class="form-control">
+                                </div>
+                            </div>                            
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="date">Heure de fin</label>
+                                    <input type="time" name="date" class="form-control">
+                                </div>
+                                
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="date">Enseignant</label>
+                                    <input type="text" name="date" class="form-control" value="<?= $_SESSION['prenom']. ' ' .$_SESSION['nom'] ?>" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="date">Type de cours</label>
+                                    <select name="type" class="form-control">
+                                        <option value="cm">CM</option>
+                                        <option value="td">TD</option>
+                                        <option value="tp">TP</option>
+                                    </select>
                                 </div>
                             </div>
 
                             
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label for="salle">Salle</label>
+                                    <input type="text" name="salle" class="form-control">
+                                </div>
                                 
                             </div>
                         </div>

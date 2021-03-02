@@ -57,6 +57,6 @@ if(!isOnline()) {
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="./assets/js/main.js"></script>
+    <script type="text/javascript" src="./assets/js/functions.js"></script>
 </body>
 </html>

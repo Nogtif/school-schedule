@@ -1,3 +1,4 @@
+// Fonctions qui s'occupe du planning
 $('.planning').ready(function() {
     // on charge la page du planning.
     $(".planning-page").load("planning.php");
