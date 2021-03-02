@@ -1,4 +1,4 @@
-# Les choix techniques
+## Les choix techniques
 
 # L'architecture choisie
 
