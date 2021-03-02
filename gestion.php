@@ -63,7 +63,7 @@ $last_search = '';
                                 <label for="">Promotion</label>
                                 <select name="promotion" class="form-control" id="promo">
                                     <?php 
-                                    $sPromo = $bdd->query('SELECT * FROM Promotions');
+                                    $sPromo = $bdd->query('SELECT p.* FROM Promotions_Usager pu INNER JOIN Promotions p ON p.PromotionID=pu.PromotionID WHERE UsagerID="'.$_SESSION['id'].'"');
                                     while($aPromo = $sPromo->fetch()) {
                                         echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
                                     } ?>                                
