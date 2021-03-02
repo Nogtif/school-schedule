@@ -127,14 +127,7 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
-                                    <select name="salle" class="form-control">
-                                        <?php 
-                                            $query = $bdd->query("SELECT * FROM Salles");
-                                            while ($row = $query->fetch()){
-                                                echo '<option value="' . $row['SalleID'].'">' . $row['NomSalle'] . '</option>';
-                                            }
-                                        ?>
-                                    </select>
+                                    <input type="text" name="salle" class="form-control">
                                 </div>
                                 
                             </div>
