@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
+require_once('./src/App/FormValide.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -13,9 +14,20 @@ if($_SESSION['rang'] < 2) {
 }
 
 $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
-
-
 // Ajout d'un cours
+if(isset($_POST['add_cours'])) {
+
+    $form = new App\FormValide($_POST);
+    $errors = $form->validator();
+
+    var_dump($_POST);
+
+    if(empty($errors)) {
+        echo "yes";
+    }
+}
+
+echo ctype_digit('gtr15');
 ?>
 <html lang="fr-FR">
 <head>
@@ -59,14 +71,20 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
             <div class="col-md-5">    
                 <div class="box-content">
                     <div class="content-title">Ajouter un cours</div>
-
+                    <?php if(isset($errors['global'])) {
+                        echo '<div class="alert alert-danger">'.$errors['global'].'</div>';
+                    } ?>
                     <form method="POST" action="">
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="">Promotion</label>
                                 <select name="promotion" class="form-control" id="promo">
-                                    <?php 
-                                    $sPromo = $bdd->query('SELECT p.* FROM Appartient pu INNER JOIN Promotions p USING(PromotionID) WHERE UsagerID="'.$_SESSION['id'].'"');
+                                    <?php                                    
+                                    $option = '';
+                                    if($_SESSION['rang'] == 2) {
+                                        $option = 'INNER JOIN Appartient ON Promotions.PromotionID = Appartient.PromotionID AND UsagerID = "'.$_SESSION['id'].'"';
+                                    }
+                                    $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
                                     while($aPromo = $sPromo->fetch()) {
                                         echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
                                     } ?>                                
@@ -88,21 +106,29 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Date</label>
-                                    <input type="date" name="date" class="form-control">
+                                    <input type="date" name="dateCour" class="form-control <?= (isset($errors['dateCour'])) ? 'is-invalid' : '' ?>">
+                                    <?php if(isset($errors['dateCour'])) {
+                                        echo '<div class="invalid-feedback">' . $errors['dateCour'] . '</div>';
+                                    } ?>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="date">Heure de début</label>
-                                    <input type="time" name="date" class="form-control">
+                                    <input type="time" name="heureDebut" class="form-control <?= (isset($errors['heureDebut'])) ? 'is-invalid' : '' ?>">
+                                    <?php if(isset($errors['heureDebut'])) {
+                                        echo '<div class="invalid-feedback">' . $errors['heureDebut'] . '</div>';
+                                    } ?>
                                 </div>
                             </div>                            
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="date">Heure de fin</label>
-                                    <input type="time" name="date" class="form-control">
+                                    <input type="time" name="heureFin" class="form-control <?= (isset($errors['heureFin'])) ? 'is-invalid' : '' ?>">
+                                    <?php if(isset($errors['heureFin'])) {
+                                        echo '<div class="invalid-feedback">' . $errors['heureFin'] . '</div>';
+                                    } ?>
                                 </div>
-                                
                             </div>
 
                             <div class="col-md-6">
@@ -115,8 +141,7 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
                                 <div class="form-group">
                                     <label for="date">Type de cours</label>
                                     <select name="type" class="form-control">
-                                    <?php 
-                                            $query = $bdd->query("SELECT * FROM TypeCours");
+                                        <?php $query = $bdd->query("SELECT * FROM TypeCours");
                                             while ($row = $query->fetch()){
                                                 echo '<option value="' . $row['TypeID'].'">' . $row['NomType'] . '</option>';
                                             }
@@ -130,7 +155,10 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
-                                    <input type="text" name="salle" class="form-control">
+                                    <input type="text" name="salle" class="form-control <?= (isset($errors['salle'])) ? 'is-invalid' : '' ?>" placeholder="S25">
+                                    <?php if(isset($errors['salle'])) {
+                                        echo '<div class="invalid-feedback">' . $errors['salle'] . '</div>';
+                                    } ?>
                                 </div>
                                 
                             </div>
@@ -141,7 +169,6 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
                 </div>
             </div>
         </div>
-        
     </div>
 
     <!-- FOOTER -->

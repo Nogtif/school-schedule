@@ -1,7 +1,7 @@
 <?php 
 require_once('./config.php');
-require_once('./src/Week.php');
-require_once('./src/Events.php');
+require_once('./src/Planning/Week.php');
+require_once('./src/Planning/Events.php');
 
 $week = new Planning\Week($_GET['week'] ?? null);
 $events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
