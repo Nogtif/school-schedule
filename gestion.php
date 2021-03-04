@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
-require_once('./src/App/FormValide.php');
+require_once('./src/Planning/EventValide.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -17,12 +17,12 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 // Ajout d'un cours
 if(isset($_POST['add_cours'])) {
 
-    $form = new App\FormValide($_POST);
+    $form = new Planning\EventValide($bdd, $_POST);
     $errors = $form->validator();
 
     if(empty($errors)) {
         $form->setData('enseignant', $_SESSION['id']);
-        var_dump($_POST);
+        $form->createEvent();
     }
 }
 ?>
@@ -105,7 +105,7 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Date</label>
-                                    <input type="date" name="dateCour" class="form-control <?= (isset($errors['dateCour'])) ? 'is-invalid' : '' ?>">
+                                    <input type="date" name="dateCour" class="form-control <?= (isset($errors['dateCour'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['dateCour'])) ? $_POST['dateCour'] : '' ?>">
                                     <?php if(isset($errors['dateCour'])) {
                                         echo '<div class="invalid-feedback">' . $errors['dateCour'] . '</div>';
                                     } ?>
@@ -114,7 +114,7 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="date">Heure de début</label>
-                                    <input type="time" name="heureDebut" class="form-control <?= (isset($errors['heureDebut'])) ? 'is-invalid' : '' ?>">
+                                    <input type="time" name="heureDebut" class="form-control <?= (isset($errors['heureDebut'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['heureDebut'])) ? $_POST['heureDebut'] : '' ?>">
                                     <?php if(isset($errors['heureDebut'])) {
                                         echo '<div class="invalid-feedback">' . $errors['heureDebut'] . '</div>';
                                     } ?>
@@ -123,7 +123,7 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="date">Heure de fin</label>
-                                    <input type="time" name="heureFin" class="form-control <?= (isset($errors['heureFin'])) ? 'is-invalid' : '' ?>">
+                                    <input type="time" name="heureFin" class="form-control <?= (isset($errors['heureFin'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['heureFin'])) ? $_POST['heureFin'] : '' ?>">
                                     <?php if(isset($errors['heureFin'])) {
                                         echo '<div class="invalid-feedback">' . $errors['heureFin'] . '</div>';
                                     } ?>
@@ -159,7 +159,7 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
-                                    <input type="text" name="salle" class="form-control <?= (isset($errors['salle'])) ? 'is-invalid' : '' ?>" placeholder="S25">
+                                    <input type="text" name="salle" class="form-control <?= (isset($errors['salle'])) ? 'is-invalid' : '' ?>" placeholder="S25" value="<?= (isset($_POST['salle'])) ? $_POST['salle'] : '' ?>">
                                     <?php if(isset($errors['salle'])) {
                                         echo '<div class="invalid-feedback">' . $errors['salle'] . '</div>';
                                     } ?>

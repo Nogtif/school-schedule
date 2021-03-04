@@ -1,10 +1,10 @@
 <?php 
 namespace App;
 
-class FormValide {
+abstract class FormValide {
 
     // On déclare quelques variables...
-    private $data, $errors;
+    protected $data, $errors;
 
     /** Constructeur de la classe FormValide.
      */
@@ -22,11 +22,6 @@ class FormValide {
     }
 
     public function validator() {
-        $this->isValide('dateCour', 'checkDate');
-        $this->isValide('heureDebut', 'checkTimeMin');
-        $this->isValide('heureFin', 'checkTimeMax');
-        $this->isValide('heureDebut', 'checkTime', 'heureFin');
-        $this->isValide('salle', 'checkSalle');
         return $this->errors;
     }
 

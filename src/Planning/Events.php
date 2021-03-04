@@ -49,18 +49,5 @@ class Events {
         }
         return $events;
     }
-
-    /** Méthode qui prend en paramètre un tableau de donnée,
-     * et insérer un cours contenant les données reçu en paramètres.
-     * @param array $data > les données à insérer.
-     */
-    public function createEvent(array $data):bool {
-        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, SalleID VALUES (?,?,?,?,?,?,?)');
-        $sInsertEvent->execute([
-            $data['DateCour'], $data['debut'], $data['fin'],
-            $data['matiere'], $data['enseignant'], $data['type'], $data['salle']
-        ]);
-        return true;
-    }
 }
 ?>
