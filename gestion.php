@@ -21,6 +21,7 @@ if(isset($_POST['add_cours'])) {
     $errors = $form->validator();
 
     if(empty($errors)) {
+        if($_SESSION['rang'] == 2)$form->setData('enseignant', $_SESSION['id']);
         $form->createEvent();
     }
 }
