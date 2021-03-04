@@ -4,7 +4,7 @@ namespace App;
 class FormValide {
 
     // On déclare quelques variables...
-    private array $data, $errors;
+    private $data, $errors;
 
     /** Constructeur de la classe FormValide.
      */

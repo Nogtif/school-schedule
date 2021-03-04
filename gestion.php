@@ -58,6 +58,7 @@ if(isset($_POST['add_cours'])) {
                     <hr>
                     <?php 
                     $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
+                    if($_SESSION['rang'] == 2) $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
                     $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) LEFT JOIN TypeCours USING(TypeID) '.$where.' ORDER BY DateCour DESC');
                     while($aCours = $sCours->fetch()) {
                         echo $aCours['NomType'] . ' ' . $aCours['NomMatiere'] .  '<br>';
@@ -88,18 +89,18 @@ if(isset($_POST['add_cours'])) {
                                 </select>
                             </div>                            
                             <div class="col-md-6">
-                                
                                 <label for="">Matière</label>
                                 <select name="matiere" id="" class="form-control" id="matiere">
-                                    <?php 
-                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m USING(MatiereID) WHERE c.UsagerID="'.$_SESSION['id'].'"');
+                                    <?php
+                                    $wMatieres = 'WHERE UsagerID = "'.$_SESSION['id'].'"';
+                                    if($_SESSION['rang'] != 2) $wMatieres = '';
+                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m USING(MatiereID) ' . $wMatieres);
                                     
                                     while($aMatieres = $sMatieres->fetch()) {
                                         echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
                                     } ?> 
                                 </select>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Date</label>
@@ -127,7 +128,6 @@ if(isset($_POST['add_cours'])) {
                                     } ?>
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Enseignant</label>
@@ -146,10 +146,8 @@ if(isset($_POST['add_cours'])) {
                                     </select>
                                 </div>
                             </div>
-
                             
                             <div class="col-md-3">
-
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
                                     <input type="text" name="salle" class="form-control <?= (isset($errors['salle'])) ? 'is-invalid' : '' ?>" placeholder="S25">
@@ -157,7 +155,6 @@ if(isset($_POST['add_cours'])) {
                                         echo '<div class="invalid-feedback">' . $errors['salle'] . '</div>';
                                     } ?>
                                 </div>
-                                
                             </div>
                         </div>
 
