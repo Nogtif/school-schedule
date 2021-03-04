@@ -4,13 +4,21 @@ namespace App;
 class FormValide {
 
     // On déclare quelques variables...
-    protected array $data, $errors;
+    private array $data, $errors;
 
     /** Constructeur de la classe FormValide.
      */
     public function __construct(array $data) {
         $this->data = $data;
         $this->errors = array();
+    }
+
+    public function getData() {
+        return $this->data;
+    }
+
+    public function setData(string $ind, string $newData) {
+        $this->data[$ind] = $newData;
     }
 
     public function validator() {
@@ -34,7 +42,7 @@ class FormValide {
 
     public function checkDate(string $name):bool {
         if(strtotime($this->data[$name]) < time()) {
-            $this->errors['global'] = 'La date du cours ne doit pas être passée !';
+            $this->errors[$name] = 'La date du cours ne doit pas être passée !';
             return false;
         }
         return true;
@@ -57,7 +65,7 @@ class FormValide {
     }
 
     public function checkTime(string $heureDeb, $heureFin) {
-        if($this->data[$heureDeb] < $this->data[$heureFin]) {
+        if($this->data[$heureDeb] > $this->data[$heureFin]) {
             $this->errors['global'] = 'L\'heure de début doit être inférieur à celle de fin !';
         }
     }

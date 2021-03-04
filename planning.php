@@ -46,8 +46,8 @@ $promo = $_GET['promo'] ?? ($_SESSION['promo'] ?? 0);
 
                     echo '<div class="event" style="background-color:'.$event['CouleurMatiere'].';top:'.$top.'px;left:'.($i-1).'px;height:'. $height.'px!important">';
                     echo '<span>'. str_replace(':', 'h', $event['HeureDebut']) .' - '. str_replace(':', 'h', $event['HeureFin']). '</span>';
-                    echo '<b>'. $event['NomType'] . ' ' . $event['NomMatiere']. '</b>';
-                    echo '<span>'. $event['NomSalle'] . ' ' . $event['Prenom'] . ' ' . $event['Nom']. '<span>';
+                    echo '<b>'. $event['NomType'] . ' ' . htmlspecialchars($event['NomMatiere']). '</b>';
+                    echo '<span>'. $event['NomSalle'] . ' ' . htmlspecialchars($event['Prenom']) . ' ' . htmlspecialchars($event['Nom']). '<span>';
                     echo '</div>';
                 } ?>
             </div>

@@ -20,14 +20,11 @@ if(isset($_POST['add_cours'])) {
     $form = new App\FormValide($_POST);
     $errors = $form->validator();
 
-    var_dump($_POST);
-
     if(empty($errors)) {
-        echo "yes";
+        $form->setData('enseignant', $_SESSION['id']);
+        var_dump($_POST);
     }
 }
-
-echo ctype_digit('gtr15');
 ?>
 <html lang="fr-FR">
 <head>
@@ -134,7 +131,7 @@ echo ctype_digit('gtr15');
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Enseignant</label>
-                                    <input type="text" name="date" class="form-control" value="<?= $_SESSION['prenom']. ' ' .$_SESSION['nom'] ?>" disabled>
+                                    <input type="text" name="enseignant" class="form-control" value="<?= $_SESSION['prenom']. ' ' .$_SESSION['nom'] ?>" disabled>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -176,5 +173,8 @@ echo ctype_digit('gtr15');
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+
+    <script>
+    </script>
 </body>
 </html>

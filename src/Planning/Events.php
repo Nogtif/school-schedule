@@ -40,14 +40,27 @@ class Events {
     public function getEvents(string $promo):array {
         $events = $this->genereList();
         $sPromo = $this->bdd->query('SELECT * FROM Cours 
-            INNER JOIN Matieres USING(MatiereID), Promotions USING(PromotionID) 
+            INNER JOIN Matieres USING(MatiereID), Promotions p USING(PromotionID) 
             LEFT JOIN Usagers USING(UsagerID) LEFT JOIN Salles USING(SalleID) LEFT JOIN TypeCours USING(TypeID) 
-            WHERE Promotions.PromotionID  = '. $promo.' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay. ' ORDER BY DateCour'
+            WHERE p.PromotionID  = '. $promo.' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay. ' ORDER BY DateCour'
         );
         while($aPromo = $sPromo->fetch()) {
             $events[date('j', $aPromo['DateCour'])][] = $aPromo;               
         }
         return $events;
+    }
+
+    /** Méthode qui prend en paramètre un tableau de donnée,
+     * et insérer un cours contenant les données reçu en paramètres.
+     * @param array $data > les données à insérer.
+     */
+    public function createEvent(array $data):bool {
+        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, SalleID VALUES (?,?,?,?,?,?,?)');
+        $sInsertEvent->execute([
+            $data['DateCour'], $data['debut'], $data['fin'],
+            $data['matiere'], $data['enseignant'], $data['type'], $data['salle']
+        ]);
+        return true;
     }
 }
 ?>
