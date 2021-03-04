@@ -57,8 +57,8 @@ if(isset($_POST['add_cours'])) {
                     </form>
                     <hr>
                     <?php 
-                    $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
-                    if($_SESSION['rang'] == 2) $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
+                    $where = '';
+                    if($_SESSION['rang'] != 3)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
                     $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) LEFT JOIN TypeCours USING(TypeID) '.$where.' ORDER BY DateCour DESC');
                     while($aCours = $sCours->fetch()) {
                         echo $aCours['NomType'] . ' ' . $aCours['NomMatiere'] .  '<br>';
@@ -92,10 +92,9 @@ if(isset($_POST['add_cours'])) {
                                 <label for="">Matière</label>
                                 <select name="matiere" id="" class="form-control" id="matiere">
                                     <?php
-                                    $wMatieres = 'WHERE UsagerID = "'.$_SESSION['id'].'"';
-                                    if($_SESSION['rang'] != 2) $wMatieres = '';
-                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m USING(MatiereID) ' . $wMatieres);
-                                    
+                                    $option = '';
+                                    if($_SESSION['rang'] == 2)  $option = 'WHERE UsagerID = "'.$_SESSION['id'].'"';
+                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m USING(MatiereID) ' .  $option . '');
                                     while($aMatieres = $sMatieres->fetch()) {
                                         echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
                                     } ?> 
@@ -131,7 +130,15 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Enseignant</label>
-                                    <input type="text" name="enseignant" class="form-control" value="<?= $_SESSION['prenom']. ' ' .$_SESSION['nom'] ?>" disabled>
+                                    <?php if($_SESSION['rang'] == 2) echo  '<input type="text" name="enseignant" class="form-control" value="' . $_SESSION['prenom']. ' ' .$_SESSION['nom'] .' disabled>';
+                                    else {
+                                        echo '<select name="enseignant" class="form-control">';
+                                        $query = $bdd->query("SELECT * FROM Usagers WHERE RangID==2");
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
+                                        }
+                                        echo '</select>';
+                                    } ?>
                                 </div>
                             </div>
                             <div class="col-md-3">
