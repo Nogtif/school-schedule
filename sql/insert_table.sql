@@ -69,32 +69,32 @@ INSERT INTO Salles(SalleID, NomSalle) VALUES
 INSERT INTO TypeCours(TypeID, NomType) VALUES
 (1, 'CM'), (2, 'TD'), (3, 'TP');
 
-INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere, PromotionID) VALUES
-(1, 'COO', '#E88436', 10),
-(2, 'LCPF', '#74568F', 10),
-(3, 'Prog Web 2', '#467BAD', 10),
-(4, 'Technologies Emergentes', '#A1B9B2', 10),
-(5, 'Anglais 6', '#AF4343', 10),
-(6, 'Stage', '#339966', 10),
-(7, 'Anglais 4', '#339966', 6);
+INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere) VALUES
+(1, 'COO', '#E88436'),
+(2, 'LCPF', '#74568F'),
+(3, 'Prog Web 2', '#467BAD'),
+(4, 'Technologies Emergentes', '#A1B9B2'),
+(5, 'Anglais 6', '#AF4343'),
+(6, 'Stage', '#339966'),
+(7, 'Anglais 4', '#339966');
 
-INSERT INTO Cours(CourID, DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, SalleID) VALUES
-(1, '1614556800', '10:15', '11:15', 4, 'karim_tabia', 1, 4),
-(2, '1614556800', '11:15', '12:15', 4, 'karim_tabia', 2, 4),
-(3, '1614556800', '14:00', '15:30', 2, 'tiago_delima', 1, 3),
+INSERT INTO Cours(CourID, DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, PromotionID, SalleID) VALUES
+(1, '1614556800', '10:15', '11:15', 4, 'karim_tabia', 1, 10, 4),
+(2, '1614556800', '11:15', '12:15', 4, 'karim_tabia', 2, 10, 4),
+(3, '1614556800', '14:00', '15:30', 2, 'tiago_delima', 1, 10, 3),
 
-(4, '1614643200', '09:30', '10:30', 3, 'johan_koitka', 2, 8),
-(5, '1614643200', '14:00', '15:30', 3, 'johan_koitka', 1, 3),
-(6, '1614643200', '15:45', '17:30', 1, 'daniel_leberre', 2, 3),
+(4, '1614643200', '09:30', '10:30', 3, 'johan_koitka', 2, 10, 8),
+(5, '1614643200', '14:00', '15:30', 3, 'johan_koitka', 1, 10, 3),
+(6, '1614643200', '15:45', '17:30', 1, 'daniel_leberre', 2, 10, 3),
 
-(7, '1614729600', '08:45', '10:45', 1, 'thibault_lietard', 3, 5),
-(8, '1614729600', '11:00', '13:00', 2, 'thibault_lietard', 3, 5),
-(9, '1614729600', '14:30', '16:30', 5, 'catherine_vincent', 3, 10),
+(7, '1614729600', '08:45', '10:45', 1, 'thibault_lietard', 3, 10, 5),
+(8, '1614729600', '11:00', '13:00', 2, 'thibault_lietard', 3, 10, 5),
+(9, '1614729600', '14:30', '16:30', 5, 'catherine_vincent', 3, 10, 10),
 
-(10, '1614816000', '09:00', '10:30', 2, 'thibault_lietard', 2, 7),
-(11, '1614816000', '10:45', '12:45', 3, 'johan_koitka', 3, 5),
-(12, '1614816000', '13:45', '15:30', 4, 'karim_tabia', 3, 7),
-(13, '1614902400', '14:00', '18:00', 6, 'zied_bouraoui', 1, 4);
+(10, '1614816000', '09:00', '10:30', 2, 'thibault_lietard', 2, 10, 7),
+(11, '1614816000', '10:45', '12:45', 3, 'johan_koitka', 3, 10, 5),
+(12, '1614816000', '13:45', '15:30', 4, 'karim_tabia', 3, 10, 7),
+(13, '1614902400', '14:00', '18:00', 6, 'zied_bouraoui', 1, 10, 4);
 
 INSERT INTO Enseigne(UsagerID, MatiereID) VALUES 
 ('daniel_leberre', 1), ('tiago_delima', 2), ('johan_koitka', 3),

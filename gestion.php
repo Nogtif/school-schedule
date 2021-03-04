@@ -14,6 +14,7 @@ if($_SESSION['rang'] < 2) {
 }
 
 $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
+
 // Ajout d'un cours
 if(isset($_POST['add_cours'])) {
 
@@ -21,7 +22,7 @@ if(isset($_POST['add_cours'])) {
     $errors = $form->validator();
 
     if(empty($errors)) {
-        if($_SESSION['rang'] == 2)$form->setData('enseignant', $_SESSION['id']);
+        if($_SESSION['rang'] == 2) $form->setData('enseignant', $_SESSION['id']);
         $form->createEvent();
     }
 }
@@ -56,13 +57,29 @@ if(isset($_POST['add_cours'])) {
                         <input type="submit" value="Rechercher" class="btn btn-primary">
                     </form>
                     <hr>
-                    <?php 
-                    $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
-                    if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
-                    $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) LEFT JOIN TypeCours USING(TypeID) '.$where.' ORDER BY DateCour DESC');
-                    while($aCours = $sCours->fetch()) {
-                        echo $aCours['NomType'] . ' ' . $aCours['NomMatiere'] .  '<br>';
-                    } ?>   
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr><th>Type</th><th>Nom du cours</th><th>Enseignant</th><th>Date</th><th>Créneau</th><th>Promo</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
+                            if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
+                            $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID) '.$where.' ORDER BY DateCour DESC, HeureDebut DESC');
+                            while($aCours = $sCours->fetch()) {
+                                echo '<tr>';
+                                echo '<td>'.$aCours['NomType'].'</td>';
+                                echo '<td>'.$aCours['NomMatiere'].'</td>';
+                                echo '<td>'.$aCours['Prenom']. ' ' .$aCours['Nom'].'</td>';
+                                echo '<td>'.date('d-m-Y', $aCours['DateCour']).'</td>';
+                                echo '<td>'.str_replace(':', 'h', $aCours['HeureDebut']). ' ' .str_replace(':', 'h', $aCours['HeureFin']).'</td>';
+                                echo '<td>'.$aCours['NomPromotion'].'</td>';
+                                echo '<td><form method="POST" action=""><input type="submit" value="X"></form></td>';
+                                echo '</tr>';
+                            } ?>
+                        </tbody>
+                    </table>
 
                 </div>
             </div>
@@ -159,7 +176,7 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
-                                    <input type="text" name="salle" class="form-control <?= (isset($errors['salle'])) ? 'is-invalid' : '' ?>" placeholder="S25" value="<?= (isset($_POST['salle'])) ? $_POST['salle'] : '' ?>">
+                                    <input type="text" name="salle" class="form-control <?= (isset($errors['salle'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['salle'])) ? $_POST['salle'] : '' ?>">
                                     <?php if(isset($errors['salle'])) {
                                         echo '<div class="invalid-feedback">' . $errors['salle'] . '</div>';
                                     } ?>

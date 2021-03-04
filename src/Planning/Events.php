@@ -40,9 +40,9 @@ class Events {
     public function getEvents(string $promo):array {
         $events = $this->genereList();
         $sPromo = $this->bdd->query('SELECT * FROM Cours 
-            INNER JOIN Matieres USING(MatiereID), Promotions p USING(PromotionID) 
+            INNER JOIN Matieres USING(MatiereID)
             LEFT JOIN Usagers USING(UsagerID) LEFT JOIN Salles USING(SalleID) LEFT JOIN TypeCours USING(TypeID) 
-            WHERE p.PromotionID  = '. $promo.' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay. ' ORDER BY DateCour'
+            WHERE PromotionID  = '. $promo.' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay. ' ORDER BY DateCour'
         );
         while($aPromo = $sPromo->fetch()) {
             $events[date('j', $aPromo['DateCour'])][] = $aPromo;               

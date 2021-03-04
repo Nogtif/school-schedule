@@ -32,10 +32,11 @@ class EventValide extends FormValide {
      * @return bool : renvoie vrai si le cours à été ajouté, faux sinon.
      */
     public function createEvent():bool {
-        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, SalleID) VALUES (?,?,?,?,?,?,?)');
+
+        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, PromotionID, SalleID) VALUES (?,?,?,?,?,?,?,?)');
         $sInsertEvent->execute([
             strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'],
-            $this->data['matiere'], $this->data['enseignant'], $this->data['type'], $this->data['salle']
+            $this->data['matiere'], $this->data['enseignant'], $this->data['type'], $this->data['promotion'], $this->data['salle']
         ]);
         return true;
     }
