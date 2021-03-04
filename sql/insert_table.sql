@@ -1,7 +1,7 @@
-INSERT INTO Formations(FormationID, NomFormation) VALUES
+INSERT INTO Departements(DepartementID, NomFormation) VALUES
 (1, 'Math'), (2, 'Info'), (3, 'SVT'), (4, 'Chimie');
 
-INSERT INTO Promotions(NomPromotion, FormationID) VALUES
+INSERT INTO Promotions(NomPromotion, DepartementID) VALUES
 ('L1-MATH', 1), ('L1-INFO', 2), ('L1-SVT', 3), ('L1-CHIMIE', 4),
 ('L2-MATH', 1), ('L2-INFO', 2), ('L2-SVT', 3), ('L2-CHIMIE', 4),
 ('L3-MATH', 1), ('L3-INFO', 2), ('L3-SVT', 3), ('L3-CHIMIE', 4);
@@ -95,6 +95,10 @@ INSERT INTO Cours(CourID, DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, T
 (12, '1614816000', '13:45', '15:30', 4, 'karim_tabia', 3, 7),
 (13, '1614902400', '14:00', '18:00', 6, 'zied_bouraoui', 1, 4);
 
+INSERT INTO Enseigne(UsagerID, MatiereID) VALUES 
+('daniel_leberre', 1), ('tiago_delima', 2), ('johan_koitka', 3),
+('karim_tabia', 4), ('catherine_vincent', 5), ('zied_bouraoui', 6);
+
 INSERT INTO Appartient(UsagerID, PromotionID) VALUES 
 ('jerome_buresi',1), ('baptiste_calmes',1), ('fatma_jeeawock',1), ('etienne_matheron',1), ('fabrice_derrien',1),
 ('jerome_buresi',5), ('baptiste_calmes',5), ('fatma_jeeawock',5), ('etienne_matheron',5), ('fabrice_derrien',5),
@@ -116,3 +120,4 @@ INSERT INTO Appartient(UsagerID, PromotionID) VALUES
 ('catherine_vincent',1), ('catherine_vincent',2), ('catherine_vincent',3), ('catherine_vincent',4), ('catherine_vincent',5), ('catherine_vincent',6), ('catherine_vincent',7), ('catherine_vincent',8), ('catherine_vincent',9), ('catherine_vincent',10), ('catherine_vincent',11), ('catherine_vincent',12),
 
 ('quentin_carpentier',10), ('pauljoseph_krogulec',10);
+

@@ -93,8 +93,10 @@ if(isset($_POST['add_cours'])) {
                                 <select name="matiere" id="" class="form-control" id="matiere">
                                     <?php
                                     $option = '';
-                                    if($_SESSION['rang'] == 2)  $option = 'WHERE UsagerID = "'.$_SESSION['id'].'"';
-                                    $sMatieres = $bdd->query('SELECT DISTINCT m.* FROM Cours c INNER JOIN Matieres m USING(MatiereID) ' .  $option . '');
+                                    if($_SESSION['rang'] == 2) {
+                                        $option = 'INNER JOIN Enseigne ON Matieres.MatiereID = Enseigne.MatiereID AND UsagerID = "'.$_SESSION['id'].'"';   
+                                    }
+                                    $sMatieres = $bdd->query('SELECT * FROM Matieres '.$option. ' ORDER BY NomMatiere');
                                     while($aMatieres = $sMatieres->fetch()) {
                                         echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
                                     } ?> 
@@ -130,7 +132,7 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Enseignant</label>
-                                    <?php if($_SESSION['rang'] == 2) echo  '<input type="text" name="enseignant" class="form-control" value="' . $_SESSION['prenom']. ' ' .$_SESSION['nom'] .' disabled>';
+                                    <?php if($_SESSION['rang'] == 2) echo  '<input type="text" name="enseignant" class="form-control" value="' . $_SESSION['prenom']. ' ' .$_SESSION['nom'] .'" disabled>';
                                     else {
                                         echo '<select name="enseignant" class="form-control">';
                                         $query = $bdd->query("SELECT * FROM Usagers WHERE RangID==2");

@@ -4,9 +4,9 @@
     -- FormationID : l'id de la formation.
     (clée étrangère associant la promotion à une formation : FormationID)
 */
-DROP TABLE IF EXISTS Formations;
-CREATE TABLE Formations (
-    FormationID INTEGER  PRIMARY KEY AUTOINCREMENT,
+DROP TABLE IF EXISTS Departements;
+CREATE TABLE Departements (
+    DepartementID INTEGER  PRIMARY KEY AUTOINCREMENT,
     NomFormation VARCHAR(25) NOT NULL
 );
 
@@ -20,8 +20,8 @@ DROP TABLE IF EXISTS Promotions;
 CREATE TABLE Promotions (
     PromotionID INTEGER  PRIMARY KEY AUTOINCREMENT,
     NomPromotion VARCHAR(25) NOT NULL,
-    FormationID INTEGER NOT NULL,
-    CONSTRAINT formation_fk FOREIGN KEY (FormationID) REFERENCES Formations(FormationID) ON DELETE CASCADE
+    DepartementID INTEGER NOT NULL,
+    CONSTRAINT formation_fk FOREIGN KEY (DepartementID) REFERENCES Departements(DepartementID) ON DELETE CASCADE
 );
 
 /* Table des roleUsager. 
@@ -121,13 +121,25 @@ CREATE TABLE Cours (
     CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
 );
 
+/* Association entre les usagers (enseignants) et leurs matières.
+    -- UsagerID : l'id de l'usager (clé primaire).
+    -- MatiereID : l'id de la matière (clé primaire).
+    (clés étrangères associant l'id d'un usager avec la table Usagers et l'id d'une matière à la table Matieres).
+*/
+DROP TABLE IF EXISTS Enseigne;
+CREATE TABLE Enseigne (
+    UsagerID VARCHAR(30) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
+    MatiereID INTEGER REFERENCES Matieres(MatiereID) ON DELETE CASCADE,
+    CONSTRAINT enseigne_pk PRIMARY KEY (UsagerID, MatiereID)
+);
+
 /* Association entre les usagers et les promotions.
     -- UsagerID : l'id de l'usager (clé primaire).
     -- PromotionID : l'id de la promotion (clé primaire).
     (clés étrangères associant l'id d'un usager avec la table Usagers et l'id d'une promotion à la table Promotions).
 */
 DROP TABLE IF EXISTS Appartient;
-CREATE TABLE Appartient(
+CREATE TABLE Appartient (
     UsagerID VARCHAR(30) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
     PromotionID INTEGER REFERENCES Promotions(PromotionID) ON DELETE CASCADE,
     CONSTRAINT appartient_pk PRIMARY KEY (UsagerID, PromotionID)
