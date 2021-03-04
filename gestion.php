@@ -57,8 +57,8 @@ if(isset($_POST['add_cours'])) {
                     </form>
                     <hr>
                     <?php 
-                    $where = '';
-                    if($_SESSION['rang'] != 3)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
+                    $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
+                    if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
                     $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) LEFT JOIN TypeCours USING(TypeID) '.$where.' ORDER BY DateCour DESC');
                     while($aCours = $sCours->fetch()) {
                         echo $aCours['NomType'] . ' ' . $aCours['NomMatiere'] .  '<br>';
