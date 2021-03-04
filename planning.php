@@ -5,7 +5,9 @@ require_once('./src/Planning/Events.php');
 
 $week = new Planning\Week($_GET['week'] ?? null);
 $events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
-$promo = $_GET['promo'] ?? ($_SESSION['promo'] ?? 0);
+
+$mypromo = (isset($_SESSION['promo'])) ? $_SESSION['promo'] : 0;
+$promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
 ?>
 
 <h1 class="planning-title"><?= $week->toString() ?></h1>

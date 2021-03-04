@@ -75,7 +75,8 @@ INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere, PromotionID) VALUES
 (3, 'Prog Web 2', '#467BAD', 10),
 (4, 'Technologies Emergentes', '#A1B9B2', 10),
 (5, 'Anglais 6', '#AF4343', 10),
-(6, 'Stage', '#339966', 10);
+(6, 'Stage', '#339966', 10),
+(7, 'Anglais 4', '#339966', 6);
 
 INSERT INTO Cours(CourID, DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, SalleID) VALUES
 (1, '1614556800', '10:15', '11:15', 4, 'karim_tabia', 1, 4),
@@ -97,7 +98,7 @@ INSERT INTO Cours(CourID, DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, T
 
 INSERT INTO Enseigne(UsagerID, MatiereID) VALUES 
 ('daniel_leberre', 1), ('tiago_delima', 2), ('johan_koitka', 3),
-('karim_tabia', 4), ('catherine_vincent', 5), ('zied_bouraoui', 6);
+('karim_tabia', 4), ('catherine_vincent', 5), ('zied_bouraoui', 6), ('julien_caronboily', 7);
 
 INSERT INTO Appartient(UsagerID, PromotionID) VALUES 
 ('jerome_buresi',1), ('baptiste_calmes',1), ('fatma_jeeawock',1), ('etienne_matheron',1), ('fabrice_derrien',1),
