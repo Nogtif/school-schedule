@@ -7,16 +7,24 @@ abstract class FormValide {
     protected $data, $errors;
 
     /** Constructeur de la classe FormValide.
+     * @param array $data > tableau contenant les données.
      */
     public function __construct(array $data) {
         $this->data = $data;
         $this->errors = array();
     }
 
-    public function getData() {
+    /** Méthode qui renvoie le tableau de donnée.
+     * @return array : le tableau de donnée.
+     */
+    public function getData():array {
         return $this->data;
     }
 
+    /** Méthode qui met à jour une donnée du tableau.
+     * @param string $ind > l'indice dans le tableau.
+     * @param string $newData > la nouvelle donnée.
+     */
     public function setData(string $ind, string $newData) {
         $this->data[$ind] = $newData;
     }
@@ -35,33 +43,27 @@ abstract class FormValide {
         }
     }
 
-    public function checkDate(string $name):bool {
+    public function checkDate(string $name) {
         if(strtotime($this->data[$name]) < time()) {
             $this->errors[$name] = 'La date du cours ne doit pas être passée !';
-            return false;
         }
-        return true;
     }
 
-    public function checkTimeMin(string $name):bool {
+    public function checkTimeMin(string $name) {
         if($this->data[$name] < '08:00') {
             $this->errors[$name] = 'Les cours commencent à 8h00 !';
-            return false;
         }
-        return true;
     }
 
-    public function checkTimeMax(string $name):bool {
+    public function checkTimeMax(string $name) {
         if($this->data[$name] > '20:00') {
             $this->errors[$name] = 'Les cours finissent à 20h00 !';
-            return false;
         }
-        return true;
     }
 
-    public function checkTime(string $heureDeb, $heureFin) {
+    public function checkTime(string $heureDeb, string $heureFin) {
         if($this->data[$heureDeb] > $this->data[$heureFin]) {
-            $this->errors['global'] = 'L\'heure de début doit être inférieur à celle de fin !';
+            $this->errors[$heureDeb] = 'L\'heure de début doit être inférieur à celle de fin !';
         }
     }
 

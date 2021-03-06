@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
-require_once('./src/Planning/EventValide.php');
+require_once('./src/Planning/addEvent.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -18,14 +18,22 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 // Ajout d'un cours
 if(isset($_POST['add_cours'])) {
 
-    $form = new Planning\EventValide($bdd, $_POST);
-    $errors = $form->validator();
+    $form = new Planning\addEvent($bdd, $_POST);
+    $errors = $form->valideEvent();
 
     if(empty($errors)) {
         if($_SESSION['rang'] == 2) $form->setData('enseignant', $_SESSION['id']);
         $form->createEvent();
     }
 }
+
+$nbCours = $bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND HeureDebut <= :fin AND HeureFin >= :debut AND PromotionID = :promo');
+$nbCours->execute(array(':date' => '1614643200', ':fin' => '16:00', ':debut' => '10:30', ':promo' => 10));
+$count = $nbCours->fetchColumn();
+if($count > 0) {
+    echo "pas ok";
+}
+var_dump($count);
 ?>
 <html lang="fr-FR">
 <head>
@@ -88,6 +96,8 @@ if(isset($_POST['add_cours'])) {
                     <div class="content-title">Ajouter un cours</div>
                     <?php if(isset($errors['global'])) {
                         echo '<div class="alert alert-danger">'.$errors['global'].'</div>';
+                    } else if(isset($_POST['add_cours']) && empty($errors)) {
+                        echo '<div class="alert alert-success">Le cours à bien été ajouté !</div>';
                     } ?>
                     <form method="POST" action="">
                         <div class="row">
@@ -101,7 +111,7 @@ if(isset($_POST['add_cours'])) {
                                     }
                                     $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
                                     while($aPromo = $sPromo->fetch()) {
-                                        echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
+                                        echo '<option value="'.$aPromo['PromotionID'].'"'. ((isset($_POST['promotion']) && $_POST['promotion'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.$aPromo['NomPromotion'].'</option>';
                                     } ?>                                
                                 </select>
                             </div>                            
