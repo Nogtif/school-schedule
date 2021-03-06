@@ -1,6 +1,7 @@
 <?php 
 namespace App;
-
+/** Classe abstraite qui s'occupe de la vérification d'un formulaire.
+*/
 abstract class Validator {
 
     // On déclare quelques variables...
@@ -27,10 +28,6 @@ abstract class Validator {
      */
     public function setData(string $ind, string $newData) {
         $this->data[$ind] = $newData;
-    }
-
-    public function validator() {
-        return $this->errors;
     }
 
     /**
@@ -67,7 +64,11 @@ abstract class Validator {
         }
     }
 
-    public function checkSalle(string $name) {
+    /** Méthode qui vérifie si le champ correspondant à une salle est bien valide.
+     * (Si elle commence par une lettre, et est suivie de chiffres).
+     * @param string $name > l'indice dans la tableau.
+     */
+    public function checkRoom(string $name) {
         if(!ctype_alpha($this->data[$name][0]) || !ctype_digit(substr($this->data[$name], 1))) {
             $this->errors[$name] = 'La salle n\'est pas valide !';
         }

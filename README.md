@@ -6,6 +6,8 @@ Pour ce projet, nous avons simplifié le contenu des données en nous concentran
 
 ### L'architecture choisie
 
+Pour l'architecture du site, nous avons fait la meilleurs décomposition possibles selon notre point de vue.
+
 ### La base de donnée
 Vous trouverez au sein du projet, dans le dossier sql, le schéma de la base de donnée sous forme PNG ou SVG (schema_db).
 

@@ -1,9 +1,8 @@
 <?php 
 namespace Planning;
-
-/** Classe Week qui représente une semaine. */
+/** Classe Week qui représente une semaine. 
+*/
 class Week {
-
     // On déclare les variables...
     private $numWeek, $year, $firstDay;
     private $months = array('Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre');
@@ -40,6 +39,9 @@ class Week {
         return $timestamp;
     }
 
+    /** Méthode qui renvoie le numéro de la semaine.
+     * @return int : le numéro.
+     */
     public function getWeek():int {
         return $this->numWeek;
     }

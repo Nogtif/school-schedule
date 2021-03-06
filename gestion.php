@@ -19,7 +19,7 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 if(isset($_POST['add_cours'])) {
 
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $form = new Planning\addEvent($bdd, $_POST);
+    $form = new Planning\FormEvent($bdd, $_POST);
     $errors = $form->checkAddEvent();
 
     // Si il n'y a aucune erreurs, on ajout le cours.
@@ -62,7 +62,7 @@ if(isset($_POST['add_cours'])) {
 
                     <table class="table table-striped">
                         <thead>
-                            <tr><th>Type</th><th>Nom du cours</th><th>Enseignant</th><th>Date</th><th>Créneau</th><th>Promo</th><th></th></tr>
+                            <tr><th>Type</th><th>Nom du cours</th><th>Enseignant</th><th>Date</th><th>Promo</th><th>Salle</th></tr>
                         </thead>
                         <tbody>
                             <?php 
@@ -74,10 +74,9 @@ if(isset($_POST['add_cours'])) {
                                 echo '<td>'.$aCours['NomType'].'</td>';
                                 echo '<td>'.$aCours['NomMatiere'].'</td>';
                                 echo '<td>'.$aCours['Prenom']. ' ' .$aCours['Nom'].'</td>';
-                                echo '<td>'.date('d-m-Y', $aCours['DateCour']).'</td>';
-                                echo '<td>'.str_replace(':', 'h', $aCours['HeureDebut']). ' ' .str_replace(':', 'h', $aCours['HeureFin']).'</td>';
+                                echo '<td>'.date('d-m-Y', $aCours['DateCour']).' de '. str_replace(':', 'h', $aCours['HeureDebut']). ' à ' .str_replace(':', 'h', $aCours['HeureFin']).'</td>';
                                 echo '<td>'.$aCours['NomPromotion'].'</td>';
-                                echo '<td><form method="POST" action=""><input type="submit" value="X"></form></td>';
+                                echo '<td>'.$aCours['SalleID'].'</td>';
                                 echo '</tr>';
                             } ?>
                         </tbody>
@@ -187,7 +186,6 @@ if(isset($_POST['add_cours'])) {
                                 </div>
                             </div>
                         </div>
-
                         <input type="submit" name="add_cours" value="Ajouter ce cours" class="btn btn-success">
                     </form>
                 </div>

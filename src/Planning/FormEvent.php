@@ -1,13 +1,14 @@
 <?php 
 namespace Planning;
-
-// on implémente la base de donnée.
+// on implémente les fichiers..
 require_once('./config/pdo.php');
 require_once('./src/App/Validator.php');
 
 use App\Validator;
 
-class addEvent extends Validator {
+/** Classe qui hérite de Validator et s'occupe de la vérification des formulaire pour la gestion d'un cours.
+*/
+class FormEvent extends Validator {
 
     /** Constructeur de la classe addEvent.
      * @param \PDO $db > la base de donnée.
@@ -18,16 +19,19 @@ class addEvent extends Validator {
         $this->bdd = $db;
     }
 
-    /** Méthode qui va regarder si le formulaire est correctement rempli et ne possède pas d'erreurs.
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour ajouter un cours, 
      * @return array : le tableau d'erreurs.
      */
-    public function checkAddEvent() {
+    public function checkAddEvent():array {
         $this->isValide('dateCour', 'checkDate');
         $this->isValide('heureDebut', 'checkTimeMin');
         $this->isValide('heureFin', 'checkTimeMax');
         $this->isValide('heureDebut', 'checkTime', 'heureFin');
-        $this->isValide('salle', 'checkSalle');
-        $this->isValide('dateCour', 'creneauValide', 'heureDebut', 'heureFin', 'promotion');
+        $this->isValide('salle', 'checkRoom');
+        $this->isValide('dateCour', 'timeSlotFree', 'heureDebut', 'heureFin', 'promotion');
+        $this->isValide('dateCour', 'roomFree', 'heureDebut', 'heureFin', 'salle');
+        // Vérification en plus, quand il s'agit de l'admin.
+        $this->isValide('enseignant', 'teachMatter', 'matiere');
         return $this->errors;
     }
 
@@ -38,10 +42,10 @@ class addEvent extends Validator {
      * @param string $promo > la promotion choisie.
      * @return bool : Vrai si le créneau est libre, faux sinon.
     */
-    public function creneauValide(string $date, string $start, string $end, string $promo) {
-        $nbCours = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND PromotionID = :promo');
-        $nbCours->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':promo' => $this->data[$promo]));
-        $count = $nbCours->fetchColumn();
+    public function timeSlotFree(string $date, string $start, string $end, string $promo) {
+        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND PromotionID = :promo');
+        $cFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':promo' => $this->data[$promo]));
+        $count = $cFree->fetchColumn();
         if($count > 0) {
             $this->errors['global'] = 'Le créneau n\'est pas disponible !';
         }
@@ -54,12 +58,21 @@ class addEvent extends Validator {
      * @param string $salle > la salle voulue.
      * @return bool : Vrai si la salle est libre, faux sinon.
     */
-    public function creneauLibre(string $date, string $start, string $end, string $promo) {
-        $nbCours = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND SalleID = :salle');
-        $nbCours->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':promo' => $this->data[$promo]));
-        $count = $nbCours->fetchColumn();
+    public function roomFree(string $date, string $start, string $end, string $room) {
+        $rFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND SalleID = :salle');
+        $rFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':salle' => $this->data[$room]));
+        $count = $rFree->fetchColumn();
         if($count > 0) {
-            $this->errors['global'] = 'Le créneau n\'est pas disponible !';
+            $this->errors['global'] = 'Le salle n\'est pas disponible !';
+        }
+    }
+
+    public function teachMatter(string $user, string $matter) {
+        $tMatter = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres INNER JOIN Enseigne USING(MatiereID) WHERE UsagerID = :enseignant AND MatiereID = :matiere');
+        $tMatter->execute(array(':matiere' => $this->data[$matter], ':enseignant' => $this->data[$user]));
+        $count = $tMatter->fetchColumn();
+        if($count == 0) {
+            $this->errors['global'] = 'Cet enseignant(e) ne s\'occupe pas de cette matière !';
         }
     }
 
