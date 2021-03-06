@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
-require_once('./src/Planning/addEvent.php');
+require_once('./src/Planning/FormEvent.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -18,22 +18,16 @@ $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 // Ajout d'un cours
 if(isset($_POST['add_cours'])) {
 
+    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
     $form = new Planning\addEvent($bdd, $_POST);
-    $errors = $form->valideEvent();
+    $errors = $form->checkAddEvent();
 
+    // Si il n'y a aucune erreurs, on ajout le cours.
     if(empty($errors)) {
         if($_SESSION['rang'] == 2) $form->setData('enseignant', $_SESSION['id']);
         $form->createEvent();
     }
 }
-
-$nbCours = $bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND HeureDebut <= :fin AND HeureFin >= :debut AND PromotionID = :promo');
-$nbCours->execute(array(':date' => '1614643200', ':fin' => '16:00', ':debut' => '10:30', ':promo' => 10));
-$count = $nbCours->fetchColumn();
-if($count > 0) {
-    echo "pas ok";
-}
-var_dump($count);
 ?>
 <html lang="fr-FR">
 <head>
