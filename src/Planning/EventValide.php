@@ -9,14 +9,14 @@ use App\FormValide;
 
 class EventValide extends FormValide {
 
-    /**
+    /** Constructeur de la classe EventValide.
      */
     public function __construct(\PDO $db, array $data) {
         parent::__construct($data);
         $this->bdd = $db;
     }
 
-    /**
+    /** Méthode qui valide
      */
     public function validator() {
         $this->isValide('dateCour', 'checkDate');
