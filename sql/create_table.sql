@@ -66,8 +66,8 @@ CREATE TABLE Salles (
 );
 
 /* Table des types de cours. 
-    -- id_type : l'id du type du cour (clé primaire).
-    -- nom_type : le nom du type du cour.
+    -- TypeID : l'id du type du cour (clé primaire).
+    -- NomType : le nom du type du cour.
 */
 DROP TABLE IF EXISTS TypeCours;
 CREATE TABLE TypeCours (
@@ -86,22 +86,24 @@ DROP TABLE IF EXISTS Matieres;
 CREATE TABLE Matieres (
     MatiereID INTEGER PRIMARY KEY AUTOINCREMENT,
     NomMatiere VARCHAR(25) NOT NULL,
-    CouleurMatiere VARCHAR(10) NOT NULL
+    CouleurMatiere VARCHAR(10) NOT NULL,
+    PromotionID INTEGER NOT NULL,
+    CONSTRAINT matiere_promo_fk FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID) ON DELETE CASCADE
 );
 
 /* Table des Cours. 
-    -- PromotionID : l'id de la promo (clé primaire).
     -- CourID : l'id du cour (clé primaire).
-    (clés étrangères associant PromotionID avec la table Promotions et CourID avec la table Cours).
     -- DateCour : la date du cour.
     -- HeureDebut : l'heure de début du cour.
     -- HeureFin : l'heure de fin du cour.
-    -- UsagerID : l'id de l'enseignant.
-    (clée étrangère associant un cour à son enseignant : UsagerID)
     -- TypeID : le type (Cours, TD, TP).
     (clée étrangère associant un cour à son type : TypeID)
     -- SalleID : l'id de la salle.
     (clée étrangère associant un étudiant à sa promotion : SalleID)
+    -- UsagerID : l'id de l'enseignant.
+    (clée étrangère associant un cour à son enseignant : UsagerID)
+    -- MatiereID : l'id de la matière.
+    (clée étrangère associant un cour à sa matière : MatiereID)
 */
 DROP TABLE IF EXISTS Cours;
 CREATE TABLE Cours (
@@ -110,15 +112,13 @@ CREATE TABLE Cours (
     HeureDebut time NOT NULL,
     HeureFin time NOT NULL,
     TypeID INTEGER NOT NULL,
-    MatiereID INTEGER NOT NULL,
-    UsagerID INTEGER NOT NULL,
-    PromotionID INTEGER NOT NULL,
     SalleID INTEGER NOT NULL,
+    UsagerID INTEGER NOT NULL,
+    MatiereID INTEGER NOT NULL,
     CONSTRAINT cour_type_fk FOREIGN KEY (TypeID) REFERENCES TypeCours(TypeID) ON DELETE CASCADE,
-    CONSTRAINT cour_matiere_fk FOREIGN KEY (MatiereID) REFERENCES Matieres(MatiereID) ON DELETE CASCADE,
-    CONSTRAINT cour_enseignant_fk FOREIGN KEY (UsagerID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
-    CONSTRAINT cour_promo_fk FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID) ON DELETE CASCADE,
     CONSTRAINT cour_salle_fk FOREIGN KEY (SalleID) REFERENCES Salles(SalleID) ON DELETE CASCADE
+    CONSTRAINT cour_enseignant_fk FOREIGN KEY (UsagerID) REFERENCES Usagers(UsagerID) ON DELETE CASCADE,
+    CONSTRAINT cour_matiere_fk FOREIGN KEY (MatiereID) REFERENCES Matieres(MatiereID) ON DELETE CASCADE
 );
 
 /* Association entre les usagers (enseignants) et leurs matières.

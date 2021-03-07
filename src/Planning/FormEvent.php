@@ -31,6 +31,7 @@ class FormEvent extends Validator {
         $this->isValide('dateCour', 'timeSlotFree', 'heureDebut', 'heureFin', 'promotion');
         $this->isValide('dateCour', 'roomFree', 'heureDebut', 'heureFin', 'salle');
         // Vérification en plus, quand il s'agit de l'admin.
+        $this->isValide('promotion', 'promoMatter', 'matiere');
         $this->isValide('enseignant', 'teachMatter', 'matiere');
         return $this->errors;
     }
@@ -43,7 +44,7 @@ class FormEvent extends Validator {
      * @return bool : Vrai si le créneau est libre, faux sinon.
     */
     public function timeSlotFree(string $date, string $start, string $end, string $promo) {
-        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND PromotionID = :promo');
+        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND PromotionID = :promo');
         $cFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':promo' => $this->data[$promo]));
         $count = $cFree->fetchColumn();
         if($count > 0) {
@@ -56,7 +57,6 @@ class FormEvent extends Validator {
      * @param string $start > l'heure de début du cour.
      * @param string $end > l'heure de fin du cour.
      * @param string $salle > la salle voulue.
-     * @return bool : Vrai si la salle est libre, faux sinon.
     */
     public function roomFree(string $date, string $start, string $end, string $room) {
         $rFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND SalleID = :salle');
@@ -67,9 +67,24 @@ class FormEvent extends Validator {
         }
     }
 
+    /** Méthode qui verifie si un enseignant enseigne bien la matière. 
+     * @param string $user > l'enseignant.
+    */
+    public function promoMatter(string $promo, string $matter) {
+        $tMatter = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres WHERE PromotionID = :promo AND MatiereID = :matiere');
+        $tMatter->execute(array(':promo' => $this->data[$promo], ':matiere' => $this->data[$matter]));
+        $count = $tMatter->fetchColumn();
+        if($count == 0) {
+            $this->errors['global'] = 'Cette promotion n\'étudie pas ce cours !';
+        }
+    }
+
+    /** Méthode qui verifie si un enseignant enseigne bien la matière. 
+     * @param string $user > l'enseignant.
+    */
     public function teachMatter(string $user, string $matter) {
         $tMatter = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres INNER JOIN Enseigne USING(MatiereID) WHERE UsagerID = :enseignant AND MatiereID = :matiere');
-        $tMatter->execute(array(':matiere' => $this->data[$matter], ':enseignant' => $this->data[$user]));
+        $tMatter->execute(array(':enseignant' => $this->data[$user], ':matiere' => $this->data[$matter]));
         $count = $tMatter->fetchColumn();
         if($count == 0) {
             $this->errors['global'] = 'Cet enseignant(e) ne s\'occupe pas de cette matière !';
@@ -78,9 +93,8 @@ class FormEvent extends Validator {
 
     /** Méthode qui insère un cours contenant les données reçu en paramètres.
      */
-    public function createEvent() {
-            
-        // $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, PromotionID, SalleID) VALUES (?,?,?,?,?,?,?,?)');
-        // $sInsertEvent->execute([strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['matiere'], $this->data['enseignant'], $this->data['type'], $this->data['promotion'], $this->data['salle']]);  
+    public function createEvent() {            
+        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, PromotionID, SalleID) VALUES (?,?,?,?,?,?,?,?)');
+        $sInsertEvent->execute([strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['matiere'], $this->data['enseignant'], $this->data['type'], $this->data['promotion'], $this->data['salle']]);  
     }
 }
