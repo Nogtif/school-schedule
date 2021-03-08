@@ -27,7 +27,6 @@ class FormEvent extends Validator {
         $this->isValide('heureDebut', 'checkTimeMin');
         $this->isValide('heureFin', 'checkTimeMax');
         $this->isValide('heureDebut', 'checkTime', 'heureFin');
-        $this->isValide('salle', 'checkRoom');
         $this->isValide('dateCour', 'timeSlotFree', 'heureDebut', 'heureFin', 'promotion');
         $this->isValide('dateCour', 'roomFree', 'heureDebut', 'heureFin', 'salle');
         // Vérification en plus, quand il s'agit de l'admin.
@@ -94,7 +93,7 @@ class FormEvent extends Validator {
     /** Méthode qui insère un cours contenant les données reçu en paramètres.
      */
     public function createEvent() {            
-        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, MatiereID, UsagerID, TypeID, PromotionID, SalleID) VALUES (?,?,?,?,?,?,?,?)');
-        $sInsertEvent->execute([strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['matiere'], $this->data['enseignant'], $this->data['type'], $this->data['promotion'], $this->data['salle']]);  
+        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?)');
+        $sInsertEvent->execute([strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['type'], $this->data['salle'], $this->data['enseignant'], $this->data['matiere']]);  
     }
 }

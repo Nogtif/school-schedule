@@ -46,10 +46,12 @@ if(isset($_POST['add_cours'])) {
 </head>
 <body>
     <!-- HEADER -->
-    <?php require_once('./views/header.php') ?>
+    <?php require_once('./views/sidebar.php') ?>
 
     <!-- PAGE -->
-    <div class="container">
+    <div class="main">
+
+        <h4>Gestion des cours</h4>
 
         <div class="row">
             <div class="col-md-7">
@@ -149,6 +151,19 @@ if(isset($_POST['add_cours'])) {
                                     } ?>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="date">Type de cours</label>
+                                    <select name="type" class="form-control">
+                                        <?php $query = $bdd->query("SELECT * FROM TypeCours");
+                                            while ($row = $query->fetch()){
+                                                echo '<option value="' . $row['TypeID'].'">' . $row['NomType'] . '</option>';
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Enseignant</label>
@@ -163,26 +178,17 @@ if(isset($_POST['add_cours'])) {
                                     } ?>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="date">Type de cours</label>
-                                    <select name="type" class="form-control">
-                                        <?php $query = $bdd->query("SELECT * FROM TypeCours");
-                                            while ($row = $query->fetch()){
-                                                echo '<option value="' . $row['TypeID'].'">' . $row['NomType'] . '</option>';
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
                             
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
-                                    <input type="text" name="salle" class="form-control <?= (isset($errors['salle'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['salle'])) ? $_POST['salle'] : '' ?>">
-                                    <?php if(isset($errors['salle'])) {
-                                        echo '<div class="invalid-feedback">' . $errors['salle'] . '</div>';
-                                    } ?>
+                                    <select name="salle" class="form-control">
+                                        <?php $query = $bdd->query("SELECT * FROM Salles");
+                                            while ($row = $query->fetch()){
+                                                echo '<option value="' . $row['SalleID'].'">' . $row['NomSalle'] . '</option>';
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -191,10 +197,10 @@ if(isset($_POST['add_cours'])) {
                 </div>
             </div>
         </div>
+        <!-- FOOTER -->
+        <?php require_once('./views/footer.php') ?>
     </div>
 
-    <!-- FOOTER -->
-    <?php require_once('./views/footer.php') ?>
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>

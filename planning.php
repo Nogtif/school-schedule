@@ -10,7 +10,7 @@ $mypromo = (isset($_SESSION['promo'])) ? $_SESSION['promo'] : 0;
 $promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
 ?>
 
-<h1 class="planning-title"><?= $week->toString() ?></h1>
+<h4 class="planning-title"><?= $week->toString() ?></h4>
 <div class="box-content">
     <table>
         <thead>
@@ -40,19 +40,19 @@ $promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
     </table>
 
     <div class="planning-events">
-        <?php $i = 1; foreach($events->getEvents($promo) as $events) { ?>
+        <?php foreach($events->getEvents($promo) as $events) { ?>
             <div class="events-day">
                 <?php foreach($events as $event) { 
                     $top = (abs(strtotime(date("8:00")) - strtotime($event['HeureDebut'])) / 3600) * 70;
                     $height = (abs(strtotime($event['HeureFin']) - strtotime($event['HeureDebut'])) / 3600) * 70;
 
-                    echo '<div class="event" style="background-color:'.$event['CouleurMatiere'].';top:'.$top.'px;left:'.($i-1).'px;height:'. $height.'px!important">';
+                    echo '<div class="event" style="background-color:'.$event['CouleurMatiere'].';top:'.$top.'px;height:'. $height.'px!important">';
                     echo '<span>'. str_replace(':', 'h', $event['HeureDebut']) .' - '. str_replace(':', 'h', $event['HeureFin']). '</span>';
                     echo '<b>'. $event['NomType'] . ' ' . htmlspecialchars($event['NomMatiere']). '</b>';
                     echo '<span>'. $event['NomSalle'] . ' ' . htmlspecialchars($event['Prenom']) . ' ' . htmlspecialchars($event['Nom']). '<span>';
                     echo '</div>';
                 } ?>
             </div>
-        <?php $i++; } ?>
+        <?php } ?>
     </div>
 </div>
