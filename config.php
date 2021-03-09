@@ -1,6 +1,6 @@
 <?php 
 session_start();
-require_once('./config/pdo.php');
+require_once(__DIR__.'/config/pdo.php');
 
 function isOnline() {
 	if(isset($_SESSION['id'])) {
