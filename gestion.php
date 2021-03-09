@@ -26,7 +26,6 @@ if(isset($_POST['add_cours'])) {
     if(empty($errors)) {
         $form->createEvent();
     }
-    var_dump($_POST);
 }
 ?>
 <html lang="fr-FR">
