@@ -7,11 +7,11 @@ require_once('./src/Planning/FormEvent.php');
 if(!isOnline()) {
     header('Location: ./login');
 }
-
 // Redirection vers l'index si l'usager n'est ni un enseignant, ni un administrateur.
 if($_SESSION['rang'] < 2) {
     header('Location: ./');
 }
+
 
 $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
