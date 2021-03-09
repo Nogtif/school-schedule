@@ -24,6 +24,7 @@ if(isset($_POST['add_cours'])) {
 
     // Si il n'y a aucune erreurs, on ajout le cours.
     if(empty($errors)) {
+        if($_SESSION['rang'] == 2) $_POST['enseignant'] = $_SESSION['id'];
         $form->createEvent();
     }
 }
@@ -155,7 +156,7 @@ if(isset($_POST['add_cours'])) {
                                 <div class="form-group">
                                     <label for="date">Type de cours</label>
                                     <select name="type" class="form-control">
-                                        <?php $query = $bdd->query("SELECT * FROM TypeCours");
+                                        <?php $query = $bdd->query('SELECT * FROM TypeCours');
                                             while ($row = $query->fetch()){
                                                 echo '<option value="' . $row['TypeID'].'">' . $row['NomType'] . '</option>';
                                             }
@@ -167,14 +168,18 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Enseignant</label>
-                                    <?php
-                                    echo '<select name="enseignant" class="form-control"'.(($_SESSION['rang'] == 2) ? ' readonly' : '').'>';
-                                    $query = $bdd->query("SELECT * FROM Usagers WHERE RangID = 2");
-                                    while ($row = $query->fetch()){
-                                        echo '<option value="' .$row['UsagerID'] .'"'. (($row['UsagerID'] == $_SESSION['id']) ? ' selected' : ' disabled').'>' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
-                                    }
-                                    echo '</select>';
-                                    ?>
+                                    <select name="enseignant" class="form-control">
+                                        <?php if($_SESSION['rang'] == 2) {
+                                                $sql = 'AND UsagerID = "'.$_SESSION['id'].'"';
+                                            } else {
+                                                $sql = '';
+                                            }
+                                            $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
+                                            while ($row = $query->fetch()){
+                                                echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             
@@ -182,7 +187,7 @@ if(isset($_POST['add_cours'])) {
                                 <div class="form-group">
                                     <label for="salle">Salle</label>
                                     <select name="salle" class="form-control">
-                                        <?php $query = $bdd->query("SELECT * FROM Salles");
+                                        <?php $query = $bdd->query('SELECT * FROM Salles');
                                             while ($row = $query->fetch()){
                                                 echo '<option value="' . $row['SalleID'].'">' . $row['NomSalle'] . '</option>';
                                             }
