@@ -64,7 +64,7 @@ if(isset($_POST['add_cours'])) {
 
                     <table class="table table-striped">
                         <thead>
-                            <tr><th>Type</th><th>Nom du cours</th><th>Enseignant</th><th>Date</th><th>Promo</th><th>Salle</th></tr>
+                            <tr><th>Type</th><th>Nom du cours</th><th>Enseignant</th><th>Date</th><th>Promo</th><th>Salle</th><th>Action</th></tr>
                         </thead>
                         <tbody>
                             <?php 
@@ -79,6 +79,7 @@ if(isset($_POST['add_cours'])) {
                                 echo '<td>'.date('d-m-Y', $aCours['DateCour']).' de '. str_replace(':', 'h', $aCours['HeureDebut']). ' à ' .str_replace(':', 'h', $aCours['HeureFin']).'</td>';
                                 echo '<td>'.$aCours['NomPromotion'].'</td>';
                                 echo '<td>'.$aCours['SalleID'].'</td>';
+                                echo '<td> <a href="./admin/cours/_delete?id='.$aCours['CourID'].'"><span class="mdi mdi-delete"></span></a></td>';
                                 echo '</tr>';
                             } ?>
                         </tbody>
