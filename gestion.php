@@ -24,9 +24,9 @@ if(isset($_POST['add_cours'])) {
 
     // Si il n'y a aucune erreurs, on ajout le cours.
     if(empty($errors)) {
-        if($_SESSION['rang'] == 2) $form->setData('enseignant', $_SESSION['id']);
         $form->createEvent();
     }
+    var_dump($_POST);
 }
 ?>
 <html lang="fr-FR">
@@ -168,15 +168,14 @@ if(isset($_POST['add_cours'])) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Enseignant</label>
-                                    <?php if($_SESSION['rang'] == 2) echo  '<input type="text" name="enseignant" class="form-control" value="' . $_SESSION['prenom']. ' ' .$_SESSION['nom'] .'" disabled>';
-                                    else {
-                                        echo '<select name="enseignant" class="form-control">';
-                                        $query = $bdd->query("SELECT * FROM Usagers WHERE RangID==2");
-                                        while ($row = $query->fetch()){
-                                            echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
-                                        }
-                                        echo '</select>';
-                                    } ?>
+                                    <?php
+                                    echo '<select name="enseignant" class="form-control"'.(($_SESSION['rang'] == 2) ? ' readonly' : '').'>';
+                                    $query = $bdd->query("SELECT * FROM Usagers WHERE RangID = 2");
+                                    while ($row = $query->fetch()){
+                                        echo '<option value="' .$row['UsagerID'] .'"'. (($row['UsagerID'] == $_SESSION['id']) ? ' selected' : ' disabled').'>' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
+                                    }
+                                    echo '</select>';
+                                    ?>
                                 </div>
                             </div>
                             
