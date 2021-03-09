@@ -79,7 +79,7 @@ if(isset($_POST['add_cours'])) {
                                 echo '<td>'.date('d-m-Y', $aCours['DateCour']).' de '. str_replace(':', 'h', $aCours['HeureDebut']). ' à ' .str_replace(':', 'h', $aCours['HeureFin']).'</td>';
                                 echo '<td>'.$aCours['NomPromotion'].'</td>';
                                 echo '<td>'.$aCours['SalleID'].'</td>';
-                                echo '<td> <a href="./admin/cours/_delete?id='.$aCours['CourID'].'"><span class="mdi mdi-delete"></span></a></td>';
+                                echo '<td> <a href="./_delete?CourID='.$aCours['CourID'].'"><span class="mdi mdi-delete"></span></a></td>';
                                 echo '</tr>';
                             } ?>
                         </tbody>
