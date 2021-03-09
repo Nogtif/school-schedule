@@ -96,8 +96,12 @@ class FormEvent extends Validator {
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?)');
         $sInsertEvent->execute([strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['type'], $this->data['salle'], $this->data['enseignant'], $this->data['matiere']]);  
     }
-    public function deleteEvent($id) {
-        $query = $this->bdd->prepare('DELETE FROM Cours WHERE CourID=:CoursId');
-        $query->execute(array('CoursId' => $id));
+
+    /** Méthode qui supprime un cours.
+     * @param int $id > l'id du cours.
+     */
+    public function deleteEvent(int $id) {
+        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Cours WHERE CourID = :id');
+        $sDeleteEvent->execute(array(':id' => $id));
     }
 }
