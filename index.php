@@ -24,9 +24,9 @@ if(!isOnline()) {
 </head>
 <body>
     <!-- HEADER -->
-    <?php require_once('./views/sidebar.php') ?>
+    <?php require_once('./views/header.php') ?>
 
-    <div class="main">
+    <div class="container">
         <div class="planning">
             <div class="planning-tools">
                 <a href="javascript:void(0)" data-id="<?= date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
@@ -48,11 +48,11 @@ if(!isOnline()) {
             </div>
             <div class="planning-page"></div>
         </div>
-        
-        <!-- FOOTER -->
-        <?php require_once('./views/footer.php') ?>
     </div>
-    
+
+    <!-- FOOTER -->
+    <?php require_once('./views/footer.php') ?>
+
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="./assets/js/functions.js"></script>

@@ -46,47 +46,39 @@ if(isset($_POST['add_cours'])) {
 </head>
 <body>
     <!-- HEADER -->
-    <?php require_once('./views/sidebar.php') ?>
+    <?php require_once('./views/header.php') ?>
 
     <!-- PAGE -->
-    <div class="main">
+    <div class="container">
 
         <h4>Gestion des cours</h4>
 
         <div class="row">
             <div class="col-md-7">
-                <div class="box-content">
-                    <form method="GET" action="" class="form-search">
-                        <input type="text" name="search" placeholder="Rechercher un cours..." class="form-control">
-                        <input type="submit" value="Rechercher" class="btn btn-primary">
-                    </form>
-                    <hr>
-
-                    <table class="table table-striped">
-                        <thead>
-                            <tr><th>Type</th><th>Nom du cours</th><th>Enseignant</th><th>Date</th><th>Promo</th><th>Salle</th><th>Action</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
-                            if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
-                            $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID) '.$where.' ORDER BY DateCour DESC, HeureDebut DESC');
-                            while($aCours = $sCours->fetch()) {
-                                echo '<tr>';
-                                echo '<td>'.$aCours['NomType'].'</td>';
-                                echo '<td>'.$aCours['NomMatiere'].'</td>';
-                                echo '<td>'.$aCours['Prenom']. ' ' .$aCours['Nom'].'</td>';
-                                echo '<td>'.date('d-m-Y', $aCours['DateCour']).' de '. str_replace(':', 'h', $aCours['HeureDebut']). ' à ' .str_replace(':', 'h', $aCours['HeureFin']).'</td>';
-                                echo '<td>'.$aCours['NomPromotion'].'</td>';
-                                echo '<td>'.$aCours['SalleID'].'</td>';
-                                echo '<td> <a href="./_delete?CourID='.$aCours['CourID'].'"><span class="mdi mdi-delete"></span></a></td>';
-                                echo '</tr>';
-                            } ?>
-                        </tbody>
-                    </table>
-
+                <div class="box-content">                    
+                    <?php 
+                    $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
+                    if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
+                    $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID), Salles USING(SalleID) '.$where.' ORDER BY DateCour DESC, HeureDebut DESC');
+                    while($aCours = $sCours->fetch()) { ?>
+                        <div class="list-cours d-flex flex-row align-items-center justify-content-between">
+                            <div class="cours-info">
+                                <p><?= $aCours['NomType'] ?> <?= $aCours['NomMatiere'] ?></p>
+                                <span>Par <?= $aCours['Prenom'] ?> <?= $aCours['Nom'] ?>, en <?= $aCours['NomSalle'] ?></span>
+                            </div>
+                            
+                            <div class="cours-date">
+                                <p><?= date('d-m-Y', $aCours['DateCour']) ?></p>
+                                <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
+                            </div>
+                            
+                            <a href="./_delete?CourID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
+                            
+                        </div>                        
+                    <?php } ?>
                 </div>
             </div>
+
             <div class="col-md-5">    
                 <div class="box-content">
                     <div class="content-title">Ajouter un cours</div>
@@ -208,8 +200,5 @@ if(isset($_POST['add_cours'])) {
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
-
-    <script>
-    </script>
 </body>
 </html>

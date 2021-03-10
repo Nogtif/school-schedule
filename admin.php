@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
+require_once('./src/Planning/FormEvent.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -29,15 +30,20 @@ if($_SESSION['rang'] < 3) {
 </head>
 <body>
     <!-- HEADER -->
-    <?php require_once('./views/header.php') ?>
+    <?php require_once('./views/sidebar.php') ?>
 
     <!-- PAGE -->
-    <div class="container">
-        
+    <div class="main">
+
+        <h4>Administration</h4>
+
+        <div class="row">
+            
+        </div>
+        <!-- FOOTER -->
+        <?php require_once('./views/footer.php') ?>
     </div>
 
-    <!-- FOOTER -->
-    <?php require_once('./views/footer.php') ?>
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>

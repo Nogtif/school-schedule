@@ -3,6 +3,7 @@
 * {
     box-sizing: border-box;
     outline: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 body {
@@ -28,8 +29,91 @@ body::-webkit-scrollbar-thumb:hover {
     background-color: #607AD5;
 }
 
-a {
+header {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 50px;
+}
+
+.logo a {
+    float: left;
+    margin-top: 15px;
     text-decoration: none;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.logo a span {
+    color: #000;
+    vertical-align: middle;
+    opacity: .9;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+nav {
+    float: right;
+    padding: 25px 0;
+}
+
+nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: relative;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+nav a {
+    display: block;
+    padding: 0 10px;
+    color: #000;
+    opacity: .7;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+nav ul li.active a {
+    opacity: 1;
+}
+
+nav ul li a::after {
+    content: '';
+    width: 50%;
+    display: block;
+    margin: 5px auto;
+    border-bottom: 3px solid transparent;
+}
+
+nav ul li.active a::after {
+    border-color: #7289DA;
+}
+
+nav ul li:hover a::after {
+    border-color: #7289DA;
+    transition: .5s;
+}
+
+nav a:hover {
+    color: #000;
+    text-decoration: none;
+    opacity: 1;
+    transition: all .5s;
+}
+
+@media (max-width: 900px) {
+    /* On enléve le menu principal */
+    nav {
+        display: none
+    }
 }
 
 footer {
@@ -37,6 +121,15 @@ footer {
     margin: 20px auto;
     font-weight: 600;
     font-size: 13px;
+}
+
+.container {
+    min-width: 80%;
+}
+
+.container h4 {
+    opacity: .9;
+    margin-bottom: 25px;
 }
 
 .btn {
@@ -77,113 +170,6 @@ footer {
     border-color: #C2CAFC;
 }
 
-.sidebar {
-    position: relative;
-    background-color: #fff;
-    height: 100%;
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding: 50px 0;
-    box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.02);
-}
-
-.cont-bar {
-    padding: 0 15px;
-    min-height: 50px;
-}
-
-.logo i {
-    background-color: #7289DA;
-    color: #fff;
-    padding: 5px 8px;
-    margin-right: 10px;
-    font-size: 18px;
-    border-radius: 5px;
-    vertical-align: middle;
-}
-
-.title-logo {
-    font-size: 16px;
-    font-weight: 600;
-    color: #000;
-    vertical-align: middle;
-}
-
-.sidebar-menu {
-    width: 100%;
-}
-
-.sidebar-menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar-menu li {
-    margin: 20px 0;
-}
-
-.sidebar-menu li > a {
-    color: #000;
-    opacity: .7;
-    padding-left: 25px;
-    font-size: 14px;
-    font-weight: 500;
-    display: block;
-    border-right: 2px solid transparent;
-}
-
-.sidebar-menu li > a:hover {
-    opacity: .9;
-    transition: all  .5s;
-    border-right: 2px solid #7289DA;
-}
-
-.sidebar-menu li > a > i {
-    vertical-align: middle;
-    font-size: 1.4rem;
-    margin-right: 10px;
-}
-
-.sidebar-menu li > a.active {
-    border-right: 2px solid #7289DA;
-    opacity: 1;
-    color: #7289DA;
-    font-weight: 600;
-}
-
-
-.sidebar a.btn {
-    width: 100%;
-    display: block;
-    padding: 10px 40px;
-    font-weight: 500;
-    border-radius: 5px;
-}
-
-.main {
-    position: relative;
-    padding: 50px;
-    padding-bottom: 15px;
-    margin-left: 250px;
-}
-
-.main h4 {
-    opacity: .9;
-    margin-bottom: 25px;
-}
-
-
-@media screen and (max-height: 450px) {
-    .sidebar {
-        padding-top: 15px;
-    }
-    .sidebar a {
-        font-size: 18px;
-    }
-}
-
 .box-content {
     position: relative;
     width: 100%;
@@ -191,7 +177,6 @@ footer {
     background-color: #fff;
     border-radius: 15px;
     margin-bottom: 30px;
-    box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.02);
 }
 
 .box-content::after {
@@ -207,6 +192,8 @@ footer {
     font-weight: 600;
     height: 40px;
 }
+/** PLANNING */
+
 
 .planning {
     min-width: 900px;
@@ -221,6 +208,11 @@ footer {
     position: absolute;
     top: -5px;
     right: 0;
+}
+
+.planning-tools a.btn {
+    padding: 8px 12px;
+    border-radius: 50px;
 }
 
 .nav-week {
@@ -240,14 +232,14 @@ footer {
     margin-left: 10px;
     border-radius: 50px;
     padding: 10px 40px 10px 20px;
-    box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.02);
 }
 
 .planning select:focus {
-    box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.02);
+    box-shadow: 0px 0px 5px 3px rgba(0,0,0,0);
 }
 
 .planning .box-content {
+    position: relative;
     width: calc(100% - 50px);
     padding: 0;
     margin: 20px 0 0 50px;
@@ -367,6 +359,10 @@ footer {
     border-right: 1px solid #F2F3F7;
 }
 
+.planning-events .events-day:last-child {
+    border-right: 0;
+}
+
 .planning-events .events-day .event {
     position: absolute;
     top: 0;
@@ -401,6 +397,45 @@ footer {
     font-size: 12px;
 }
 
+
+.nav-cours {
+    margin-bottom: 20px;
+}
+
+.list-cours {
+    padding: 15px 0;
+    border-bottom: 1px dashed;
+}
+
+.list-cours:last-child {
+    border: 0;
+}
+.cours-info {
+    width: calc(100% - 50%);
+    line-height: 1.6;
+}
+
+.list-cours p {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.list-cours span {
+    font-size: 13px;
+    font-style: italic;
+    opacity: .8;
+}
+
+.cours-date {
+    flex: 1;
+}
+
+.list-cours > a.btn {
+    position: absolute;
+    right: 30px;
+    padding: 3px 6px;
+    font-size: 1.2rem;
+}
 
 label {
     font-size: 13px;
