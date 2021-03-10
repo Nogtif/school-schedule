@@ -182,7 +182,7 @@ footer {
 .box-content {
     position: relative;
     width: 100%;
-    padding: 30px;
+    padding: 25px 20px;
     background-color: #fff;
     border-radius: 15px;
     margin-bottom: 30px;
@@ -413,7 +413,7 @@ footer {
 
 .list-cours {
     padding: 15px 0;
-    border-bottom: 1px dashed;
+    border-bottom: 2px solid #DADFE1;
 }
 
 .list-cours:last-child {
@@ -440,10 +440,13 @@ footer {
 }
 
 .list-cours > a.btn {
+    background-color: transparent;
+    border: none;
+    color: #DC3545;
     position: absolute;
     right: 30px;
     padding: 3px 6px;
-    font-size: 1.2rem;
+    font-size: 1.8rem;
 }
 
 label {

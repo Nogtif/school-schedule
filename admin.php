@@ -37,14 +37,68 @@ if($_SESSION['rang'] < 3) {
 
         <h4>Administration</h4>
 
+        <p>Gestion des salles</p>
+
         <div class="row">
-            
+            <div class="col-md-6">
+                <div class="box-content">
+                    <div class="content-title">Ajouter une salle</div>
+                    <form method="POST" action="">
+                        <label for="room">Nom de la salle</label>
+                        <input type="text" name="room" class="form-control">
+                        <input type="submit" name="add_room" value="Ajouter" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box-content">
+                    <div class="content-title">Supprimer une salle</div>
+                    <form method="POST" action="">
+                        <label for="room">Nom de la salle</label>
+                        <input type="text" name="room" class="form-control">
+                        <input type="submit" name="delete_room" value="Supprimer" class="btn btn-danger">
+                    </form>
+                </div>
+            </div>
         </div>
-        <!-- FOOTER -->
-        <?php require_once('./views/footer.php') ?>
+
+        <p>Gestion des matières</p>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box-content">
+                    <div class="content-title">Ajouter une matière</div>
+                    <form method="POST" action="">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label for="room">Nom de la matire</label>
+                                <input type="text" name="room" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="room">Couleur</label>
+                                <input type="color" name="room" class="form-control">
+                            </div>
+                        </div>
+
+                        <input type="submit" name="add_room" value="Ajouter" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="box-content">
+                    
+                </div>
+            </div>
+        </div>
+
+        <p>Gestion des usagers</p>
+        
+            
     </div>
 
-    
+    <!-- FOOTER -->
+    <?php require_once('./views/footer.php') ?>
+
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
 </body>

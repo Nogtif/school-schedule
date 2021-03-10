@@ -192,10 +192,10 @@ if(isset($_POST['add_cours'])) {
                 </div>
             </div>
         </div>
-        <!-- FOOTER -->
-        <?php require_once('./views/footer.php') ?>
     </div>
-
+    
+    <!-- FOOTER -->
+    <?php require_once('./views/footer.php') ?>
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
