@@ -26,6 +26,7 @@ if(!isOnline()) {
     <!-- HEADER -->
     <?php require_once('./views/header.php') ?>
 
+    <!-- PAGE -->
     <div class="container">
         <div class="planning">
             <div class="planning-tools">

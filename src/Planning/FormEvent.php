@@ -10,7 +10,7 @@ use App\Validator;
 */
 class FormEvent extends Validator {
 
-    /** Constructeur de la classe addEvent.
+    /** Constructeur de la classe FormEvent.
      * @param \PDO $db > la base de donnée.
      * @param array $data > le tableau contenant les données. 
      */
@@ -127,7 +127,7 @@ class FormEvent extends Validator {
         }
     }
 
-    /** Méthode qui insère un cours contenant les données reçu en paramètres.
+    /** Méthode qui insère un cours contenant les données reçu en paramètre.
      */
     public function insertEvent() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?)');

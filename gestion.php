@@ -71,7 +71,7 @@ if(isset($_POST['add_cours'])) {
                                 <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
                             </div>
                             
-                            <a href="./_delete?CourID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
+                            <a href="./_delete?addEventID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
                             
                         </div>                        
                     <?php } ?>
@@ -187,7 +187,7 @@ if(isset($_POST['add_cours'])) {
                                 </div>
                             </div>
                         </div>
-                        <input type="submit" name="add_cours" value="Ajouter ce cours" class="btn btn-success">
+                        <input type="submit" name="add_cours" value="Programmer ce cours" class="btn btn-success">
                     </form>
                 </div>
             </div>

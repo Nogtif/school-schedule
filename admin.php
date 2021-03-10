@@ -30,10 +30,10 @@ if($_SESSION['rang'] < 3) {
 </head>
 <body>
     <!-- HEADER -->
-    <?php require_once('./views/sidebar.php') ?>
+    <?php require_once('./views/header.php') ?>
 
     <!-- PAGE -->
-    <div class="main">
+    <div class="container">
 
         <h4>Administration</h4>
 

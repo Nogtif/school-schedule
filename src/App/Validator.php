@@ -35,16 +35,5 @@ abstract class Validator {
             call_user_func([$this, $method], $name, ...$param);
         }
     }
-
-    /** Méthode qui vérifie si le champ correspondant à une salle est bien valide.
-     * (Si elle commence par une lettre, et est suivie de chiffres).
-     * @param string $name > l'indice dans la tableau.
-     */
-    public function checkRoom(string $name) {
-        if(!ctype_alpha($this->data[$name][0]) || !ctype_digit(substr($this->data[$name], 1))) {
-            $this->errors[$name] = 'La salle n\'est pas valide !';
-        }
-    }
 }
-
 ?>
