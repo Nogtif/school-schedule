@@ -14,6 +14,10 @@
                 <li <?= (basename($_SERVER['PHP_SELF']) == 'admin.php') ? 'class="active"' : null ?>>
                     <a href="./admin">Administration</a>
                 </li>
+
+                <li>
+                    <a href="./logout" class="btn btn-primary">Déconnexion</a>
+                </li>
                 
             </ul>
         </nav>

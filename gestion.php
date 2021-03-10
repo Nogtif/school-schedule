@@ -24,8 +24,7 @@ if(isset($_POST['add_cours'])) {
 
     // Si il n'y a aucune erreurs, on ajout le cours.
     if(empty($errors)) {
-        if($_SESSION['rang'] == 2) $_POST['enseignant'] = $_SESSION['id'];
-        $form->createEvent();
+        $form->insertEvent();
     }
 }
 ?>

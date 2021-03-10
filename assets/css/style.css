@@ -55,7 +55,7 @@ header {
 
 nav {
     float: right;
-    padding: 25px 0;
+    padding: 20px 0;
 }
 
 nav ul {
@@ -107,6 +107,14 @@ nav a:hover {
     text-decoration: none;
     opacity: 1;
     transition: all .5s;
+}
+
+nav a.btn {
+    display: flex;
+    opacity: 1;
+    font-size: 13px;
+    padding: 8px 20px;
+    text-transform: unset;
 }
 
 @media (max-width: 900px) {

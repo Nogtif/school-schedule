@@ -35,6 +35,43 @@ class FormEvent extends Validator {
         return $this->errors;
     }
 
+    /** Méthode qui vérifie si la date dans le tableau n'est pas passée.
+     * @param string $name > clé de la date à vérifiée.
+    */
+    public function checkDate(string $name) {
+        if(strtotime($this->data[$name]) < time()) {
+            $this->errors[$name] = 'La date du cours ne doit pas être passée !';
+        }
+    }
+
+    /** Méthode qui vérifie si l'heure de début dans le tableau est bien supérieure à 8h00.
+     * @param string $date > clé de l'heure de début à vérifiée.
+    */
+    public function checkTimeMin(string $date) {
+        if($this->data[$date] < '08:00') {
+            $this->errors[$date] = 'Les cours commencent à 8h00 !';
+        }
+    }
+
+    /** Méthode qui vérifie si l'heure de fin dans le tableau est bien inférieure à 20h00.
+     * @param string $hour > clé de l'heure de fin à vérifiée.
+    */
+    public function checkTimeMax(string $hour) {
+        if($this->data[$hour] > '20:00') {
+            $this->errors[$hour] = 'Les cours finissent à 20h00 !';
+        }
+    }
+
+    /** Méthode qui vérifie si l'heure de début dans le tableau est bien inférieure à l'heure de fin.
+     * @param string $startHour > clé de l'heure de fin à vérifiée.
+     * @param string $endHour > clé de l'heure de fin à vérifiée.
+    */
+    public function checkTime(string $startHour, string $endHour) {
+        if($this->data[$startHour] > $this->data[$endHour]) {
+            $this->errors[$startHour] = 'L\'heure de début doit être inférieur à celle de fin !';
+        }
+    }
+
     /** Méthode qui verifie si un créneau pour une promotion est libre à cette date. 
      * @param string $date > la date du cours.
      * @param string $start > l'heure de début du cour.
@@ -92,7 +129,7 @@ class FormEvent extends Validator {
 
     /** Méthode qui insère un cours contenant les données reçu en paramètres.
      */
-    public function createEvent() {            
+    public function insertEvent() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?)');
         $sInsertEvent->execute([strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['type'], $this->data['salle'], $this->data['enseignant'], $this->data['matiere']]);  
     }
