@@ -84,7 +84,7 @@ if(isset($_POST['add_cours'])) {
                     <?php if(isset($errors['global'])) {
                         echo '<div class="alert alert-danger">'.$errors['global'].'</div>';
                     } else if(isset($_POST['add_cours']) && empty($errors)) {
-                        echo '<div class="alert alert-success">Le cours à bien été ajouté !</div>';
+                        echo '<div class="alert alert-success">Le cours a bien été ajouté !</div>';
                     } ?>
                     <form method="POST" action="">
                         <div class="row">
@@ -193,7 +193,7 @@ if(isset($_POST['add_cours'])) {
             </div>
         </div>
     </div>
-    
+
     <!-- FOOTER -->
     <?php require_once('./views/footer.php') ?>
     
