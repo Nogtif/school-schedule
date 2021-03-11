@@ -41,7 +41,7 @@ class Events {
         $sPromo = $this->bdd->query('SELECT * FROM Cours 
             INNER JOIN Matieres USING(MatiereID)
             LEFT JOIN Usagers USING(UsagerID) LEFT JOIN Salles USING(SalleID) LEFT JOIN TypeCours USING(TypeID) 
-            WHERE PromotionID  = '. $promo.' AND DateDebut <= '.$this->firstDay .' AND DateFin >=' .$this->lastDay. ' ORDER BY DateCour'
+            WHERE PromotionID  = '. $promo.' AND DateDebut <= '.$this->firstDay .' AND DateFin >=' .$this->lastDay. ' ORDER BY DateDebut'
         );
         while($aPromo = $sPromo->fetch()) {
             $events[date('j', $aPromo['DateDebut'])%7][] = $aPromo;
