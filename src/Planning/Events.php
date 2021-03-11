@@ -26,7 +26,7 @@ class Events {
     private function genereList():array {
         $events = array();
         for($i = 0; $i < 7; $i++) {
-            $events[date('j', $this->firstDay + ($i * 86400))] = array();
+            $events[date('j', $this->firstDay + ($i * 86400))%7] = array();
         }
         return $events;
     }
@@ -41,10 +41,11 @@ class Events {
         $sPromo = $this->bdd->query('SELECT * FROM Cours 
             INNER JOIN Matieres USING(MatiereID)
             LEFT JOIN Usagers USING(UsagerID) LEFT JOIN Salles USING(SalleID) LEFT JOIN TypeCours USING(TypeID) 
-            WHERE PromotionID  = '. $promo.' AND DateCour BETWEEN '.$this->firstDay .' AND '.$this->lastDay. ' ORDER BY DateCour'
+            WHERE PromotionID  = '. $promo.' AND DateCour <= '.$this->firstDay .' AND DateFin >=' .$this->lastDay. ' ORDER BY DateCour'
         );
         while($aPromo = $sPromo->fetch()) {
-            $events[date('j', $aPromo['DateCour'])][] = $aPromo;               
+            $events[date('j', $aPromo['DateCour'])%7][] = $aPromo;
+
         }
         return $events;
     }
