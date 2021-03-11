@@ -2,6 +2,7 @@
 <?php 
 require_once('./config.php');
 require_once('./src/Planning/FormRoom.php');
+require_once('./src/Planning/FormMatter.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -27,6 +28,18 @@ if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
     }
     if (isset($_POST['delete_room'])){
         $formRoom->deleteRoomByName($_POST['room']);
+    }
+}
+if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
+    
+    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
+    $formmatter = new Planning\FormMatter($bdd, $_POST);
+    $errorsMatter = $formmatter->checkAddMatter();
+    if(empty($errorsMatter)){
+        $formmatter->insertMatter();
+    }
+    if (isset($_POST['delete_matter'])){
+        $formmatter->deleteMatter($_POST['nomM']);
     }
 }
 ?>
@@ -95,28 +108,50 @@ if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
         <p>Gestion des matières</p>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="box-content">
                     <div class="content-title">Ajouter une matière</div>
                     <form method="POST" action="">
                         <div class="row">
-                            <div class="col-md-8">
-                                <label for="room">Nom de la matire</label>
-                                <input type="text" name="room" class="form-control">
+                            <div class="col-md-4">
+                                <label for="room">Nom de la matière</label>
+                                <input type="text" name="nomM" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="room">Nom de la promotion </label>
+                                <select name="promoM" class="form-control">
+                                <?php 
+                                    $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
+                                    while($aPromo = $sPromo->fetch()) {
+                                        echo '<option value="'.$aPromo['PromotionID'].'"'. ((isset($_POST['promotion']) && $_POST['promotion'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.$aPromo['NomPromotion'].'</option>';
+                                    } ?>    
+                                </select>
                             </div>
                             <div class="col-md-4">
                                 <label for="room">Couleur</label>
-                                <input type="color" name="room" class="form-control">
+                                <input type="color" name="colorM" class="form-control">
                             </div>
                         </div>
 
-                        <input type="submit" name="add_room" value="Ajouter" class="btn btn-success">
+                        <input type="submit" name="add_matter" value="Ajouter" class="btn btn-success">
                     </form>
                 </div>
             </div>
-            <div class="col-md-8">
+            
+            <div class="col-md-6">
                 <div class="box-content">
-                    
+                    <div class="content-title">Supprimer une salle</div>
+                    <?php if(isset($_POST['delete_room']) && empty($errorsRoom)) {
+                        echo '<div class="alert alert-success">La salle a bien été supprimé !</div>';
+                    } ?>
+                    <form method="POST" action="">
+                        <label for="room">Nom de la matiére</label>
+                        <input type="text" name="nomM" class="form-control <?= (isset($errorsRoom['room'])) ? 'is-invalid' : '' ?>">
+                        <?php if(isset($errorsRoom['room'])) {
+                            echo '<div class="invalid-feedback">' . $errorsMatter['room'] . '</div>';
+                        } ?>
+                        <input type="submit" name="delete_matter" value="Supprimer" class="btn btn-danger">
+                    </form>
                 </div>
             </div>
         </div>
