@@ -36,7 +36,9 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
     $formmatter = new Planning\FormMatter($bdd, $_POST);
     $errorsMatter = $formmatter->checkAddMatter();
     if(empty($errorsMatter)){
-        $formmatter->insertMatter();
+        if(isset($_POST['add_matter'])){
+            $formmatter->insertMatter();
+        }
     }
     if (isset($_POST['delete_matter'])){
         $formmatter->deleteMatter($_POST['nomM']);
@@ -90,7 +92,7 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
             <div class="col-md-6">
                 <div class="box-content">
                     <div class="content-title">Supprimer une salle</div>
-                    <?php if(isset($_POST['delete_room']) && empty($errorsRoom)) {
+                    <?php if(isset($_POST['delete_room'])) {
                         echo '<div class="alert alert-success">La salle a bien été supprimé !</div>';
                     } ?>
                     <form method="POST" action="">
@@ -111,6 +113,9 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
             <div class="col-md-6">
                 <div class="box-content">
                     <div class="content-title">Ajouter une matière</div>
+                    <?php if(isset($_POST['add_matter']) && empty($errorsMatter)) {
+                        echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
+                    } ?>
                     <form method="POST" action="">
                         <div class="row">
                             <div class="col-md-4">
@@ -140,15 +145,15 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
             
             <div class="col-md-6">
                 <div class="box-content">
-                    <div class="content-title">Supprimer une salle</div>
-                    <?php if(isset($_POST['delete_room']) && empty($errorsRoom)) {
-                        echo '<div class="alert alert-success">La salle a bien été supprimé !</div>';
+                    <div class="content-title">Supprimer une matière</div>
+                    <?php if(isset($_POST['delete_matter'])) {
+                        echo '<div class="alert alert-success">La matière a bien été supprimé !</div>';
                     } ?>
                     <form method="POST" action="">
                         <label for="room">Nom de la matiére</label>
-                        <input type="text" name="nomM" class="form-control <?= (isset($errorsRoom['room'])) ? 'is-invalid' : '' ?>">
+                        <input type="text" name="nomM" required class="form-control <?= (isset($errorsMatter['nomM'])) ? 'is-invalid' : '' ?>">
                         <?php if(isset($errorsRoom['room'])) {
-                            echo '<div class="invalid-feedback">' . $errorsMatter['room'] . '</div>';
+                            echo '<div class="invalid-feedback">' . $errorsMatter['nomM'] . '</div>';
                         } ?>
                         <input type="submit" name="delete_matter" value="Supprimer" class="btn btn-danger">
                     </form>

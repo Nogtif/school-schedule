@@ -11,6 +11,7 @@ if(!isOnline()) {
 if($_SESSION['rang'] < 2) {
     header('Location: ./');
 }
+
 if(isset($_GET['addEventID'])){
     $form = new Planning\FormEvent($bdd, $_GET);
     $form->deleteEvent($_GET['addEventID']);
