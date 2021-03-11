@@ -12,15 +12,9 @@ if($_SESSION['rang'] < 2) {
     header('Location: ./');
 }
 
-if(isset($_GET['addEventID'])){
-    $form = new Planning\FormEvent($bdd, $_GET);
-    $form->deleteEvent($_GET['addEventID']);
-    header('Location: ./gestion');
-}
-
 $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
-// Ajout d'un cours
+// Ajout d'un cours.
 if(isset($_POST['add_cours'])) {
 
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
@@ -31,6 +25,13 @@ if(isset($_POST['add_cours'])) {
     if(empty($errors)) {
         $form->insertEvent();
     }
+}
+
+// Suppression d'un cours.
+if(isset($_GET['removeEventID'])){
+    $form = new Planning\FormEvent($bdd, $_GET);
+    $form->deleteEvent($_GET['removeEventID']);
+    header('Location: ./gestion');
 }
 ?>
 <html lang="fr-FR">
@@ -65,19 +66,20 @@ if(isset($_POST['add_cours'])) {
                     if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
                     $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID), Salles USING(SalleID) '.$where.' ORDER BY DateDebut DESC, HeureDebut DESC');
                     while($aCours = $sCours->fetch()) { ?>
-                        <div class="list-cours d-flex flex-row align-items-center justify-content-between">
-                            <div class="cours-info">
+                        <div class="list-items d-flex flex-row align-items-center justify-content-between">
+                            <div class="item-info">
                                 <p><?= $aCours['NomType'] ?> <?= $aCours['NomMatiere'] ?></p>
                                 <span>Par <?= $aCours['Prenom'] ?> <?= $aCours['Nom'] ?>, en <?= $aCours['NomSalle'] ?></span>
                             </div>
                             
-                            <div class="cours-date">
+                            <div class="item-info">
                                 <p>du <?= date('d-m-Y', $aCours['DateDebut']) ?> au <?= date('d-m-Y', $aCours['DateFin']) ?></p>
                                 <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
                             </div>
-                            
-                            <a href="?addEventID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
-                            
+                        
+                            <button class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></button>
+                            <a href="?removeEventID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-close"></i></a>
+                                                    
                         </div>
                     <?php } ?>
                 </div>
@@ -93,7 +95,7 @@ if(isset($_POST['add_cours'])) {
                     } ?>
                     <form method="POST" action="">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="form-group">
                                     <label for="">Promotion</label>
                                     <select name="promotion" class="form-control" id="promo">
@@ -109,7 +111,7 @@ if(isset($_POST['add_cours'])) {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="form-group">
                                     <label for="">Matière</label>
                                     <select name="matiere" id="" class="form-control" id="matiere">
@@ -199,6 +201,8 @@ if(isset($_POST['add_cours'])) {
                         <input type="submit" name="add_cours" value="Programmer ce cours" class="btn btn-success">
                     </form>
                 </div>
+
+
             </div>
         </div>
     </div>

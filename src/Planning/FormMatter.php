@@ -49,8 +49,8 @@ class FormMatter extends Validator {
     /** Méthode qui supprime une matière.
      * @param int $id > l'id de la matière.
      */
-    public function deleteMatter($name) {
-        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Matieres WHERE NomMatiere = :nomM');
-        $sDeleteEvent->execute(array(':nomM' => $name));
+    public function deleteMatter($id) {
+        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Matieres WHERE MatiereID = :id');
+        $sDeleteEvent->execute(array(':id' => $id));
     }
 }

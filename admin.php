@@ -30,6 +30,7 @@ if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
     }
 }
 
+// Ajout d'une matière.
 if (isset($_POST['add_matter'])){
     
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
@@ -39,6 +40,12 @@ if (isset($_POST['add_matter'])){
     if(empty($errorsMatter)){
         $formMatter->insertMatter();
     }
+}
+
+// Suppression d'une matière.
+if(isset($_GET['removeMatterID'])){
+    $form = new Planning\FormMatter($bdd, $_GET);
+    $form->deleteMatter($_GET['removeMatterID']);
 }
 ?>
 <html lang="fr-FR">
@@ -143,22 +150,74 @@ if (isset($_POST['add_matter'])){
                         <input type="submit" name="add_matter" value="Ajouter" class="btn btn-success">
                     </form>
                 </div>
+
+                <div class="box-content">
+                    <div class="content-title">Associer une matière et un enseignant</div>
+                    <?php if(isset($_POST['add_matter']) && empty($errorsMatter)) {
+                        echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
+                    } ?>
+                    <form method="POST" action="">
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="room">Nom de la matière</label>
+                                <select name="matiere" class="form-control">
+                                    <?php
+                                    $option = '';
+                                    if($_SESSION['rang'] == 2) {
+                                        $option = 'INNER JOIN Enseigne ON Matieres.MatiereID = Enseigne.MatiereID AND UsagerID = "'.$_SESSION['id'].'"';   
+                                    }
+                                    $sMatieres = $bdd->query('SELECT * FROM Matieres '.$option. ' ORDER BY NomMatiere');
+                                    while($aMatieres = $sMatieres->fetch()) {
+                                        echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
+                                    } ?> 
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                                <label for="room">Enseignant</label>
+                                <select name="enseignant" class="form-control">
+                                    <?php if($_SESSION['rang'] == 2) {
+                                            $sql = 'AND UsagerID = "'.$_SESSION['id'].'"';
+                                        } else {
+                                            $sql = '';
+                                        }
+                                        $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="submit" name="add_teachMatter" value="Associer" class="btn btn-success">
+                        <input type="submit" name="remove_teachMatter" value="Dissocier" class="btn btn-danger" style="float: right">
+                    </form>
+                </div>
             </div>
             
             <div class="col-md-8">
                 <div class="box-content">
-                <?php 
-                $sMatter = $bdd->query('SELECT * FROM Matieres m INNER JOIN Promotions p ON m.PromotionID = p.PromotionID ORDER BY NomMatiere ASC');
-                while($aMatter = $sMatter->fetch()) { ?>
-                    <div class="list-matter d-flex flex-row align-items-center justify-content-between">
-                        <p class="nameM"><?= $aMatter['NomMatiere'] ?></p>
-                        
-                        <p class="promoM"><?= $aMatter['NomPromotion'] ?></p>
-                        
-                        <a href="?removeMatterID=<?= $aMatter['MatiereID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
-                        
-                    </div>
-                <?php } ?>                    
+                    <?php 
+                    $sMatter = $bdd->query('SELECT * FROM Matieres m INNER JOIN Promotions p ON m.PromotionID = p.PromotionID ORDER BY NomMatiere ASC');
+                    while($aMatter = $sMatter->fetch()) { ?>
+                        <div class="list-items d-flex flex-row align-items-center justify-content-between">
+                            <div class="item-info">
+                                <p class="nameM"><?= $aMatter['NomMatiere'] ?></p>
+                            </div>
+
+                            <div class="item-info">
+                                <p class="promoM"><?= $aMatter['NomPromotion'] ?></p>
+                            </div>
+
+                            <div class="item-info">
+                                <p class="colorM" style="background-color: <?= $aMatter['CouleurMatiere'] ?>"></p>
+                            </div>
+                            
+                            
+                            <a href="?removeMatterID=<?= $aMatter['MatiereID'] ?>" class="btn btn-danger"><i class="mdi mdi-close"></i></a>
+                            
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>

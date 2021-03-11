@@ -411,47 +411,44 @@ footer {
     margin-bottom: 20px;
 }
 
-.list-cours {
+.list-items {
     padding: 15px 0;
     border-bottom: 2px solid #DADFE1;
 }
 
-.list-cours:last-child {
+.list-items:last-child {
     border: 0;
 }
-.cours-info {
-    width: 50%;
+
+.item-info {
     line-height: 1.6;
+    flex: 1;
 }
 
-.list-cours p {
+.list-items p {
     font-weight: 600;
     margin-bottom: 0;
+    opacity: .9;
     font-size: 14px;
 }
 
-.list-cours span {
+.list-items span {
     font-size: 12px;
     font-style: italic;
     opacity: .8;
 }
 
-.cours-date {
-    flex: 1;
+.list-items > .btn {
+    padding: 3px 6px;
+    font-size: 1.1rem;
+    margin-left: 5px;
 }
 
-.list-cours > a.btn {
-    background-color: transparent;
-    border: none;
-    color: #DC3545;
-    position: absolute;
-    right: 30px;
-    padding: 3px 6px;
-    font-size: 1.8rem;
-}
 
 .form-group {
     margin-bottom: 20px;
+    position: relative;
+    min-height: 60px;
 }
 
 label {
@@ -470,26 +467,23 @@ label {
 .form-control, .form-control:focus {
     background-color: #F5F5F7;
     border-color: #F5F5F7;
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: 500;
     padding: 10px 15px;
 }
 
 .form-group input[type=color] {
     height: 45px;
-    padding: 5px;
+    padding: 8px;
+    border: 0;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
-.list-matter {
-    line-height: 1.6;
-    padding: 15px 0;
-    border-bottom: 2px solid #DADFE1;
-}
-.list-matter .nameM {
-    width: 50%;
-}
-
-.list-matter .promoM {
-    flex: 1;
+.colorM {
+    padding: 8px;
+    width: 30px;
+    border-radius: 5px;
 }
 
 /** LOGIN */
