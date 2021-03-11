@@ -63,7 +63,7 @@ if(isset($_POST['add_cours'])) {
                     <?php 
                     $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
                     if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
-                    $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID), Salles USING(SalleID) '.$where.' ORDER BY DateCour DESC, HeureDebut DESC');
+                    $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID), Salles USING(SalleID) '.$where.' ORDER BY DateDebut DESC, HeureDebut DESC');
                     while($aCours = $sCours->fetch()) { ?>
                         <div class="list-cours d-flex flex-row align-items-center justify-content-between">
                             <div class="cours-info">
@@ -72,7 +72,7 @@ if(isset($_POST['add_cours'])) {
                             </div>
                             
                             <div class="cours-date">
-                                <p><?= date('d-m-Y', $aCours['DateCour']) ?></p>
+                                <p>du <?= date('d-m-Y', $aCours['DateDebut']) ?> au <?= date('d-m-Y', $aCours['DateFin']) ?></p>
                                 <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
                             </div>
                             
