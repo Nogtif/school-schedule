@@ -108,7 +108,8 @@ CREATE TABLE Matieres (
 DROP TABLE IF EXISTS Cours;
 CREATE TABLE Cours (
     CourID INTEGER PRIMARY KEY AUTOINCREMENT,
-    DateCour VARCHAR(30) NOT NULL,
+    DateDebut VARCHAR(30) NOT NULL,
+    DateFin VARCHAR(30),
     HeureDebut time NOT NULL,
     HeureFin time NOT NULL,
     TypeID INTEGER NOT NULL,
