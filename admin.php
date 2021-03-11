@@ -21,7 +21,12 @@ if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
 
     // Si il n'y a aucune erreurs, on ajout le cours.
     if(empty($errorsRoom)) {
-        $formRoom->insertRoom();
+        if(isset($_POST['add_room'])){
+            $formRoom->insertRoom();
+        } 
+    }
+    if (isset($_POST['delete_room'])){
+        $formRoom->deleteRoomByName($_POST['room']);
     }
 }
 ?>

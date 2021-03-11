@@ -11,7 +11,11 @@ if(!isOnline()) {
 if($_SESSION['rang'] < 2) {
     header('Location: ./');
 }
-
+if(isset($_GET['addEventID'])){
+    $form = new Planning\FormEvent($bdd, $_GET);
+    $form->deleteEvent($_GET['addEventID']);
+    header('Location: ./gestion');
+}
 
 $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
@@ -71,7 +75,7 @@ if(isset($_POST['add_cours'])) {
                                 <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
                             </div>
                             
-                            <a href="./_delete?addEventID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
+                            <a href="?addEventID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
                             
                         </div>                        
                     <?php } ?>

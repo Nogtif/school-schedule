@@ -60,8 +60,8 @@ class FormRoom extends Validator {
     /** Méthode qui supprime une salle de cours.
      * @param int $id > l'id de la salle.
      */
-    public function deleteRoom(int $id) {
-        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Salles WHERE SalleID = :id');
-        $sDeleteEvent->execute(array(':id' => $id));
+    public function deleteRoomByName($name) {
+        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Salles WHERE NomSalle = :nom');
+        $sDeleteEvent->execute(array(':nom' => $name));
     }
 }
