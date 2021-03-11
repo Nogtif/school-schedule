@@ -29,18 +29,15 @@ if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
         if(empty($errorsDRoom)) $formRoom->deleteRoom();
     }
 }
-if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
+
+if (isset($_POST['add_matter'])){
     
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formmatter = new Planning\FormMatter($bdd, $_POST);
-    $errorsMatter = $formmatter->checkAddMatter();
+    $formMatter = new Planning\FormMatter($bdd, $_POST);
+    $errorsMatter = $formMatter->checkAddMatter();
+
     if(empty($errorsMatter)){
-        if(isset($_POST['add_matter'])){
-            $formmatter->insertMatter();
-        }
-    }
-    if (isset($_POST['delete_matter'])){
-        $formmatter->deleteMatter($_POST['nomM']);
+        $formMatter->insertMatter();
     }
 }
 ?>
@@ -79,12 +76,15 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
                         echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
                     } ?>
                     <form method="POST" action="">
-                        <label for="room">Nom de la salle</label>
-                        <input type="text" name="room" class="form-control <?= (isset($errorsARoom['room'])) ? 'is-invalid' : '' ?>">
-                        <?php if(isset($errorsARoom['room'])) {
-                            echo '<div class="invalid-feedback">' . $errorsARoom['room'] . '</div>';
-                        } ?>
+                        <div class="form-group">
+                            <label for="room">Nom de la salle</label>
+                            <input type="text" name="room" class="form-control <?= (isset($errorsARoom['room'])) ? 'is-invalid' : '' ?>">
+                            <?php if(isset($errorsARoom['room'])) {
+                                echo '<small class="invalid-feedback">' . $errorsARoom['room'] . '</small>';
+                            } ?>
+                        </div>
                         <input type="submit" name="add_room" value="Ajouter" class="btn btn-success">
+                       
                     </form>
                 </div>
             </div>
@@ -95,11 +95,13 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
                         echo '<div class="alert alert-success">La salle a bien été supprimé !</div>';
                     } ?>
                     <form method="POST" action="">
-                        <label for="room">Nom de la salle</label>
-                        <input type="text" name="room" class="form-control <?= (isset($errorsDRoom['room'])) ? 'is-invalid' : '' ?>">
-                        <?php if(isset($errorsDRoom['room'])) {
-                            echo '<div class="invalid-feedback">' . $errorsDRoom['room'] . '</div>';
-                        } ?>
+                        <div class="form-group">
+                            <label for="room">Nom de la salle</label>
+                            <input type="text" name="room" class="form-control <?= (isset($errorsDRoom['room'])) ? 'is-invalid' : '' ?>">
+                            <?php if(isset($errorsDRoom['room'])) {
+                                echo '<small class="invalid-feedback">' . $errorsDRoom['room'] . '</small>';
+                            } ?>                        
+                        </div>
                         <input type="submit" name="delete_room" value="Supprimer" class="btn btn-danger">
                     </form>
                 </div>
@@ -109,7 +111,7 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
         <p>Gestion des matières</p>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="box-content">
                     <div class="content-title">Ajouter une matière</div>
                     <?php if(isset($_POST['add_matter']) && empty($errorsMatter)) {
@@ -117,11 +119,17 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
                     } ?>
                     <form method="POST" action="">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-8 form-group">
                                 <label for="room">Nom de la matière</label>
                                 <input type="text" name="nomM" class="form-control">
                             </div>
-                            <div class="col-md-4">
+
+                            <div class="col-md-4 form-group">
+                                <label for="room">Couleur</label>
+                                <input type="color" name="colorM" class="form-control">
+                            </div>
+
+                            <div class="col-md-12 form-group">
                                 <label for="room">Nom de la promotion </label>
                                 <select name="promoM" class="form-control">
                                 <?php 
@@ -131,31 +139,26 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
                                     } ?>    
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <label for="room">Couleur</label>
-                                <input type="color" name="colorM" class="form-control">
-                            </div>
                         </div>
-
                         <input type="submit" name="add_matter" value="Ajouter" class="btn btn-success">
                     </form>
                 </div>
             </div>
             
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="box-content">
-                    <div class="content-title">Supprimer une matière</div>
-                    <?php if(isset($_POST['delete_matter'])) {
-                        echo '<div class="alert alert-success">La matière a bien été supprimé !</div>';
-                    } ?>
-                    <form method="POST" action="">
-                        <label for="room">Nom de la matiére</label>
-                        <input type="text" name="nomM" required class="form-control <?= (isset($errorsMatter['nomM'])) ? 'is-invalid' : '' ?>">
-                        <?php if(isset($errorsRoom['room'])) {
-                            echo '<div class="invalid-feedback">' . $errorsMatter['nomM'] . '</div>';
-                        } ?>
-                        <input type="submit" name="delete_matter" value="Supprimer" class="btn btn-danger">
-                    </form>
+                <?php 
+                $sMatter = $bdd->query('SELECT * FROM Matieres m INNER JOIN Promotions p ON m.PromotionID = p.PromotionID ORDER BY NomMatiere ASC');
+                while($aMatter = $sMatter->fetch()) { ?>
+                    <div class="list-matter d-flex flex-row align-items-center justify-content-between">
+                        <p class="nameM"><?= $aMatter['NomMatiere'] ?></p>
+                        
+                        <p class="promoM"><?= $aMatter['NomPromotion'] ?></p>
+                        
+                        <a href="?removeMatterID=<?= $aMatter['MatiereID'] ?>" class="btn btn-danger"><i class="mdi mdi-calendar-remove-outline"></i></a>
+                        
+                    </div>
+                <?php } ?>                    
                 </div>
             </div>
         </div>

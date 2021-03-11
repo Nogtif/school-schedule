@@ -420,17 +420,18 @@ footer {
     border: 0;
 }
 .cours-info {
-    width: calc(100% - 50%);
+    width: 50%;
     line-height: 1.6;
 }
 
 .list-cours p {
     font-weight: 600;
     margin-bottom: 0;
+    font-size: 14px;
 }
 
 .list-cours span {
-    font-size: 13px;
+    font-size: 12px;
     font-style: italic;
     opacity: .8;
 }
@@ -447,6 +448,10 @@ footer {
     right: 30px;
     padding: 3px 6px;
     font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
 }
 
 label {
@@ -467,7 +472,24 @@ label {
     border-color: #F5F5F7;
     font-size: 15px;
     padding: 10px 15px;
-    margin-bottom: 20px;
+}
+
+.form-group input[type=color] {
+    height: 45px;
+    padding: 5px;
+}
+
+.list-matter {
+    line-height: 1.6;
+    padding: 15px 0;
+    border-bottom: 2px solid #DADFE1;
+}
+.list-matter .nameM {
+    width: 50%;
+}
+
+.list-matter .promoM {
+    flex: 1;
 }
 
 /** LOGIN */
