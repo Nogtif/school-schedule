@@ -23,8 +23,18 @@ class FormRoom extends Validator {
      * @return array : le tableau d'erreurs.
      */
     public function checkAddRoom():array {
-        $this->isValide('room', 'checkRoom');
-        $this->isValide('room', 'roomExist');
+        $this->isValide('room', 'roomValide');
+        $this->isValide('room', 'roomExist', false);
+
+        return $this->errors;
+    }
+
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour ajouter une salle, 
+     * @return array : le tableau d'erreurs.
+     */
+    public function checkDeleteRoom():array {
+        $this->isValide('room', 'roomValide');
+        $this->isValide('room', 'roomExist', true);
         return $this->errors;
     }
 
@@ -32,7 +42,7 @@ class FormRoom extends Validator {
      * (Si elle commence par une lettre, et est suivie de chiffres).
      * @param string $name > l'indice dans la tableau.
      */
-    public function checkRoom(string $name) {
+    public function roomValide(string $name) {
         if(!ctype_alpha($this->data[$name][0]) || !ctype_digit(substr($this->data[$name], 1))) {
             $this->errors[$name] = 'La salle n\'est pas valide !';
         }
@@ -41,13 +51,15 @@ class FormRoom extends Validator {
     /** Méthode qui vérifie si le nom de la nouvelle matière n'existe pas déjà.
      * @param string $name > le nom de la matière.
      */
-    public function roomExist(string $name) {
+    public function roomExist(string $name, bool $check) {
         $rExist = $this->bdd->prepare('SELECT COUNT(*) FROM Salles WHERE NomSalle = ?');
         $rExist->execute(array($this->data[$name]));
         $count = $rExist->fetchColumn();
         if($count > 0) {
-            $this->errors['room'] = 'Cette salle existe déjà !';
-        }  
+            if($check == false) $this->errors[$name] = 'Cette salle existe déjà !';
+        } else {
+            if($check == true) $this->errors[$name] = 'Cette salle n\'existe pas !';
+        }
     }
 
     /** Méthode qui insère insère une salle contenant les données reçu en paramètre.
@@ -58,10 +70,9 @@ class FormRoom extends Validator {
     }
 
     /** Méthode qui supprime une salle de cours.
-     * @param int $id > l'id de la salle.
      */
-    public function deleteRoomByName($name) {
-        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Salles WHERE NomSalle = :nom');
-        $sDeleteEvent->execute(array(':nom' => $name));
+    public function deleteRoom() {
+        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Salles WHERE NomSalle = ?');
+        $sDeleteEvent->execute(array($this->data['room']));
     }
 }

@@ -18,16 +18,15 @@ if($_SESSION['rang'] < 3) {
 if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
     $formRoom = new Planning\FormRoom($bdd, $_POST);
-    $errorsRoom = $formRoom->checkAddRoom();
 
-    // Si il n'y a aucune erreurs, on ajout le cours.
-    if(empty($errorsRoom)) {
-        if(isset($_POST['add_room'])){
-            $formRoom->insertRoom();
-        } 
+    if(isset($_POST['add_room'])) {
+        $errorsARoom = $formRoom->checkAddRoom();
+        if(empty($errorsARoom)) $formRoom->insertRoom();
     }
-    if (isset($_POST['delete_room'])){
-        $formRoom->deleteRoomByName($_POST['room']);
+
+    if(isset($_POST['delete_room'])) {
+        $errorsDRoom = $formRoom->checkDeleteRoom();
+        if(empty($errorsDRoom)) $formRoom->deleteRoom();
     }
 }
 if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
@@ -76,14 +75,14 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
                 <div class="box-content">
                     <div class="content-title">Ajouter une salle</div>
 
-                    <?php if(isset($_POST['add_room']) && empty($errorsRoom)) {
+                    <?php if(isset($_POST['add_room']) && empty($errorsARoom)) {
                         echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
                     } ?>
                     <form method="POST" action="">
                         <label for="room">Nom de la salle</label>
-                        <input type="text" name="room" class="form-control <?= (isset($errorsRoom['room'])) ? 'is-invalid' : '' ?>">
-                        <?php if(isset($errorsRoom['room'])) {
-                            echo '<div class="invalid-feedback">' . $errorsRoom['room'] . '</div>';
+                        <input type="text" name="room" class="form-control <?= (isset($errorsARoom['room'])) ? 'is-invalid' : '' ?>">
+                        <?php if(isset($errorsARoom['room'])) {
+                            echo '<div class="invalid-feedback">' . $errorsARoom['room'] . '</div>';
                         } ?>
                         <input type="submit" name="add_room" value="Ajouter" class="btn btn-success">
                     </form>
@@ -92,14 +91,14 @@ if (isset($_POST['add_matter']) || isset($_POST['delete_matter'])){
             <div class="col-md-6">
                 <div class="box-content">
                     <div class="content-title">Supprimer une salle</div>
-                    <?php if(isset($_POST['delete_room'])) {
+                    <?php if(isset($_POST['delete_room']) && empty($errorsDRoom)) {
                         echo '<div class="alert alert-success">La salle a bien été supprimé !</div>';
                     } ?>
                     <form method="POST" action="">
                         <label for="room">Nom de la salle</label>
-                        <input type="text" name="room" class="form-control <?= (isset($errorsRoom['room'])) ? 'is-invalid' : '' ?>">
-                        <?php if(isset($errorsRoom['room'])) {
-                            echo '<div class="invalid-feedback">' . $errorsRoom['room'] . '</div>';
+                        <input type="text" name="room" class="form-control <?= (isset($errorsDRoom['room'])) ? 'is-invalid' : '' ?>">
+                        <?php if(isset($errorsDRoom['room'])) {
+                            echo '<div class="invalid-feedback">' . $errorsDRoom['room'] . '</div>';
                         } ?>
                         <input type="submit" name="delete_room" value="Supprimer" class="btn btn-danger">
                     </form>
