@@ -40,7 +40,7 @@ class FormEvent extends Validator {
     */
     public function checkDate(string $name) {
         if(strtotime($this->data[$name]) < time()) {
-            $this->errors[$name] = 'La date du cours ne doit pas être passée !';
+            $this->errors[$name] = 'La première date du cours ne doit pas être passée !';
         }
     }
 
@@ -80,7 +80,7 @@ class FormEvent extends Validator {
      * @return bool : Vrai si le créneau est libre, faux sinon.
     */
     public function timeSlotFree(string $date, string $start, string $end, string $promo) {
-        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND PromotionID = :promo');
+        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE DateDebut = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND PromotionID = :promo');
         $cFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':promo' => $this->data[$promo]));
         $count = $cFree->fetchColumn();
         if($count > 0) {
@@ -95,7 +95,7 @@ class FormEvent extends Validator {
      * @param string $salle > la salle voulue.
     */
     public function roomFree(string $date, string $start, string $end, string $room) {
-        $rFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateCour = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND SalleID = :salle');
+        $rFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateDebut = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND SalleID = :salle');
         $rFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':salle' => $this->data[$room]));
         $count = $rFree->fetchColumn();
         if($count > 0) {
@@ -130,8 +130,8 @@ class FormEvent extends Validator {
     /** Méthode qui insère un cours contenant les données reçu en paramètre.
      */
     public function insertEvent() {            
-        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateCour, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?)');
-        $sInsertEvent->execute([strtotime($this->data['dateCour']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['type'], $this->data['salle'], $this->data['enseignant'], $this->data['matiere']]);  
+        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateDebut, DateFin, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?)');
+        $sInsertEvent->execute([strtotime($this->data['dateDebut']), strtotime($this->data['dateFin']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['type'], $this->data['salle'], $this->data['enseignant'], $this->data['matiere']]);  
     }
 
     /** Méthode qui supprime un cours.

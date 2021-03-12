@@ -42,6 +42,18 @@ if (isset($_POST['add_matter'])){
     }
 }
 
+// Ajout d'une matière.
+if (isset($_POST['add_teachMatter'])){
+    
+    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
+    $formLinkMatter = new Planning\FormMatter($bdd, $_POST);
+    $errorsLinkMatter = $formLinkMatter->checkAddLinkMatter();
+
+    if(empty($errorsLinkMatter)){
+        $formLinkMatter->linkMatterAndTeacher();
+    }
+}
+
 // Suppression d'une matière.
 if(isset($_GET['removeMatterID'])){
     $form = new Planning\FormMatter($bdd, $_GET);
@@ -78,7 +90,6 @@ if(isset($_GET['removeMatterID'])){
             <div class="col-md-6">
                 <div class="box-content">
                     <div class="content-title">Ajouter une salle</div>
-
                     <?php if(isset($_POST['add_room']) && empty($errorsARoom)) {
                         echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
                     } ?>
@@ -128,17 +139,20 @@ if(isset($_GET['removeMatterID'])){
                         <div class="row">
                             <div class="col-md-8 form-group">
                                 <label for="room">Nom de la matière</label>
-                                <input type="text" name="nomM" class="form-control">
+                                <input type="text" name="name" class="form-control <?= (isset($errorsMatter['name'])) ? 'is-invalid' : '' ?>">
+                                <?php if(isset($errorsMatter['name'])) {
+                                echo '<small class="invalid-feedback">' . $errorsMatter['name'] . '</small>';
+                            } ?>  
                             </div>
 
                             <div class="col-md-4 form-group">
                                 <label for="room">Couleur</label>
-                                <input type="color" name="colorM" class="form-control">
+                                <input type="color" name="color" class="form-control">
                             </div>
 
                             <div class="col-md-12 form-group">
                                 <label for="room">Nom de la promotion </label>
-                                <select name="promoM" class="form-control">
+                                <select name="promo" class="form-control">
                                 <?php 
                                     $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
                                     while($aPromo = $sPromo->fetch()) {
@@ -153,7 +167,7 @@ if(isset($_GET['removeMatterID'])){
 
                 <div class="box-content">
                     <div class="content-title">Associer une matière et un enseignant</div>
-                    <?php if(isset($_POST['add_matter']) && empty($errorsMatter)) {
+                    <?php if(isset($_POST['add_teachMatter']) && empty($errorsMatter)) {
                         echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
                     } ?>
                     <form method="POST" action="">

@@ -53,7 +53,7 @@ class FormRoom extends Validator {
      */
     public function roomExist(string $name, bool $check) {
         $rExist = $this->bdd->prepare('SELECT COUNT(*) FROM Salles WHERE NomSalle = ?');
-        $rExist->execute(array($this->data[$name]));
+        $rExist->execute(array(strtoupper($this->data[$name])));
         $count = $rExist->fetchColumn();
         if($count > 0) {
             if($check == false) $this->errors[$name] = 'Cette salle existe déjà !';
@@ -66,13 +66,13 @@ class FormRoom extends Validator {
      */
     public function insertRoom() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Salles (NomSalle) VALUES (?)');
-        $sInsertEvent->execute([$this->data['room']]);  
+        $sInsertEvent->execute([strtoupper($this->data['room'])]);  
     }
 
     /** Méthode qui supprime une salle de cours.
      */
     public function deleteRoom() {
         $sDeleteEvent = $this->bdd->prepare('DELETE FROM Salles WHERE NomSalle = ?');
-        $sDeleteEvent->execute(array($this->data['room']));
+        $sDeleteEvent->execute(array(strtoupper($this->data['room'])));
     }
 }

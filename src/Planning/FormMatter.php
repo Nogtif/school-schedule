@@ -23,7 +23,23 @@ class FormMatter extends Validator {
      * @return array : le tableau d'erreurs.
      */
     public function checkAddMatter():array {
-        $this->isValide('nomM', 'matterExist');
+        $this->isValide('name', 'matterExist');
+        return $this->errors;
+    }
+
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour associer une matière et un enseignant, 
+     * @return array : le tableau d'erreurs.
+     */
+    public function checkAddLinkMatter():array {
+        $this->isValide('matiere', 'matterBind', 'enseignant', false);
+        return $this->errors;
+    }
+
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour dissocier une matière à un enseignant, 
+     * @return array : le tableau d'erreurs.
+     */
+    public function checkRemoveLinkMatter():array {
+        $this->isValide('matiere', 'matterBind', 'enseignant', true);
         return $this->errors;
     }
 
@@ -35,15 +51,22 @@ class FormMatter extends Validator {
         $mExist->execute(array($this->data[$name]));
         $count = $mExist->fetchColumn();
         if($count > 0) {
-            $this->errors['nomM'] = 'Cette matière existe déjà !';
+            $this->errors['name'] = 'Cette matière existe déjà !';
         }  
     }
 
-    /** Méthode qui insère insère une matière contenant les données reçu en paramètre.
+    /** Méthode qui insère une matière contenant les données reçu en paramètre.
      */
     public function insertMatter() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Matieres (NomMatiere, CouleurMatiere, PromotionID) VALUES (?,?,?)');
-        $sInsertEvent->execute([$this->data['nomM'], $this->data['colorM'], $this->data['promoM']]);  
+        $sInsertEvent->execute([$this->data['name'], $this->data['color'], $this->data['promo']]);  
+    }
+
+    /** Méthode qui insère une association entre une matière et un usager.
+     */
+    public function linkMatterAndTeacher() {            
+        $sLink = $this->bdd->prepare('INSERT INTO Enseigne (MatiereID, UsagerID) VALUES (?,?)');
+        $sLink->execute([$this->data['matiere'], $this->data['enseignant']]);  
     }
 
     /** Méthode qui supprime une matière.
