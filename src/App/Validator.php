@@ -35,5 +35,22 @@ abstract class Validator {
             call_user_func([$this, $method], $name, ...$param);
         }
     }
+
+
+    public function minLength(string $name, int $size) {
+        if(strlen($this->data[$name]) < $size) {
+            $this->errors[$name] = 'Le champ doit contenent au moins ' . $size . ' caractères !';
+        }
+    }
+
+    /** Méthode qui vérifie si un mot de passe est valide.
+     * (compte au moins 6 caractères et n'a pas de caractère spéciaux)
+     * @param string $name > le mot de passe.
+     */
+    public function checkPassword(string $name) {
+        if(strlen($this->data[$name]) < 6 && preg_match('/[^a-zA-Z0-9-!@]/', $this->data[$name])) {
+            $this->errors[$name] = 'Le mot de passe est trop court ou content des caractères non-autorisé !';
+        }
+    }
 }
 ?>

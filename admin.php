@@ -3,6 +3,7 @@
 require_once('./config.php');
 require_once('./src/Planning/FormRoom.php');
 require_once('./src/Planning/FormMatter.php');
+require_once('./src/Planning/FormUser.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -43,14 +44,21 @@ if (isset($_POST['add_matter'])){
 }
 
 // Ajout d'une matière.
-if (isset($_POST['add_teachMatter'])){
+if (isset($_POST['add_teachMatter']) || isset($_POST['remove_teachMatter'])){
     
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
     $formLinkMatter = new Planning\FormMatter($bdd, $_POST);
-    $errorsLinkMatter = $formLinkMatter->checkAddLinkMatter();
 
-    if(empty($errorsLinkMatter)){
-        $formLinkMatter->linkMatterAndTeacher();
+    if(isset($_POST['add_teachMatter'])) {
+        $errorsLinkMatter = $formLinkMatter->checkAddLinkMatter();
+        if(empty($errorsLinkMatter)){
+            $formLinkMatter->linkMatterAndTeacher();
+        }
+    } else if(isset($_POST['remove_teachMatter'])) {
+        $errorsLinkMatter = $formLinkMatter->checkRemoveLinkMatter();
+        if(empty($errorsLinkMatter)){
+            $formLinkMatter->unLinkMatterAndTeacher();
+        }
     }
 }
 
@@ -59,6 +67,19 @@ if(isset($_GET['removeMatterID'])){
     $form = new Planning\FormMatter($bdd, $_GET);
     $form->deleteMatter($_GET['removeMatterID']);
 }
+
+// Ajout d'une matière.
+if (isset($_POST['add_user'])){
+    
+    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
+    $formUser = new Planning\FormUser($bdd, $_POST);
+    $errorsUser = $formUser->checkAddUser();
+
+    if(empty($errorsUser)){
+        $formUser->insertUser();
+    }
+}
+
 ?>
 <html lang="fr-FR">
 <head>
@@ -167,8 +188,12 @@ if(isset($_GET['removeMatterID'])){
 
                 <div class="box-content">
                     <div class="content-title">Associer une matière et un enseignant</div>
-                    <?php if(isset($_POST['add_teachMatter']) && empty($errorsMatter)) {
-                        echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
+                    <?php if(isset($errorsLinkMatter['global'])) {
+                        echo '<div class="alert alert-danger">'.$errorsLinkMatter['global'].'</div>';
+                    } else if(isset($_POST['add_teachMatter']) && empty($errorsLinkMatter)) {
+                        echo '<div class="alert alert-success">La matière a bien été associé à l\'enseignant !</div>';
+                    } else if(isset($_POST['remove_teachMatter']) && empty($errorsLinkMatter)) {
+                        echo '<div class="alert alert-success">La matière a bien été dissocié de l\'enseignant !</div>';
                     } ?>
                     <form method="POST" action="">
                         <div class="row">
@@ -237,6 +262,63 @@ if(isset($_GET['removeMatterID'])){
         </div>
 
         <p>Gestion des usagers</p>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box-content">
+                    <div class="content-title">Ajout d'un usager</div>
+                    <form method="POST" action="">
+                        <div class="row">    
+                            <div class="form-group">
+                                <label for="room">Identifiant</label>
+                                <input type="text" name="userid" class="form-control <?= (isset($errorsUser['userid'])) ? 'is-invalid' : '' ?>">
+                                <?php if(isset($errorsUser['userid'])) {
+                                    echo '<small class="invalid-feedback">' . $errorsUser['userid'] . '</small>';
+                                } ?>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="room">Nom</label>
+                                <input type="text" name="lastname" class="form-control <?= (isset($errorsUser['lastname'])) ? 'is-invalid' : '' ?>">
+                                <?php if(isset($errorsUser['lastname'])) {
+                                    echo '<small class="invalid-feedback">' . $errorsUser['lastname'] . '</small>';
+                                } ?>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="room">Prénom</label>
+                                <input type="text" name="firstname" class="form-control <?= (isset($errorsUser['firstname'])) ? 'is-invalid' : '' ?>">
+                                <?php if(isset($errorsUser['firstname'])) {
+                                    echo '<small class="invalid-feedback">' . $errorsUser['firstname'] . '</small>';
+                                } ?>
+                            </div>
+
+                            <div class="col-md-7 form-group">
+                                <label for="room">Mot de passe</label>
+                                <input type="password" name="password" class="form-control <?= (isset($errorsUser['password'])) ? 'is-invalid' : '' ?>">
+                                <?php if(isset($errorsUser['password'])) {
+                                    echo '<small class="invalid-feedback">' . $errorsUser['password'] . '</small>';
+                                } ?>
+                            </div>
+
+                            <div class="col-md-5 form-group">
+                                <label for="room">Rang</label>
+                                <select name="rank" class="form-control">
+                                    <?php
+                                    $query = $bdd->query('SELECT * FROM Rangs');
+                                    while ($row = $query->fetch()){
+                                        echo '<option value="' .$row['RangID'] .'">' . $row['NomRang'].'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="submit" name="add_user" value="Enregistrer cet usager" class="btn btn-success">
+                    </form>
+                </div>
+                        
+            </div>
+        </div>
         
             
     </div>

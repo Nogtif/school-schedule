@@ -31,7 +31,7 @@ class FormMatter extends Validator {
      * @return array : le tableau d'erreurs.
      */
     public function checkAddLinkMatter():array {
-        $this->isValide('matiere', 'matterBind', 'enseignant', false);
+        $this->isValide('matiere', 'bindExist', 'enseignant', false);
         return $this->errors;
     }
 
@@ -39,8 +39,22 @@ class FormMatter extends Validator {
      * @return array : le tableau d'erreurs.
      */
     public function checkRemoveLinkMatter():array {
-        $this->isValide('matiere', 'matterBind', 'enseignant', true);
+        $this->isValide('matiere', 'bindExist', 'enseignant', true);
         return $this->errors;
+    }
+
+    /** Méthode qui vérifie si le nom de la nouvelle matière n'existe pas déjà.
+     * @param string $name > le nom de la matière.
+     */
+    public function bindExist(string $matter, string $user, bool $check) {
+        $bExist = $this->bdd->prepare('SELECT COUNT(*) FROM Enseigne WHERE MatiereID = :m AND UsagerID = :u');
+        $bExist->execute(array(':m' => $this->data[$matter], ':u' => $this->data[$user]));
+        $count = $bExist->fetchColumn();
+        if($count > 0) {
+            if($check == false) $this->errors['global'] = 'Cet enseignant enseigne déjà ce cours !';
+        } else {
+            if($check == true) $this->errors['global'] = 'Cet enseignant n\'enseigne pas ce cours !';
+        }
     }
 
     /** Méthode qui vérifie si le nom de la nouvelle matière n'existe pas déjà.
@@ -62,6 +76,14 @@ class FormMatter extends Validator {
         $sInsertEvent->execute([$this->data['name'], $this->data['color'], $this->data['promo']]);  
     }
 
+    /** Méthode qui supprime une matière.
+     * @param int $id > l'id de la matière.
+     */
+    public function deleteMatter($id) {
+        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Matieres WHERE MatiereID = :id');
+        $sDeleteEvent->execute(array(':id' => $id));
+    }
+
     /** Méthode qui insère une association entre une matière et un usager.
      */
     public function linkMatterAndTeacher() {            
@@ -72,8 +94,8 @@ class FormMatter extends Validator {
     /** Méthode qui supprime une matière.
      * @param int $id > l'id de la matière.
      */
-    public function deleteMatter($id) {
-        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Matieres WHERE MatiereID = :id');
-        $sDeleteEvent->execute(array(':id' => $id));
+    public function unLinkMatterAndTeacher() {
+        $sDeleteEvent = $this->bdd->prepare('DELETE FROM Enseigne WHERE MatiereID = :m AND UsagerID = :u');
+        $sDeleteEvent->execute(array(':m' => $this->data['matiere'], ':u' => $this->data['enseignant']));
     }
 }
