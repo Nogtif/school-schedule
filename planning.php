@@ -10,7 +10,7 @@ $mypromo = (isset($_SESSION['promo'])) ? $_SESSION['promo'] : 0;
 $promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
 ?>
 
-<h4 class="planning-title"><?= $week->toString() ?></h4>
+<h4 class="planning-title"><?= htmlspecialchars($week->toString()) ?></h4>
 <div class="box-content">
     <table>
         <thead>
@@ -19,7 +19,7 @@ $promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
                     $day = $week->getFirstDay() + ($i * 86400);
                     echo '<td ' . ((intval(date('jm', $day)) == intval(date('jm', time()))) ? 'class="active"' : '') . '>';
                     echo '<span class="numDay">'. date('j', $day) .'</span>';
-                    echo '<span class="nameDay">'. $week->getDay($i) .'</span>';
+                    echo '<span class="nameDay">'. htmlspecialchars($week->getDay($i)) .'</span>';
                     echo '</td>';
                 } ?>
             </tr>

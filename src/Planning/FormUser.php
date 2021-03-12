@@ -46,7 +46,7 @@ class Formuser extends Validator {
      */
     public function insertUser() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Usagers (UsagerID, MotDePasse, Nom, Prenom, RangID) VALUES (?,?,?,?,?)');
-        $sInsertEvent->execute([$this->data['userid'], $this->data['password'], $this->data['lastname'], $this->data['firstname'], $this->data['rank']]);  
+        $sInsertEvent->execute([$this->data['userid'], password_hash($this->data['password'], PASSWORD_DEFAULT), $this->data['lastname'], $this->data['firstname'], $this->data['rank']]);  
     }
 
     /** Méthode qui supprime une salle de cours.

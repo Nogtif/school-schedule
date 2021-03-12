@@ -69,7 +69,7 @@ if(isset($_GET['removeEventID'])){
                         <div class="list-items d-flex flex-row align-items-center justify-content-between">
                             <div class="item-info">
                                 <p><?= $aCours['NomType'] ?> <?= $aCours['NomMatiere'] ?></p>
-                                <span>Par <?= $aCours['Prenom'] ?> <?= $aCours['Nom'] ?>, en <?= $aCours['NomSalle'] ?></span>
+                                <span>Par <?= htmlspecialchars($aCours['Prenom']) ?> <?= htmlspecialchars($aCours['Nom']) ?>, en <?= htmlspecialchars($aCours['NomSalle']) ?></span>
                             </div>
                             
                             <div class="item-info">
@@ -122,7 +122,7 @@ if(isset($_GET['removeEventID'])){
                                         }
                                         $sMatieres = $bdd->query('SELECT * FROM Matieres '.$option. ' ORDER BY NomMatiere');
                                         while($aMatieres = $sMatieres->fetch()) {
-                                            echo '<option value="'.$aMatieres['MatiereID'].'">'.$aMatieres['NomMatiere'].'</option>';
+                                            echo '<option value="'.$aMatieres['MatiereID'].'">'.htmlspecialchars($aMatieres['NomMatiere']).'</option>';
                                         } ?> 
                                     </select>
                                 </div>
@@ -160,7 +160,7 @@ if(isset($_GET['removeEventID'])){
                                     <select name="type" class="form-control">
                                         <?php $query = $bdd->query('SELECT * FROM TypeCours');
                                             while ($row = $query->fetch()){
-                                                echo '<option value="' . $row['TypeID'].'">' . $row['NomType'] . '</option>';
+                                                echo '<option value="' . $row['TypeID'].'">' . htmlspecialchars($row['NomType']) . '</option>';
                                             }
                                         ?>
                                     </select>

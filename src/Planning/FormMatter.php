@@ -23,7 +23,7 @@ class FormMatter extends Validator {
      * @return array : le tableau d'erreurs.
      */
     public function checkAddMatter():array {
-        $this->isValide('name', 'matterExist');
+        $this->isValide('name_matter', 'matterExist');
         return $this->errors;
     }
 
@@ -65,7 +65,7 @@ class FormMatter extends Validator {
         $mExist->execute(array($this->data[$name]));
         $count = $mExist->fetchColumn();
         if($count > 0) {
-            $this->errors['name'] = 'Cette matière existe déjà !';
+            $this->errors[$name] = 'Cette matière existe déjà !';
         }  
     }
 
@@ -73,7 +73,7 @@ class FormMatter extends Validator {
      */
     public function insertMatter() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Matieres (NomMatiere, CouleurMatiere, PromotionID) VALUES (?,?,?)');
-        $sInsertEvent->execute([$this->data['name'], $this->data['color'], $this->data['promo']]);  
+        $sInsertEvent->execute([$this->data['name_matter'], $this->data['color_matter'], $this->data['promo']]);  
     }
 
     /** Méthode qui supprime une matière.

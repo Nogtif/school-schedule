@@ -29,3 +29,78 @@ $('.planning').ready(function() {
         });
     });
 });
+
+/** Fonction qui s'occupe de l'affichage des erreurs d'un formulaire.
+ */
+ function alertForm(data, id, msg) {
+    res = jQuery.parseJSON(data);
+    $(id + ' .form-control').removeClass('is-invalid');
+    $(id + ' .alert').css('display', 'none');
+    if(Object.keys(res).length > 0) {
+        jQuery.each(res, function(k, elt) {
+            if(k == 'global') {
+                $(id + ' .alert').css('display', 'block');
+                $(id + ' .alert').addClass('alert-danger').text(elt);
+            } else {
+                $(id + ' input[name=' + k + ']').addClass('is-invalid');
+                $('#'+k+' small').text(elt);
+            }
+        });
+    } else {
+        $(id + ' .alert').css('display', 'block');
+        $(id + ' .alert').addClass('alert-success').text(msg);
+    }
+}
+
+$('#form_addRoom').submit(function(e) {
+    e.preventDefault();
+    var post = $(this).serialize();
+    $.post('admin.php', {add_room: 1, post}, (data) => {alertForm(data, '#form_addRoom' , 'La salle a bien été ajouté !')});
+});
+
+$("#form_removeRoom").submit(function(e){
+    e.preventDefault();
+
+    var post = $(this).serialize();
+    $.post('admin.php', {delete_room: 1, post}, (data) => {alertForm(data, '#form_removeRoom', 'La salle a bien été supprimé !')});
+});
+
+
+$("#form_teachMatter input[type=\'submit\']").click(function(e){
+    $(this).addClass("clicked");
+    
+});
+
+$("#form_teachMatter").submit(function(e) {
+    e.preventDefault();
+
+    var post = $(this).serialize();
+
+    if($(this).find('.clicked').attr('value') == 'Associer') {
+        $.post('admin.php', {add_teachMatter: 1, post}, (data) => {alertForm(data, '#form_teachMatter', 'La matière a bien été associé à l\'enseignant !')});
+    } else {
+        $.post('admin.php', {remove_teachMatter: 1, post}, (data) => {alertForm(data, '#form_teachMatter', 'La matière a bien été dissocié de l\'enseignant !')});
+    }
+    $(this).find('input[type=\'submit\']').removeClass("clicked");
+});
+
+$("#form_matter").submit(function(e){
+    e.preventDefault();
+
+    var post = $(this).serialize();
+    $.post('admin.php', {add_matter: 1, post}, (data) => {alertForm(data, '#form_matter', 'La matière a bien été crée !')});
+});
+
+$("#form_linkMatter").submit(function(e){
+    e.preventDefault();
+
+    var post = $(this).serialize();
+    $.post('admin.php', {add_teachMatter: 1, post}, (data) => {alertForm(data, '#form_linkMatter', 'La matière a bien été associé à l\'enseignant !')});
+});
+
+$("#form_user").submit(function(e){
+    e.preventDefault();
+
+    var post = $(this).serialize();
+    $.post('admin.php', {add_user: 1, post}, (data) => {alertForm(data, '#form_user', 'L\'usager a bien été ajouté !')});
+});

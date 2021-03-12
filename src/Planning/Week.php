@@ -77,20 +77,6 @@ class Week {
         return date('l j/m/Y', $day);      
     }
 
-    /** Méthode qui navigue vers la semaine précédente.
-     * @return Week : une nouvelle semaine.
-     */
-    public function previousWeek():Week {
-        return new Week($this->numWeek - 1);
-    }
-
-    /** Méthode qui navigue vers la semaine suivante.
-     * @return Week : une nouvelle semaine.
-     */
-    public function nextWeek():Week {
-        return new Week($this->numWeek + 1);
-    }
-
     /** Méthode qui affiche une semaine.
      * @return string : la semaine.
      */

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php 
 require_once('./config.php');
 require_once('./src/Planning/FormRoom.php');
@@ -17,70 +16,98 @@ if($_SESSION['rang'] < 3) {
 
 // Ajout ou suppression d'une salle
 if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
+
+    // On récupère les données reçu en js.
+    parse_str($_POST['post'], $data);
+
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formRoom = new Planning\FormRoom($bdd, $_POST);
+    $formRoom = new Planning\FormRoom($bdd, $data);
 
     if(isset($_POST['add_room'])) {
         $errorsARoom = $formRoom->checkAddRoom();
         if(empty($errorsARoom)) $formRoom->insertRoom();
+
+        echo json_encode($errorsARoom);
     }
 
     if(isset($_POST['delete_room'])) {
         $errorsDRoom = $formRoom->checkDeleteRoom();
         if(empty($errorsDRoom)) $formRoom->deleteRoom();
+
+        echo json_encode($errorsDRoom);
     }
+    exit;
 }
 
 // Ajout d'une matière.
-if (isset($_POST['add_matter'])){
-    
+if (isset($_POST['add_matter'])) {
+
+    // On récupère les données reçu en js.
+    parse_str($_POST['post'], $data);
+
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formMatter = new Planning\FormMatter($bdd, $_POST);
+    $formMatter = new Planning\FormMatter($bdd, $data);
     $errorsMatter = $formMatter->checkAddMatter();
 
     if(empty($errorsMatter)){
         $formMatter->insertMatter();
     }
+
+    echo json_encode($errorsMatter);
+    exit;
 }
 
 // Ajout d'une matière.
-if (isset($_POST['add_teachMatter']) || isset($_POST['remove_teachMatter'])){
+if (isset($_POST['add_teachMatter']) || isset($_POST['remove_teachMatter'])) {
+
+    // On récupère les données reçu en js.
+    parse_str($_POST['post'], $data);
     
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formLinkMatter = new Planning\FormMatter($bdd, $_POST);
+    $formLinkMatter = new Planning\FormMatter($bdd, $data);
 
     if(isset($_POST['add_teachMatter'])) {
         $errorsLinkMatter = $formLinkMatter->checkAddLinkMatter();
         if(empty($errorsLinkMatter)){
             $formLinkMatter->linkMatterAndTeacher();
         }
+
     } else if(isset($_POST['remove_teachMatter'])) {
         $errorsLinkMatter = $formLinkMatter->checkRemoveLinkMatter();
         if(empty($errorsLinkMatter)){
             $formLinkMatter->unLinkMatterAndTeacher();
         }
     }
+    echo json_encode($errorsLinkMatter);
+    exit;
 }
 
 // Suppression d'une matière.
-if(isset($_GET['removeMatterID'])){
+if(isset($_GET['removeMatterID'])) {
     $form = new Planning\FormMatter($bdd, $_GET);
     $form->deleteMatter($_GET['removeMatterID']);
 }
 
 // Ajout d'une matière.
 if (isset($_POST['add_user'])){
+
+    // On récupère les données reçu en js.
+    parse_str($_POST['post'], $data);
     
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formUser = new Planning\FormUser($bdd, $_POST);
+    $formUser = new Planning\FormUser($bdd, $data);
     $errorsUser = $formUser->checkAddUser();
 
     if(empty($errorsUser)){
         $formUser->insertUser();
     }
-}
 
+    // On renvoie le tableau d'erreurs en format json.
+    echo json_encode($errorsUser);
+    exit;
+}
 ?>
+<!DOCTYPE html>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
@@ -111,35 +138,26 @@ if (isset($_POST['add_user'])){
             <div class="col-md-6">
                 <div class="box-content">
                     <div class="content-title">Ajouter une salle</div>
-                    <?php if(isset($_POST['add_room']) && empty($errorsARoom)) {
-                        echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
-                    } ?>
-                    <form method="POST" action="">
-                        <div class="form-group">
+                    <form method="POST" id="form_addRoom">
+                        <div class="alert" style="display:none"></div>
+                        <div class="form-group" id="room">
                             <label for="room">Nom de la salle</label>
-                            <input type="text" name="room" class="form-control <?= (isset($errorsARoom['room'])) ? 'is-invalid' : '' ?>">
-                            <?php if(isset($errorsARoom['room'])) {
-                                echo '<small class="invalid-feedback">' . $errorsARoom['room'] . '</small>';
-                            } ?>
+                            <input type="text" name="room" class="form-control">
+                            <small class="invalid-feedback"></small>
                         </div>
                         <input type="submit" name="add_room" value="Ajouter" class="btn btn-success">
-                       
                     </form>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="box-content">
                     <div class="content-title">Supprimer une salle</div>
-                    <?php if(isset($_POST['delete_room']) && empty($errorsDRoom)) {
-                        echo '<div class="alert alert-success">La salle a bien été supprimé !</div>';
-                    } ?>
-                    <form method="POST" action="">
-                        <div class="form-group">
+                    <form method="POST" id="form_removeRoom">
+                        <div class="alert" style="display:none"></div>
+                        <div class="form-group" id="room">
                             <label for="room">Nom de la salle</label>
-                            <input type="text" name="room" class="form-control <?= (isset($errorsDRoom['room'])) ? 'is-invalid' : '' ?>">
-                            <?php if(isset($errorsDRoom['room'])) {
-                                echo '<small class="invalid-feedback">' . $errorsDRoom['room'] . '</small>';
-                            } ?>                        
+                            <input type="text" name="room" class="form-control">                            
+                            <small class="invalid-feedback"></small>                     
                         </div>
                         <input type="submit" name="delete_room" value="Supprimer" class="btn btn-danger">
                     </form>
@@ -153,22 +171,19 @@ if (isset($_POST['add_user'])){
             <div class="col-md-4">
                 <div class="box-content">
                     <div class="content-title">Ajouter une matière</div>
-                    <?php if(isset($_POST['add_matter']) && empty($errorsMatter)) {
-                        echo '<div class="alert alert-success">La salle a bien été ajouté !</div>';
-                    } ?>
-                    <form method="POST" action="">
+                    <form method="POST" id="form_matter">
+                        <div class="alert" style="display:none"></div>
                         <div class="row">
-                            <div class="col-md-8 form-group">
+                            <div class="col-md-8 form-group" id="name_matter">
                                 <label for="room">Nom de la matière</label>
-                                <input type="text" name="name" class="form-control <?= (isset($errorsMatter['name'])) ? 'is-invalid' : '' ?>">
-                                <?php if(isset($errorsMatter['name'])) {
-                                echo '<small class="invalid-feedback">' . $errorsMatter['name'] . '</small>';
-                            } ?>  
+                                <input type="text" name="name_matter" class="form-control">
+                                <small class="invalid-feedback"></small>
                             </div>
 
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-4 form-group" id="color_matter">
                                 <label for="room">Couleur</label>
-                                <input type="color" name="color" class="form-control">
+                                <input type="color" name="color_matter" class="form-control">
+                                <small class="invalid-feedback"></small>
                             </div>
 
                             <div class="col-md-12 form-group">
@@ -188,14 +203,8 @@ if (isset($_POST['add_user'])){
 
                 <div class="box-content">
                     <div class="content-title">Associer une matière et un enseignant</div>
-                    <?php if(isset($errorsLinkMatter['global'])) {
-                        echo '<div class="alert alert-danger">'.$errorsLinkMatter['global'].'</div>';
-                    } else if(isset($_POST['add_teachMatter']) && empty($errorsLinkMatter)) {
-                        echo '<div class="alert alert-success">La matière a bien été associé à l\'enseignant !</div>';
-                    } else if(isset($_POST['remove_teachMatter']) && empty($errorsLinkMatter)) {
-                        echo '<div class="alert alert-success">La matière a bien été dissocié de l\'enseignant !</div>';
-                    } ?>
-                    <form method="POST" action="">
+                    <form method="POST" id="form_teachMatter">
+                        <div class="alert" style="display:none"></div>
                         <div class="row">
                             <div class="col-md-12 form-group">
                                 <label for="room">Nom de la matière</label>
@@ -267,38 +276,31 @@ if (isset($_POST['add_user'])){
             <div class="col-md-4">
                 <div class="box-content">
                     <div class="content-title">Ajout d'un usager</div>
-                    <form method="POST" action="">
+                    <form method="POST" id="form_user">
+                        <div class="alert" style="display:none"></div>
                         <div class="row">    
-                            <div class="form-group">
+                            <div class="form-group" id="userid">
                                 <label for="room">Identifiant</label>
-                                <input type="text" name="userid" class="form-control <?= (isset($errorsUser['userid'])) ? 'is-invalid' : '' ?>">
-                                <?php if(isset($errorsUser['userid'])) {
-                                    echo '<small class="invalid-feedback">' . $errorsUser['userid'] . '</small>';
-                                } ?>
+                                <input type="text" name="userid" class="form-control">
+                                <small class="invalid-feedback"></small>
                             </div>
 
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-6 form-group" id="lastname">
                                 <label for="room">Nom</label>
-                                <input type="text" name="lastname" class="form-control <?= (isset($errorsUser['lastname'])) ? 'is-invalid' : '' ?>">
-                                <?php if(isset($errorsUser['lastname'])) {
-                                    echo '<small class="invalid-feedback">' . $errorsUser['lastname'] . '</small>';
-                                } ?>
+                                <input type="text" name="lastname" class="form-control">
+                                <small class="invalid-feedback"></small>
                             </div>
 
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-6 form-group" id="firstname">
                                 <label for="room">Prénom</label>
-                                <input type="text" name="firstname" class="form-control <?= (isset($errorsUser['firstname'])) ? 'is-invalid' : '' ?>">
-                                <?php if(isset($errorsUser['firstname'])) {
-                                    echo '<small class="invalid-feedback">' . $errorsUser['firstname'] . '</small>';
-                                } ?>
+                                <input type="text" name="firstname" class="form-control">
+                                <small class="invalid-feedback"></small>
                             </div>
 
-                            <div class="col-md-7 form-group">
+                            <div class="col-md-7 form-group" id="password">
                                 <label for="room">Mot de passe</label>
-                                <input type="password" name="password" class="form-control <?= (isset($errorsUser['password'])) ? 'is-invalid' : '' ?>">
-                                <?php if(isset($errorsUser['password'])) {
-                                    echo '<small class="invalid-feedback">' . $errorsUser['password'] . '</small>';
-                                } ?>
+                                <input type="password" name="password" class="form-control">
+                                <small class="invalid-feedback"></small>
                             </div>
 
                             <div class="col-md-5 form-group">
@@ -316,11 +318,8 @@ if (isset($_POST['add_user'])){
                         <input type="submit" name="add_user" value="Enregistrer cet usager" class="btn btn-success">
                     </form>
                 </div>
-                        
             </div>
         </div>
-        
-            
     </div>
 
     <!-- FOOTER -->
@@ -328,5 +327,6 @@ if (isset($_POST['add_user'])){
 
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./assets/js/functions.js"></script>
 </body>
 </html>
