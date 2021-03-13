@@ -22,15 +22,15 @@ class FormEvent extends Validator {
     /** Méthode qui va renvoie toutes les erreurs trouvées pour ajouter un cours, 
      * @return array : le tableau d'erreurs.
      */
-    public function checkAddEvent():array {
+    public function checkEvent():array {
         $this->isValide('firstdate', 'checkDate');
+        $this->isValide('nbweek', 'checkNbWeeks');
         $this->isValide('start', 'checkTimeMin');
         $this->isValide('end', 'checkTimeMax');
         $this->isValide('start', 'checkTime', 'end');
-        $this->isValide('firstdate', 'timeSlotFree', 'start', 'end', 'promo');
+        $this->isValide('firstdate', 'timeSlotFree', 'start', 'end', 'matter');
         $this->isValide('firstdate', 'roomFree', 'start', 'end', 'room');
         // Vérification en plus, quand il s'agit de l'admin.
-        $this->isValide('promo', 'promoMatter', 'matter');
         $this->isValide('user', 'teachMatter', 'matter');
         return $this->errors;
     }
@@ -41,6 +41,15 @@ class FormEvent extends Validator {
     public function checkDate(string $name) {
         if(strtotime($this->data[$name]) < time()) {
             $this->errors[$name] = 'La première date du cours ne doit pas être passée !';
+        }
+    }
+
+    /** Méthode qui vérifie si la date dans le tableau n'est pas passée.
+     * @param string $name > clé de la date à vérifiée.
+    */
+    public function checkNbWeeks(string $name) {
+        if($this->data[$name] < 1) {
+            $this->errors[$name] = 'Le nombre de semaine ne peut être négatif !';
         }
     }
 
@@ -79,12 +88,16 @@ class FormEvent extends Validator {
      * @param string $promo > la promotion choisie.
      * @return bool : Vrai si le créneau est libre, faux sinon.
     */
-    public function timeSlotFree(string $date, string $start, string $end, string $promo) {
-        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE DateDebut = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND PromotionID = :promo');
-        $cFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':promo' => $this->data[$promo]));
+    public function timeSlotFree(string $date, string $start, string $end, string $matter) {
+        $opt = '';
+        if(isset($this->data['id'])) {
+            $opt = ' AND CourID != "'. $this->data['id'].'" ';
+        }
+        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE DateDebut = :date AND (HeureDebut < :fin AND HeureFin > :debut) '.$opt.' AND PromotionID = (SELECT PromotionID FROM Matieres WHERE MatiereID = :matter)');
+        $cFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':matter' => $this->data[$matter]));
         $count = $cFree->fetchColumn();
         if($count > 0) {
-            $this->errors['global'] = 'Le créneau n\'est pas disponible !';
+            $this->errors['global'] = 'Le créneau n\'est pas disponible !';      
         }
     }
 
@@ -95,23 +108,15 @@ class FormEvent extends Validator {
      * @param string $salle > la salle voulue.
     */
     public function roomFree(string $date, string $start, string $end, string $room) {
-        $rFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateDebut = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND SalleID = :salle');
+        $opt = '';
+        if(isset($this->data['id'])) {
+            $opt = 'AND CourID != "'. $this->data['id'].'"';
+        }
+        $rFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours WHERE DateDebut = :date AND (HeureDebut < :fin AND HeureFin > :debut) AND SalleID = :salle '. $opt);
         $rFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':salle' => $this->data[$room]));
         $count = $rFree->fetchColumn();
         if($count > 0) {
             $this->errors['global'] = 'Le salle n\'est pas disponible !';
-        }
-    }
-
-    /** Méthode qui verifie si un enseignant enseigne bien la matière. 
-     * @param string $user > l'enseignant.
-    */
-    public function promoMatter(string $promo, string $matter) {
-        $tMatter = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres WHERE PromotionID = :promo AND MatiereID = :matiere');
-        $tMatter->execute(array(':promo' => $this->data[$promo], ':matiere' => $this->data[$matter]));
-        $count = $tMatter->fetchColumn();
-        if($count == 0) {
-            $this->errors['global'] = 'Cette promotion n\'étudie pas ce cours !';
         }
     }
 
@@ -130,8 +135,15 @@ class FormEvent extends Validator {
     /** Méthode qui insère un cours contenant les données reçu en paramètre.
      */
     public function insertEvent() {            
-        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateDebut, DateFin, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?,?)');
-        $sInsertEvent->execute([strtotime($this->data['firstdate']), strtotime('+'.$this->data['nbweek'].' weeks', strtotime($this->data['firstdate'])), $this->data['start'], $this->data['end'], $this->data['type'], $this->data['room'], $this->data['user'], $this->data['matter']]);  
+        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateDebut, NbSemaines, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?,?)');
+        $sInsertEvent->execute([strtotime($this->data['firstdate']), $this->data['nbweek'], $this->data['start'], $this->data['end'], $this->data['type'], $this->data['room'], $this->data['user'], $this->data['matter']]);  
+    }
+
+    /** Méthode qui insère un cours contenant les données reçu en paramètre.
+     */
+    public function updateEvent() {            
+        $sUpdateEvent = $this->bdd->prepare('UPDATE Cours SET DateDebut = ?, NbSemaines = ?, HeureDebut = ?, HeureFin = ?, TypeID = ?, SalleID = ?, UsagerID = ?, MatiereID = ? WHERE CourID = :id');
+        $sUpdateEvent->execute([strtotime($this->data['firstdate']), $this->data['nbweek'], $this->data['start'], $this->data['end'], $this->data['type'], $this->data['room'], $this->data['user'], $this->data['matter'], ':id' => $this->data['id']]);  
     }
 
     /** Méthode qui supprime un cours.
@@ -139,6 +151,6 @@ class FormEvent extends Validator {
      */
     public function deleteEvent(int $id) {
         $sDeleteEvent = $this->bdd->prepare('DELETE FROM Cours WHERE CourID = :id');
-        $sDeleteEvent->execute(array(':id' => $id));
+        $sDeleteEvent->execute([':id' => $id]);
     }
 }

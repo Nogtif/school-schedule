@@ -1,6 +1,6 @@
 <?php 
 require_once('./config.php');
-require_once('./src/Planning/FormRoom.php');
+require_once('./src/Planning/FormOthers.php');
 require_once('./src/Planning/FormMatter.php');
 require_once('./src/Planning/FormUser.php');
 
@@ -15,27 +15,46 @@ if($_SESSION['rang'] < 3) {
 }
 
 // Ajout ou suppression d'une salle
-if(isset($_POST['add_room']) || isset($_POST['delete_room'])) {
+if(isset($_POST['add_room']) || isset($_POST['remove_room'])) {
 
     // On récupère les données reçu en js.
     parse_str($_POST['post'], $data);
 
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formRoom = new Planning\FormRoom($bdd, $data);
+    $formRoom = new Planning\FormOthers($bdd, $data);
 
     if(isset($_POST['add_room'])) {
-        $errorsARoom = $formRoom->checkAddRoom();
-        if(empty($errorsARoom)) $formRoom->insertRoom();
-
-        echo json_encode($errorsARoom);
+        $errorsRoom = $formRoom->checkAddRoom();
+        if(empty($errorsRoom)) $formRoom->insertRoom();
     }
 
-    if(isset($_POST['delete_room'])) {
-        $errorsDRoom = $formRoom->checkDeleteRoom();
-        if(empty($errorsDRoom)) $formRoom->deleteRoom();
-
-        echo json_encode($errorsDRoom);
+    if(isset($_POST['remove_room'])) {
+        $errorsRoom = $formRoom->checkDeleteRoom();
+        if(empty($errorsRoom)) $formRoom->deleteRoom();
     }
+    echo json_encode($errorsRoom);
+    exit;
+}
+
+// Ajout ou suppression d'une promotion
+if(isset($_POST['add_promo']) || isset($_POST['remove_promo'])) {
+
+    // On récupère les données reçu en js.
+    parse_str($_POST['post'], $data);
+
+    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
+    $formPromo = new Planning\FormOthers($bdd, $data);
+
+    if(isset($_POST['add_promo'])) {
+        $errorsPromo = $formPromo->checkPromo();
+        if(empty($errorsPromo)) $formPromo->insertPromo();
+        echo json_encode($errorsPromo);
+    }
+    if(isset($_POST['remove_promo'])) {
+        $formPromo->deletePromo();
+        echo json_encode([]);
+    }
+
     exit;
 }
 
@@ -49,15 +68,13 @@ if (isset($_POST['add_matter'])) {
     $formMatter = new Planning\FormMatter($bdd, $data);
     $errorsMatter = $formMatter->checkAddMatter();
 
-    if(empty($errorsMatter)){
-        $formMatter->insertMatter();
-    }
+    if(empty($errorsMatter)) $formMatter->insertMatter();
 
     echo json_encode($errorsMatter);
     exit;
 }
 
-// Ajout d'une matière.
+// Ajout ou suppression d'une association entre une matière et un enseignant.
 if (isset($_POST['add_teachMatter']) || isset($_POST['remove_teachMatter'])) {
 
     // On récupère les données reçu en js.
@@ -68,15 +85,11 @@ if (isset($_POST['add_teachMatter']) || isset($_POST['remove_teachMatter'])) {
 
     if(isset($_POST['add_teachMatter'])) {
         $errorsLinkMatter = $formLinkMatter->checkAddLinkMatter();
-        if(empty($errorsLinkMatter)){
-            $formLinkMatter->linkMatterAndTeacher();
-        }
+        if(empty($errorsLinkMatter)) $formLinkMatter->linkMatterAndTeacher();
 
     } else if(isset($_POST['remove_teachMatter'])) {
         $errorsLinkMatter = $formLinkMatter->checkRemoveLinkMatter();
-        if(empty($errorsLinkMatter)){
-            $formLinkMatter->unLinkMatterAndTeacher();
-        }
+        if(empty($errorsLinkMatter)) $formLinkMatter->unLinkMatterAndTeacher();
     }
     echo json_encode($errorsLinkMatter);
     exit;
@@ -98,9 +111,7 @@ if (isset($_POST['add_user'])){
     $formUser = new Planning\FormUser($bdd, $data);
     $errorsUser = $formUser->checkAddUser();
 
-    if(empty($errorsUser)){
-        $formUser->insertUser();
-    }
+    if(empty($errorsUser)) $formUser->insertUser();
 
     // On renvoie le tableau d'erreurs en format json.
     echo json_encode($errorsUser);
@@ -130,12 +141,12 @@ if (isset($_POST['add_user'])){
     <!-- PAGE -->
     <div class="container">
         <h4>Administration</h4>
-        <p>Gestion des salles</p>
+        <p>Gestion divers</p>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="box-content">
-                    <div class="content-title">Ajouter une salle</div>
-                    <form method="POST" id="form_addRoom">
+                    <div class="content-title">Ajout/Suppression d'une salle</div>
+                    <form method="POST" id="form_room">
                         <div class="alert" style="display:none"></div>
                         <div class="form-group" id="room">
                             <label for="room">Nom de la salle</label>
@@ -143,22 +154,56 @@ if (isset($_POST['add_user'])){
                             <small class="invalid-feedback"></small>
                         </div>
                         <input type="submit" name="add_room" value="Ajouter" class="btn btn-success">
+                        <input type="submit" name="delete_room" value="Supprimer" class="btn btn-danger" style="float:right">
                     </form>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="box-content">
-                    <div class="content-title">Supprimer une salle</div>
-                    <form method="POST" id="form_removeRoom">
+                    <div class="content-title">Ajouter une promotion</div>
+                    <form method="POST" id="form_addPromo">
                         <div class="alert" style="display:none"></div>
-                        <div class="form-group" id="room">
-                            <label for="room">Nom de la salle</label>
-                            <input type="text" name="room" class="form-control">
-                            <small class="invalid-feedback"></small>
+                        <div class="row">
+                            <div class="form-group col-md-5" id="name_promo">
+                                <label for="name_promo">Nom de la promotion</label>
+                                <input type="text" name="name_promo" class="form-control">
+                                <small class="invalid-feedback"></small>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <label for="depid">Département</label>
+                                <select name="depid" class="form-control">
+                                    <?php
+                                    $sDeps = $bdd->query('SELECT * FROM Departements ORDER BY NomDepartement');
+                                    while($aDep = $sDeps->fetch()) {
+                                        echo '<option value="'.$aDep['DepartementID'].'">'.$aDep['NomDepartement'].'</option>';
+                                    } ?>
+                                </select>
+                            </div>
                         </div>
-                        <input type="submit" name="delete_room" value="Supprimer" class="btn btn-danger">
+                        <input type="submit" name="add_promo" value="Ajouter" class="btn btn-success">
                     </form>
                 </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box-content">
+                    <div class="content-title">Supprimer une promotion</div>
+                    <form method="POST" id="form_removePromo">
+                        <div class="alert" style="display:none"></div>
+                        <div class="form-group">
+                            <label for="promo">Promotion</label>
+                            <select name="promo" class="form-control">
+                                <option value="0">Choisir...</option>
+                                <?php
+                                $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
+                                while($aPromo = $sPromo->fetch()) {
+                                    echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
+                                } ?>
+                            </select>
+                        </div>
+                        <input type="submit" name="remove_promo" value="Supprimer" class="btn btn-danger">                    
+                    </form>
+                </div>
+            
             </div>
         </div>
 

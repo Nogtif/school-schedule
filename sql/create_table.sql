@@ -7,7 +7,7 @@
 DROP TABLE IF EXISTS Departements;
 CREATE TABLE Departements (
     DepartementID INTEGER  PRIMARY KEY AUTOINCREMENT,
-    NomFormation VARCHAR(25) NOT NULL
+    NomDepartement VARCHAR(25) NOT NULL
 );
 
 /* Table des Promotions. 
@@ -21,7 +21,7 @@ CREATE TABLE Promotions (
     PromotionID INTEGER  PRIMARY KEY AUTOINCREMENT,
     NomPromotion VARCHAR(25) NOT NULL,
     DepartementID INTEGER NOT NULL,
-    CONSTRAINT formation_fk FOREIGN KEY (DepartementID) REFERENCES Departements(DepartementID) ON DELETE CASCADE
+    CONSTRAINT departement_fk FOREIGN KEY (DepartementID) REFERENCES Departements(DepartementID) ON DELETE CASCADE
 );
 
 /* Table des roleUsager. 
@@ -109,7 +109,7 @@ DROP TABLE IF EXISTS Cours;
 CREATE TABLE Cours (
     CourID INTEGER PRIMARY KEY AUTOINCREMENT,
     DateDebut VARCHAR(30) NOT NULL,
-    DateFin VARCHAR(30),
+    NbSemaines INTEGER NOT NULL,
     HeureDebut time NOT NULL,
     HeureFin time NOT NULL,
     TypeID INTEGER NOT NULL,

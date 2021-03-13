@@ -57,7 +57,7 @@ class Week {
      * @return string : le premier jour.
      */
     public function getLastDay():string {
-        return $this->firstDay + (6 * 86400);
+        return $this->firstDay + 604800;
     }
 
     /** Méthode qui prend en paramètre un indice du tableau des noms de jour de la semaine,

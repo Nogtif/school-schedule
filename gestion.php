@@ -14,19 +14,28 @@ if($_SESSION['rang'] < 2) {
 $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
 // Ajout d'un cours.
-if(isset($_POST['add_event'])) {
+if(isset($_POST['add_event']) || isset($_POST['update_event'])) {
 
     // On récupère les données reçu en js.
     parse_str($_POST['post'], $data);
 
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
     $form = new Planning\FormEvent($bdd, $data);
-    $errors = $form->checkAddEvent();
+    $errors = $form->checkEvent();
+
+    if(isset($_POST['add_event'])) {
+        if(empty($errors)) {
+            $form->insertEvent();
+        }
+    }
+
+    if(isset($_POST['update_event'])) {
+        if(empty($errors)) {
+            $form->updateEvent();
+        }
+    }
 
     // Si il n'y a aucune erreurs, on ajout le cours.
-    if(empty($errors)) {
-        $form->insertEvent();
-    }
     echo json_encode($errors);
     exit;
 }
@@ -75,44 +84,31 @@ if(isset($_GET['removeEventID'])){
                             <div class="item-info">
                                 <p><?= $aCours['NomType'] ?> <?= $aCours['NomMatiere'] ?></p>
                                 <span>Par <?= htmlspecialchars($aCours['Prenom']) ?> <?= htmlspecialchars($aCours['Nom']) ?>, en <?= htmlspecialchars($aCours['NomSalle']) ?></span>
-                            </div>
-                            
+                            </div>                            
                             <div class="item-info">
-                                <p>du <?= date('d-m-Y', $aCours['DateDebut']) ?> au <?= date('d-m-Y', $aCours['DateFin']) ?></p>
+                                <p>du <?= date('d-m-Y', $aCours['DateDebut']) ?> au <?= date('d-m-Y', ($aCours['DateDebut'] + ($aCours['NbSemaines'] * 604800))) ?></p>
                                 <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
-                            </div>
-                        
+                            </div>                        
                             <a href="?courID=<?= $aCours['CourID'] ?>" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
-                            <a href="?removeEventID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-close"></i></a>
-                                                    
                         </div>
                     <?php } ?>
                 </div>
             </div>
 
-            <div class="col-md-5">    
+            <div class="col-md-5">
                 <div class="box-content">
+                    <?php
+                    $cEvents = $bdd->prepare('SELECT * FROM Cours WHERE CourID = :id');
+                    $cEvents->execute(array(':id' => isset($_GET['courID']) ? $_GET['courID'] : ''));
+                    $cEvent = $cEvents->fetch();
+                    if(empty($_GET['courID'])) {?>
                     <div class="content-title">Ajouter un cours</div>
                     <form method="POST" id="form_addEvent">
                         <div class="alert" style="display:none"></div>
                         <div class="row">
-                            <div class="col-md-5 form-group">
-                                <label for="promo">Promotion</label>
-                                <select name="promo" class="form-control" id="promo">
-                                    <?php                                    
-                                    $option = '';
-                                    if($_SESSION['rang'] == 2) {
-                                        $option = 'INNER JOIN Appartient ON Promotions.PromotionID = Appartient.PromotionID AND UsagerID = "'.$_SESSION['id'].'"';
-                                    }
-                                    $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
-                                    while($aPromo = $sPromo->fetch()) {
-                                        echo '<option value="'.$aPromo['PromotionID'].'"'. ((isset($_POST['promo']) && $_POST['promo'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.$aPromo['NomPromotion'].'</option>';
-                                    } ?>
-                                </select>
-                            </div>
-                            <div class="col-md-7 form-group">
+                            <div class="form-group">
                                 <label for="matter">Matière</label>
-                                <select name="matter" id="" class="form-control" id="matiere">
+                                <select name="matter" id="" class="form-control">
                                     <?php
                                     $option = '';
                                     if($_SESSION['rang'] == 2) {
@@ -124,19 +120,24 @@ if(isset($_GET['removeEventID'])){
                                     } ?> 
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group" id="firstdate">
+                            <div class="col-md-7 form-group" id="firstdate">
                                 <label for="firstdate">Date</label>
-                                <input type="date" name="firstdate" class="form-control" value="<?= (isset($_POST['firstdate'])) ? $_POST['firstdate'] : '' ?>">
+                                <input type="date" name="firstdate" class="form-control">
                                 <small class="invalid-feedback"></small>
                             </div>
-                            <div class="col-md-3 form-group" id="start">
+                            <div class="col-md-5 form-group" id="nbweek">
+                                <label for="nbweek">Nombre de semaine</label>
+                                <input type="number" name="nbweek" class="form-control" value="1">
+                                <small class="invalid-feedback"></small>
+                            </div>
+                            <div class="col-md-6 form-group" id="start">
                                 <label for="start">Heure de début</label>
-                                <input type="time" name="start" class="form-control" value="<?= (isset($_POST['start'])) ? $_POST['start'] : '' ?>">
+                                <input type="time" name="start" class="form-control">
                                 <small class="invalid-feedback"></small>
                             </div>
-                            <div class="col-md-3 form-group" id="end">
+                            <div class="col-md-6 form-group" id="end">
                                 <label for="end">Heure de fin</label>
-                                <input type="time" name="end" class="form-control" value="<?= (isset($_POST['end'])) ? $_POST['end'] : '' ?>">
+                                <input type="time" name="end" class="form-control">
                                 <small class="invalid-feedback"></small>  
                             </div>
                             <div class="col-md-3 form-group">
@@ -174,31 +175,90 @@ if(isset($_GET['removeEventID'])){
                                     ?>
                                 </select>
                             </div>
-
-                            <div class="col-md-12 form-group">
-                                <label for="room">Durée du cours</label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input class="form-check-input" type="radio" name="nbweek" value="1" checked>
-                                        <label class="form-check-label" for="nbweek">Cours fixe</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input class="form-check-input" type="radio" name="nbweek" value="2">
-                                        <label class="form-check-label" for="nbweek">2 semaines</label>
-                                    </div>
-                                    <div class="col-md-6 ">
-                                        <input class="form-check-input" type="radio" name="nbweek" value="3">
-                                        <label class="form-check-label" for="nbweek">3 semaines</label>
-                                    </div>                                    
-                                    <div class="col-md-6">
-                                        <input class="form-check-input" type="radio" name="nbweek" value="4">
-                                        <label class="form-check-label" for="nbweek">1 mois</label>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <input type="submit" name="add_event" value="Programmer ce cours" class="btn btn-success">
                     </form>
+
+                    <?php } else { ?>
+                    <div class="content-title">Modification d'un cours</div>
+                    <form method="POST" id="form_updateEvent">
+                        <div class="alert" style="display:none"></div>
+                        <div class="row">
+                            <input type="hidden" name="id" value="<?= $cEvent['CourID'] ?>">
+                            <div class="form-group">
+                                <label for="matter">Matière</label>
+                                <select name="matter" id="" class="form-control">
+                                    <?php
+                                    $option = '';
+                                    if($_SESSION['rang'] == 2) {
+                                        $option = 'INNER JOIN Enseigne ON Matieres.MatiereID = Enseigne.MatiereID AND UsagerID = "'.$_SESSION['id'].'"';   
+                                    }
+                                    $sMatieres = $bdd->query('SELECT * FROM Matieres '.$option. ' ORDER BY NomMatiere');
+                                    while($row = $sMatieres->fetch()) {
+                                        echo '<option value="'.$row['MatiereID'].'"'.($cEvent['MatiereID'] == $row['MatiereID'] ? ' selected' : '').'>'.htmlspecialchars($row['NomMatiere']).'</option>';
+                                    } ?> 
+                                </select>
+                            </div>
+                            <div class="col-md-7 form-group" id="firstdate">
+                                <label for="firstdate">Date</label>
+                                <input type="date" name="firstdate" class="form-control" value="<?= date('Y-m-d', $cEvent['DateDebut']) ?>">
+                                <small class="invalid-feedback"></small>
+                            </div>
+                            <div class="col-md-5 form-group" id="nbweek">
+                                <label for="nbweek">Date</label>
+                                <input type="number" name="nbweek" class="form-control" value="<?= $cEvent['NbSemaines'] ?>">
+                                <small class="invalid-feedback"></small>
+                            </div>
+                            <div class="col-md-6 form-group" id="start">
+                                <label for="start">Heure de début</label>
+                                <input type="time" name="start" class="form-control" value="<?= $cEvent['HeureDebut'] ?>">
+                                <small class="invalid-feedback"></small>
+                            </div>
+                            <div class="col-md-6 form-group" id="end">
+                                <label for="end">Heure de fin</label>
+                                <input type="time" name="end" class="form-control" value="<?= $cEvent['HeureFin'] ?>">
+                                <small class="invalid-feedback"></small>  
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="type">Type de cours</label>
+                                <select name="type" class="form-control">
+                                    <?php $query = $bdd->query('SELECT * FROM TypeCours');
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="'.$row['TypeID'].'"'.($cEvent['TypeID'] == $row['TypeID'] ? ' selected' : '').'>'.htmlspecialchars($row['NomType']).'</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>                            
+                            <div class="col-md-6 form-group">
+                                <label for="user">Enseignant</label>
+                                <select name="user" class="form-control">
+                                    <?php if($_SESSION['rang'] == 2) {
+                                            $sql = 'AND UsagerID = "'.$_SESSION['id'].'"';
+                                        } else {
+                                            $sql = '';
+                                        }
+                                        $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="'.$row['UsagerID'].'"'.($cEvent['UsagerID'] == $row['UsagerID'] ? ' selected' : '').'>'.$row['Prenom'].' '.$row['Nom'].'</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>                            
+                            <div class="col-md-3 form-group">
+                                <label for="room">Salle</label>
+                                <select name="room" class="form-control">
+                                    <?php $query = $bdd->query('SELECT * FROM Salles');
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="'.$row['SalleID'].'"'.($cEvent['SalleID'] == $row['SalleID'] ? ' selected' : '').'>'.$row['NomSalle'].'</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="submit" name="update_event" value="Modifier ce cours" class="btn btn-success">
+                        <a href="?removeEventID=<?= $cEvent['CourID'] ?>" class="btn btn-danger" style="float:right">Supprimer ce cour</a>
+                    </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>

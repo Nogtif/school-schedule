@@ -1,4 +1,4 @@
-INSERT INTO Departements(DepartementID, NomFormation) VALUES
+INSERT INTO Departements(DepartementID, NomDepartement) VALUES
 (1, 'Math'), (2, 'Info'), (3, 'SVT'), (4, 'Chimie');
 
 INSERT INTO Promotions(NomPromotion, DepartementID) VALUES
@@ -78,23 +78,23 @@ INSERT INTO Matieres(MatiereID, NomMatiere, CouleurMatiere, PromotionID) VALUES
 (6, 'Stage', '#339966', 10),
 (7, 'Anglais 4 MATHS', '#339966', 5);
 
-INSERT INTO Cours(CourID, DateDebut, DateFin, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES
-(1, '1609459200', '1616371200', '10:15', '11:15', 1, 4, 'karim_tabia', 4),
-(2, '1609459200', '1616371200', '11:15', '12:15', 2, 4, 'karim_tabia', 4),
-(3, '1609459200', '1616371200', '14:00', '15:30', 1, 3, 'tiago_delima', 2),
+INSERT INTO Cours(CourID, DateDebut, NbSemaines, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES
+(1, '1609718400', 11, '10:15', '11:15', 1, 4, 'karim_tabia', 4),
+(2, '1609718400', 11, '11:15', '12:15', 2, 4, 'karim_tabia', 4),
+(3, '1609718400', 11, '14:00', '15:30', 1, 3, 'tiago_delima', 2),
 
-(4, '1609545600', '1616371200', '09:30', '10:30', 2, 8, 'johan_koitka', 3),
-(5, '1609545600', '1616371200', '14:00', '15:30', 1, 3, 'johan_koitka', 3),
-(6, '1609545600', '1616371200', '15:45', '17:30', 2, 3, 'daniel_leberre', 1),
+(4, '1609804800', 11, '09:30', '10:30', 2, 8, 'johan_koitka', 3),
+(5, '1609804800', 11, '14:00', '15:30', 1, 3, 'johan_koitka', 3),
+(6, '1609804800', 11, '15:45', '17:30', 2, 3, 'daniel_leberre', 1),
 
-(7, '1609632000', '1616371200', '08:45', '10:45', 3, 5, 'thibault_lietard', 1),
-(8, '1609632000', '1616371200', '11:00', '13:00', 3, 5, 'thibault_lietard', 2),
-(9, '1609632000', '1616371200', '14:30', '16:30', 2, 10, 'catherine_vincent', 5),
+(7, '1609891200', 11, '08:45', '10:45', 3, 5, 'thibault_lietard', 1),
+(8, '1609891200', 11, '11:00', '13:00', 3, 5, 'thibault_lietard', 2),
+(9, '1609891200', 11, '14:30', '16:30', 2, 10, 'catherine_vincent', 5),
 
-(10, '1609718400', '1616371200', '09:00', '10:30', 2, 7, 'thibault_lietard', 2),
-(11, '1609718400', '1616371200', '10:45', '12:45', 3, 5, 'johan_koitka', 3),
-(12, '1609718400', '1616371200', '13:45', '15:30', 3, 7, 'karim_tabia', 4),
-(13, '1609804800', '1616371200', '14:00', '18:00', 1, 4, 'zied_bouraoui', 6);
+(10, '1609977600', 11, '09:00', '10:30', 2, 7, 'thibault_lietard', 2),
+(11, '1609977600', 11, '10:45', '12:45', 3, 5, 'johan_koitka', 3),
+(12, '1609977600', 11, '13:45', '15:30', 3, 7, 'karim_tabia', 4),
+(13, '1610064000', 11, '14:00', '18:00', 1, 4, 'zied_bouraoui', 6);
 
 INSERT INTO Enseigne(UsagerID, MatiereID) VALUES 
 ('daniel_leberre', 1), ('tiago_delima', 2), ('johan_koitka', 3),
