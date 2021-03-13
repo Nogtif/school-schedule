@@ -129,11 +129,8 @@ if (isset($_POST['add_user'])){
 
     <!-- PAGE -->
     <div class="container">
-
         <h4>Administration</h4>
-
         <p>Gestion des salles</p>
-
         <div class="row">
             <div class="col-md-6">
                 <div class="box-content">
@@ -156,8 +153,8 @@ if (isset($_POST['add_user'])){
                         <div class="alert" style="display:none"></div>
                         <div class="form-group" id="room">
                             <label for="room">Nom de la salle</label>
-                            <input type="text" name="room" class="form-control">                            
-                            <small class="invalid-feedback"></small>                     
+                            <input type="text" name="room" class="form-control">
+                            <small class="invalid-feedback"></small>
                         </div>
                         <input type="submit" name="delete_room" value="Supprimer" class="btn btn-danger">
                     </form>

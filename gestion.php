@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php 
 require_once('./config.php');
 require_once('./src/Planning/FormEvent.php');
@@ -15,16 +14,21 @@ if($_SESSION['rang'] < 2) {
 $last_search = isset($_GET['search']) ? $_GET['search'] : ' ';
 
 // Ajout d'un cours.
-if(isset($_POST['add_cours'])) {
+if(isset($_POST['add_event'])) {
+
+    // On récupère les données reçu en js.
+    parse_str($_POST['post'], $data);
 
     // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $form = new Planning\FormEvent($bdd, $_POST);
+    $form = new Planning\FormEvent($bdd, $data);
     $errors = $form->checkAddEvent();
 
     // Si il n'y a aucune erreurs, on ajout le cours.
     if(empty($errors)) {
         $form->insertEvent();
     }
+    echo json_encode($errors);
+    exit;
 }
 
 // Suppression d'un cours.
@@ -34,6 +38,7 @@ if(isset($_GET['removeEventID'])){
     header('Location: ./gestion');
 }
 ?>
+<!DOCTYPE html>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
@@ -59,8 +64,8 @@ if(isset($_GET['removeEventID'])){
         <h4>Gestion des cours</h4>
 
         <div class="row">
-            <div class="col-md-7">
-                <div class="box-content">                    
+            <div class="col-md-7"> 
+                <div class="box-content">
                     <?php 
                     $where = 'WHERE NomMatiere LIKE \'%'. $last_search.'%\'';
                     if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '" AND NomMatiere LIKE \'%'. $last_search.'%\'';
@@ -77,7 +82,7 @@ if(isset($_GET['removeEventID'])){
                                 <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
                             </div>
                         
-                            <button class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></button>
+                            <a href="?courID=<?= $aCours['CourID'] ?>" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
                             <a href="?removeEventID=<?= $aCours['CourID'] ?>" class="btn btn-danger"><i class="mdi mdi-close"></i></a>
                                                     
                         </div>
@@ -88,121 +93,113 @@ if(isset($_GET['removeEventID'])){
             <div class="col-md-5">    
                 <div class="box-content">
                     <div class="content-title">Ajouter un cours</div>
-                    <?php if(isset($errors['global'])) {
-                        echo '<div class="alert alert-danger">'.$errors['global'].'</div>';
-                    } else if(isset($_POST['add_cours']) && empty($errors)) {
-                        echo '<div class="alert alert-success">Le cours a bien été ajouté !</div>';
-                    } ?>
-                    <form method="POST" action="">
+                    <form method="POST" id="form_addEvent">
+                        <div class="alert" style="display:none"></div>
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="">Promotion</label>
-                                    <select name="promotion" class="form-control" id="promo">
-                                        <?php                                    
-                                        $option = '';
-                                        if($_SESSION['rang'] == 2) {
-                                            $option = 'INNER JOIN Appartient ON Promotions.PromotionID = Appartient.PromotionID AND UsagerID = "'.$_SESSION['id'].'"';
+                            <div class="col-md-5 form-group">
+                                <label for="promo">Promotion</label>
+                                <select name="promo" class="form-control" id="promo">
+                                    <?php                                    
+                                    $option = '';
+                                    if($_SESSION['rang'] == 2) {
+                                        $option = 'INNER JOIN Appartient ON Promotions.PromotionID = Appartient.PromotionID AND UsagerID = "'.$_SESSION['id'].'"';
+                                    }
+                                    $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
+                                    while($aPromo = $sPromo->fetch()) {
+                                        echo '<option value="'.$aPromo['PromotionID'].'"'. ((isset($_POST['promo']) && $_POST['promo'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.$aPromo['NomPromotion'].'</option>';
+                                    } ?>
+                                </select>
+                            </div>
+                            <div class="col-md-7 form-group">
+                                <label for="matter">Matière</label>
+                                <select name="matter" id="" class="form-control" id="matiere">
+                                    <?php
+                                    $option = '';
+                                    if($_SESSION['rang'] == 2) {
+                                        $option = 'INNER JOIN Enseigne ON Matieres.MatiereID = Enseigne.MatiereID AND UsagerID = "'.$_SESSION['id'].'"';   
+                                    }
+                                    $sMatieres = $bdd->query('SELECT * FROM Matieres '.$option. ' ORDER BY NomMatiere');
+                                    while($aMatieres = $sMatieres->fetch()) {
+                                        echo '<option value="'.$aMatieres['MatiereID'].'">'.htmlspecialchars($aMatieres['NomMatiere']).'</option>';
+                                    } ?> 
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group" id="firstdate">
+                                <label for="firstdate">Date</label>
+                                <input type="date" name="firstdate" class="form-control" value="<?= (isset($_POST['firstdate'])) ? $_POST['firstdate'] : '' ?>">
+                                <small class="invalid-feedback"></small>
+                            </div>
+                            <div class="col-md-3 form-group" id="start">
+                                <label for="start">Heure de début</label>
+                                <input type="time" name="start" class="form-control" value="<?= (isset($_POST['start'])) ? $_POST['start'] : '' ?>">
+                                <small class="invalid-feedback"></small>
+                            </div>
+                            <div class="col-md-3 form-group" id="end">
+                                <label for="end">Heure de fin</label>
+                                <input type="time" name="end" class="form-control" value="<?= (isset($_POST['end'])) ? $_POST['end'] : '' ?>">
+                                <small class="invalid-feedback"></small>  
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="type">Type de cours</label>
+                                <select name="type" class="form-control">
+                                    <?php $query = $bdd->query('SELECT * FROM TypeCours');
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="' . $row['TypeID'].'">' . htmlspecialchars($row['NomType']) . '</option>';
                                         }
-                                        $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
-                                        while($aPromo = $sPromo->fetch()) {
-                                            echo '<option value="'.$aPromo['PromotionID'].'"'. ((isset($_POST['promotion']) && $_POST['promotion'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.$aPromo['NomPromotion'].'</option>';
-                                        } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label for="">Matière</label>
-                                    <select name="matiere" id="" class="form-control" id="matiere">
-                                        <?php
-                                        $option = '';
-                                        if($_SESSION['rang'] == 2) {
-                                            $option = 'INNER JOIN Enseigne ON Matieres.MatiereID = Enseigne.MatiereID AND UsagerID = "'.$_SESSION['id'].'"';   
+                                    ?>
+                                </select>
+                            </div>                            
+                            <div class="col-md-6 form-group">
+                                <label for="user">Enseignant</label>
+                                <select name="user" class="form-control">
+                                    <?php if($_SESSION['rang'] == 2) {
+                                            $sql = 'AND UsagerID = "'.$_SESSION['id'].'"';
+                                        } else {
+                                            $sql = '';
                                         }
-                                        $sMatieres = $bdd->query('SELECT * FROM Matieres '.$option. ' ORDER BY NomMatiere');
-                                        while($aMatieres = $sMatieres->fetch()) {
-                                            echo '<option value="'.$aMatieres['MatiereID'].'">'.htmlspecialchars($aMatieres['NomMatiere']).'</option>';
-                                        } ?> 
-                                    </select>
-                                </div>
+                                        $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>                            
+                            <div class="col-md-3 form-group">
+                                <label for="room">Salle</label>
+                                <select name="room" class="form-control">
+                                    <?php $query = $bdd->query('SELECT * FROM Salles');
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="' . $row['SalleID'].'">' . $row['NomSalle'] . '</option>';
+                                        }
+                                    ?>
+                                </select>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="date">Date</label>
-                                    <input type="date" name="dateCour" class="form-control <?= (isset($errors['dateCour'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['dateCour'])) ? $_POST['dateCour'] : '' ?>">
-                                    <?php if(isset($errors['dateCour'])) {
-                                        echo '<small class="invalid-feedback">' . $errors['dateCour'] . '</small>';
-                                    } ?>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="date">Heure de début</label>
-                                    <input type="time" name="heureDebut" class="form-control <?= (isset($errors['heureDebut'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['heureDebut'])) ? $_POST['heureDebut'] : '' ?>">
-                                    <?php if(isset($errors['heureDebut'])) {
-                                        echo '<small class="invalid-feedback">' . $errors['heureDebut'] . '</small>';
-                                    } ?>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="date">Heure de fin</label>
-                                    <input type="time" name="heureFin" class="form-control <?= (isset($errors['heureFin'])) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['heureFin'])) ? $_POST['heureFin'] : '' ?>">
-                                    <?php if(isset($errors['heureFin'])) {
-                                        echo '<small class="invalid-feedback">' . $errors['heureFin'] . '</small>';
-                                    } ?>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="date">Type de cours</label>
-                                    <select name="type" class="form-control">
-                                        <?php $query = $bdd->query('SELECT * FROM TypeCours');
-                                            while ($row = $query->fetch()){
-                                                echo '<option value="' . $row['TypeID'].'">' . htmlspecialchars($row['NomType']) . '</option>';
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="date">Enseignant</label>
-                                    <select name="enseignant" class="form-control">
-                                        <?php if($_SESSION['rang'] == 2) {
-                                                $sql = 'AND UsagerID = "'.$_SESSION['id'].'"';
-                                            } else {
-                                                $sql = '';
-                                            }
-                                            $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
-                                            while ($row = $query->fetch()){
-                                                echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="salle">Salle</label>
-                                    <select name="salle" class="form-control">
-                                        <?php $query = $bdd->query('SELECT * FROM Salles');
-                                            while ($row = $query->fetch()){
-                                                echo '<option value="' . $row['SalleID'].'">' . $row['NomSalle'] . '</option>';
-                                            }
-                                        ?>
-                                    </select>
+
+                            <div class="col-md-12 form-group">
+                                <label for="room">Durée du cours</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input class="form-check-input" type="radio" name="nbweek" value="1" checked>
+                                        <label class="form-check-label" for="nbweek">Cours fixe</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-check-input" type="radio" name="nbweek" value="2">
+                                        <label class="form-check-label" for="nbweek">2 semaines</label>
+                                    </div>
+                                    <div class="col-md-6 ">
+                                        <input class="form-check-input" type="radio" name="nbweek" value="3">
+                                        <label class="form-check-label" for="nbweek">3 semaines</label>
+                                    </div>                                    
+                                    <div class="col-md-6">
+                                        <input class="form-check-input" type="radio" name="nbweek" value="4">
+                                        <label class="form-check-label" for="nbweek">1 mois</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <input type="submit" name="add_cours" value="Programmer ce cours" class="btn btn-success">
+                        <input type="submit" name="add_event" value="Programmer ce cours" class="btn btn-success">
                     </form>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -212,5 +209,6 @@ if(isset($_GET['removeEventID'])){
     
 	<!-- JS -->
 	<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./assets/js/functions.js"></script>
 </body>
 </html>

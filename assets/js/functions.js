@@ -35,6 +35,7 @@ $('.planning').ready(function() {
  function alertForm(data, id, msg) {
     res = jQuery.parseJSON(data);
     $(id + ' .form-control').removeClass('is-invalid');
+    $(id + ' .alert').removeClass('alert-danger alert-success');
     $(id + ' .alert').css('display', 'none');
     if(Object.keys(res).length > 0) {
         jQuery.each(res, function(k, elt) {
@@ -51,6 +52,12 @@ $('.planning').ready(function() {
         $(id + ' .alert').addClass('alert-success').text(msg);
     }
 }
+
+$('#form_addEvent').submit(function(e) {
+    e.preventDefault();
+    var post = $(this).serialize();
+    $.post('gestion.php', {add_event: 1, post}, (data) => {alertForm(data, '#form_addEvent' , 'Le cours a bien été ajouté !')});
+});
 
 $('#form_addRoom').submit(function(e) {
     e.preventDefault();

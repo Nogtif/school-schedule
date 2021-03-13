@@ -23,15 +23,15 @@ class FormEvent extends Validator {
      * @return array : le tableau d'erreurs.
      */
     public function checkAddEvent():array {
-        $this->isValide('dateCour', 'checkDate');
-        $this->isValide('heureDebut', 'checkTimeMin');
-        $this->isValide('heureFin', 'checkTimeMax');
-        $this->isValide('heureDebut', 'checkTime', 'heureFin');
-        $this->isValide('dateCour', 'timeSlotFree', 'heureDebut', 'heureFin', 'promotion');
-        $this->isValide('dateCour', 'roomFree', 'heureDebut', 'heureFin', 'salle');
+        $this->isValide('firstdate', 'checkDate');
+        $this->isValide('start', 'checkTimeMin');
+        $this->isValide('end', 'checkTimeMax');
+        $this->isValide('start', 'checkTime', 'end');
+        $this->isValide('firstdate', 'timeSlotFree', 'start', 'end', 'promo');
+        $this->isValide('firstdate', 'roomFree', 'start', 'end', 'room');
         // Vérification en plus, quand il s'agit de l'admin.
-        $this->isValide('promotion', 'promoMatter', 'matiere');
-        $this->isValide('enseignant', 'teachMatter', 'matiere');
+        $this->isValide('promo', 'promoMatter', 'matter');
+        $this->isValide('user', 'teachMatter', 'matter');
         return $this->errors;
     }
 
@@ -130,8 +130,8 @@ class FormEvent extends Validator {
     /** Méthode qui insère un cours contenant les données reçu en paramètre.
      */
     public function insertEvent() {            
-        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateDebut, DateFin, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?)');
-        $sInsertEvent->execute([strtotime($this->data['dateDebut']), strtotime($this->data['dateFin']), $this->data['heureDebut'], $this->data['heureFin'], $this->data['type'], $this->data['salle'], $this->data['enseignant'], $this->data['matiere']]);  
+        $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateDebut, DateFin, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?,?)');
+        $sInsertEvent->execute([strtotime($this->data['firstdate']), strtotime('+'.$this->data['nbweek'].' weeks', strtotime($this->data['firstdate'])), $this->data['start'], $this->data['end'], $this->data['type'], $this->data['room'], $this->data['user'], $this->data['matter']]);  
     }
 
     /** Méthode qui supprime un cours.

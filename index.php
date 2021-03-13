@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php 
 require_once('./config.php');
 
@@ -7,6 +6,7 @@ if(!isOnline()) {
     header('Location: ./login');
 }
 ?>
+<!DOCTYPE html>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
@@ -34,6 +34,7 @@ if(!isOnline()) {
                 <a href="javascript:void(0)" data-id="<?= date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
                 
                 <select name="promo" class="form-select">
+                <option value="0">Promotions</option>
                     <?php
                     if($_SESSION['rang'] == 1){
                         $sPromo = $bdd->query('SELECT * FROM Promotions WHERE PromotionID='.$_SESSION['promo']);
