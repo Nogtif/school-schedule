@@ -23,7 +23,6 @@ class FormEvent extends Validator {
      * @return array : le tableau d'erreurs.
      */
     public function checkEvent():array {
-        $this->isValide('firstdate', 'checkDate');
         $this->isValide('nbweek', 'checkNbWeeks');
         $this->isValide('start', 'checkTimeMin');
         $this->isValide('end', 'checkTimeMax');
@@ -143,7 +142,7 @@ class FormEvent extends Validator {
 
     /** Méthode qui insère un cours contenant les données reçu en paramètre.
      */
-    public function updateEvent() {            
+    public function updateEvent() {
         $sUpdateEvent = $this->bdd->prepare('UPDATE Cours SET DateDebut = ?, NbSemaines = ?, HeureDebut = ?, HeureFin = ?, TypeID = ?, SalleID = ?, UsagerID = ?, MatiereID = ? WHERE CourID = :id');
         $sUpdateEvent->execute([strtotime($this->data['firstdate']), $this->data['nbweek'], $this->data['start'], $this->data['end'], $this->data['type'], $this->data['room'], $this->data['user'], $this->data['matter'], ':id' => $this->data['id']]);  
     }

@@ -94,7 +94,7 @@ INSERT INTO Cours(CourID, DateDebut, NbSemaines, HeureDebut, HeureFin, TypeID, S
 (10, '1609977600', 11, '09:00', '10:30', 2, 7, 'thibault_lietard', 2),
 (11, '1609977600', 11, '10:45', '12:45', 3, 5, 'johan_koitka', 3),
 (12, '1609977600', 11, '13:45', '15:30', 3, 7, 'karim_tabia', 4),
-(13, '1610064000', 11, '14:00', '18:00', 1, 4, 'zied_bouraoui', 6);
+(13, '1610064000', 14, '14:00', '18:00', 1, 4, 'zied_bouraoui', 6);
 
 INSERT INTO Enseigne(UsagerID, MatiereID) VALUES 
 ('daniel_leberre', 1), ('tiago_delima', 2), ('johan_koitka', 3),

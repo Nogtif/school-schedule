@@ -60,13 +60,13 @@ $('input[type=\'submit\']').click(function(e){
 $('#form_addEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {add_event: 1, post}, (data) => {console.log(data);alertForm(data, '#form_addEvent' , 'Le cours a bien été ajouté !')});
+    $.post('config.php', {add_event: 1, post}, (data) => {alertForm(data, '#form_addEvent' , 'Le cours a bien été ajouté !')});
 });
 
 $('#form_updateEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {update_event: 1, post}, (data) => {alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !')});
+    $.post('config.php', {update_event: 1, post}, (data) => {console.log(data);alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !')});
 });
 
 $('#form_room').submit(function(e) {

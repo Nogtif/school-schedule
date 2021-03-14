@@ -40,7 +40,7 @@ $uEvent = $uEvents->fetch();
         <div class="row">
             <div class="col-md-7"> 
                 <div class="box-content">
-                    <div class="select-data">
+                    <div class="select-data" id="list-events">
                         <?php 
                         $where = '';
                         if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '"';
@@ -61,8 +61,8 @@ $uEvent = $uEvents->fetch();
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
-                <div class="box-content">
+            <div class="col-md-5" id="form">
+                <div class="box-content getEvent">
                     <?php if(empty($_GET['courID'])) {?>
                         <div class="content-title">Ajouter un cours</div>
                         <form method="POST" id="form_addEvent">
