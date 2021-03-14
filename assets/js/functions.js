@@ -54,31 +54,29 @@ $('.planning').ready(function() {
 }
 
 $('input[type=\'submit\']').click(function(e){
-    $(this).addClass("clicked");
-    
+    $(this).addClass("clicked");    
 });
 
 $('#form_addEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('gestion.php', {add_event: 1, post}, (data) => {alertForm(data, '#form_addEvent' , 'Le cours a bien été ajouté !')});
+    $.post('config.php', {add_event: 1, post}, (data) => {console.log(data);alertForm(data, '#form_addEvent' , 'Le cours a bien été ajouté !')});
 });
 
 $('#form_updateEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('gestion.php', {update_event: 1, post}, (data) => {console.log(data);alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !')});
+    $.post('config.php', {update_event: 1, post}, (data) => {alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !')});
 });
 
 $('#form_room').submit(function(e) {
     e.preventDefault();
-
     var post = $(this).serialize();
 
     if($(this).find('.clicked').attr('value') == 'Ajouter') {
-        $.post('admin.php', {add_room: 1, post}, (data) => {alertForm(data, '#form_room', 'La salle a bien été ajouté !')});
+        $.post('config.php', {add_room: 1, post}, (data) => {alertForm(data, '#form_room', 'La salle a bien été ajouté !')});
     } else {
-        $.post('admin.php', {remove_room: 1, post}, (data) => {alertForm(data, '#form_room', 'La salle a bien été supprimé !')});
+        $.post('config.php', {remove_room: 1, post}, (data) => {alertForm(data, '#form_room', 'La salle a bien été supprimé !')});
     }
     $(this).find('input[type=\'submit\']').removeClass("clicked");
 });
@@ -86,45 +84,65 @@ $('#form_room').submit(function(e) {
 $('#form_addPromo').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('admin.php', {add_promo: 1, post}, (data) => {alertForm(data, '#form_addPromo' , 'La promotion a bien été ajouté !')});
+    $.post('config.php', {add_promo: 1, post}, (data) => {alertForm(data, '#form_addPromo' , 'La promotion a bien été ajouté !')});
 });
 
 $('#form_removePromo').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('admin.php', {remove_promo: 1, post}, (data) => {alertForm(data, '#form_removePromo' , 'La promotion a bien été supprimé !')});
+    $.post('config.php', {remove_promo: 1, post}, (data) => {alertForm(data, '#form_removePromo' , 'La promotion a bien été supprimé !')});
 });
 
 $('#form_teachMatter').submit(function(e) {
     e.preventDefault();
-
     var post = $(this).serialize();
 
     if($(this).find('.clicked').attr('value') == 'Associer') {
-        $.post('admin.php', {add_teachMatter: 1, post}, (data) => {alertForm(data, '#form_teachMatter', 'La matière a bien été associé à l\'enseignant !')});
+        $.post('config.php', {add_teachMatter: 1, post}, (data) => {alertForm(data, '#form_teachMatter', 'La matière a bien été associé à l\'enseignant !')});
     } else {
-        $.post('admin.php', {remove_teachMatter: 1, post}, (data) => {alertForm(data, '#form_teachMatter', 'La matière a bien été dissocié de l\'enseignant !')});
+        $.post('config.php', {remove_teachMatter: 1, post}, (data) => {alertForm(data, '#form_teachMatter', 'La matière a bien été dissocié de l\'enseignant !')});
     }
     $(this).find('input[type=\'submit\']').removeClass("clicked");
 });
 
-$('#form_matter').submit(function(e){
+$('#form_addMatter').submit(function(e){
     e.preventDefault();
-
     var post = $(this).serialize();
-    $.post('admin.php', {add_matter: 1, post}, (data) => {alertForm(data, '#form_matter', 'La matière a bien été crée !')});
+    $.post('config.php', {add_matter: 1, post}, (data) => {alertForm(data, '#form_addMatter', 'La matière a bien été crée !')});
+});
+
+$('#form_updateMatter').submit(function(e){
+    e.preventDefault();
+    var post = $(this).serialize();
+    $.post('config.php', {update_matter: 1, post}, (data) => {console.log(data);alertForm(data, '#form_updateMatter', 'La matière a bien été mise à jour !')});
 });
 
 $('#form_linkMatter').submit(function(e){
     e.preventDefault();
-
     var post = $(this).serialize();
-    $.post('admin.php', {add_teachMatter: 1, post}, (data) => {alertForm(data, '#form_linkMatter', 'La matière a bien été associé à l\'enseignant !')});
+    $.post('config.php', {add_teachMatter: 1, post}, (data) => {alertForm(data, '#form_linkMatter', 'La matière a bien été associé à l\'enseignant !')});
 });
 
-$('#form_user').submit(function(e){
+$('#form_addUser').submit(function(e){
     e.preventDefault();
-
     var post = $(this).serialize();
-    $.post('admin.php', {add_user: 1, post}, (data) => {alertForm(data, '#form_user', 'L\'usager a bien été ajouté !')});
+    $.post('config.php', {add_user: 1, post}, (data) => {alertForm(data, '#form_addUser', 'L\'usager a bien été ajouté !')});
+});
+
+$('#form_updateUser').submit(function(e){
+    e.preventDefault();
+    var post = $(this).serialize();
+    $.post('config.php', {update_user: 1, post}, (data) => {alertForm(data, '#form_updateUser', 'L\'usager a bien été mise à jour !')});
+});
+
+$('#form_userPromo').submit(function(e) {
+    e.preventDefault();
+    var post = $(this).serialize();
+
+    if($(this).find('.clicked').attr('value') == 'Associer') {
+        $.post('config.php', {add_userPromo: 1, post}, (data) => {alertForm(data, '#form_userPromo', 'L\'étudiant étudie désormais dans cette promotion !')});
+    } else {
+        $.post('config.php', {remove_userPromo: 1, post}, (data) => {alertForm(data, '#form_userPromo', 'L\'étudiant n\'étudie plus dans cette promotion !')});
+    }
+    $(this).find('input[type=\'submit\']').removeClass("clicked");
 });

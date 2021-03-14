@@ -5,7 +5,6 @@ require_once('./src/Planning/Events.php');
 
 $week = new Planning\Week($_GET['week'] ?? null);
 $events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
-
 $mypromo = (isset($_SESSION['promo'])) ? $_SESSION['promo'] : 0;
 $promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
 ?>
@@ -38,7 +37,6 @@ $promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
             </tbody>
         </div>
     </table>
-
     <div class="planning-events">
         <?php foreach($events->getEvents($promo) as $events) { ?>
             <div class="events-day">

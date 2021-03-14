@@ -89,6 +89,8 @@ class FormEvent extends Validator {
      * @return bool : Vrai si le créneau est libre, faux sinon.
     */
     public function timeSlotFree(string $date, string $start, string $end, string $matter) {
+        $firstDay = strtotime($this->data[$date]);
+        $lastDay = ($firstDay + ($this->data['nbweek'] * 604800));
         $opt = '';
         if(isset($this->data['id'])) {
             $opt = ' AND CourID != "'. $this->data['id'].'" ';

@@ -1,8 +1,7 @@
+<!DOCTYPE html>
 <?php 
 require_once('./config.php');
-require_once('./src/Planning/FormOthers.php');
 require_once('./src/Planning/FormMatter.php');
-require_once('./src/Planning/FormUser.php');
 
 // Redirection vers le login si l'usager n'est pas connecté.
 if(!isOnline()) {
@@ -14,86 +13,9 @@ if($_SESSION['rang'] < 3) {
     header('Location: ./');
 }
 
-// Ajout ou suppression d'une salle
-if(isset($_POST['add_room']) || isset($_POST['remove_room'])) {
-
-    // On récupère les données reçu en js.
-    parse_str($_POST['post'], $data);
-
-    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formRoom = new Planning\FormOthers($bdd, $data);
-
-    if(isset($_POST['add_room'])) {
-        $errorsRoom = $formRoom->checkAddRoom();
-        if(empty($errorsRoom)) $formRoom->insertRoom();
-    }
-
-    if(isset($_POST['remove_room'])) {
-        $errorsRoom = $formRoom->checkDeleteRoom();
-        if(empty($errorsRoom)) $formRoom->deleteRoom();
-    }
-    echo json_encode($errorsRoom);
-    exit;
-}
-
-// Ajout ou suppression d'une promotion
-if(isset($_POST['add_promo']) || isset($_POST['remove_promo'])) {
-
-    // On récupère les données reçu en js.
-    parse_str($_POST['post'], $data);
-
-    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formPromo = new Planning\FormOthers($bdd, $data);
-
-    if(isset($_POST['add_promo'])) {
-        $errorsPromo = $formPromo->checkPromo();
-        if(empty($errorsPromo)) $formPromo->insertPromo();
-        echo json_encode($errorsPromo);
-    }
-    if(isset($_POST['remove_promo'])) {
-        $formPromo->deletePromo();
-        echo json_encode([]);
-    }
-
-    exit;
-}
-
-// Ajout d'une matière.
-if (isset($_POST['add_matter'])) {
-
-    // On récupère les données reçu en js.
-    parse_str($_POST['post'], $data);
-
-    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formMatter = new Planning\FormMatter($bdd, $data);
-    $errorsMatter = $formMatter->checkAddMatter();
-
-    if(empty($errorsMatter)) $formMatter->insertMatter();
-
-    echo json_encode($errorsMatter);
-    exit;
-}
-
-// Ajout ou suppression d'une association entre une matière et un enseignant.
-if (isset($_POST['add_teachMatter']) || isset($_POST['remove_teachMatter'])) {
-
-    // On récupère les données reçu en js.
-    parse_str($_POST['post'], $data);
-    
-    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formLinkMatter = new Planning\FormMatter($bdd, $data);
-
-    if(isset($_POST['add_teachMatter'])) {
-        $errorsLinkMatter = $formLinkMatter->checkAddLinkMatter();
-        if(empty($errorsLinkMatter)) $formLinkMatter->linkMatterAndTeacher();
-
-    } else if(isset($_POST['remove_teachMatter'])) {
-        $errorsLinkMatter = $formLinkMatter->checkRemoveLinkMatter();
-        if(empty($errorsLinkMatter)) $formLinkMatter->unLinkMatterAndTeacher();
-    }
-    echo json_encode($errorsLinkMatter);
-    exit;
-}
+$uMatters = $bdd->prepare('SELECT * FROM Matieres WHERE MatiereID = :id');
+$uMatters->execute(array(':id' => isset($_GET['matterID']) ? $_GET['matterID'] : ''));
+$uMatter = $uMatters->fetch();
 
 // Suppression d'une matière.
 if(isset($_GET['removeMatterID'])) {
@@ -101,24 +23,10 @@ if(isset($_GET['removeMatterID'])) {
     $form->deleteMatter($_GET['removeMatterID']);
 }
 
-// Ajout d'une matière.
-if (isset($_POST['add_user'])){
-
-    // On récupère les données reçu en js.
-    parse_str($_POST['post'], $data);
-    
-    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
-    $formUser = new Planning\FormUser($bdd, $data);
-    $errorsUser = $formUser->checkAddUser();
-
-    if(empty($errorsUser)) $formUser->insertUser();
-
-    // On renvoie le tableau d'erreurs en format json.
-    echo json_encode($errorsUser);
-    exit;
-}
+$uUsers = $bdd->prepare('SELECT * FROM Usagers WHERE UsagerID = :id');
+$uUsers->execute(array(':id' => isset($_GET['usagerID']) ? $_GET['usagerID'] : ''));
+$uUser = $uUsers->fetch();
 ?>
-<!DOCTYPE html>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
@@ -210,38 +118,73 @@ if (isset($_POST['add_user'])){
         <p>Gestion des matières</p>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="box-content">
-                    <div class="content-title">Ajouter une matière</div>
-                    <form method="POST" id="form_matter">
-                        <div class="alert" style="display:none"></div>
-                        <div class="row">
-                            <div class="col-md-8 form-group" id="name_matter">
-                                <label for="room">Nom de la matière</label>
-                                <input type="text" name="name_matter" class="form-control">
-                                <small class="invalid-feedback"></small>
-                            </div>
+                    <?php if(empty($_GET['matterID'])) {?>
+                        <div class="content-title">Ajouter une matière</div>
+                        <form method="POST" id="form_addMatter">
+                            <div class="alert" style="display:none"></div>
+                            <div class="row">
+                                <div class="col-md-8 form-group" id="name_matter">
+                                    <label for="room">Nom de la matière</label>
+                                    <input type="text" name="name_matter" class="form-control">
+                                    <small class="invalid-feedback"></small>
+                                </div>
 
-                            <div class="col-md-4 form-group" id="color_matter">
-                                <label for="room">Couleur</label>
-                                <input type="color" name="color_matter" class="form-control">
-                                <small class="invalid-feedback"></small>
-                            </div>
+                                <div class="col-md-4 form-group" id="color_matter">
+                                    <label for="room">Couleur</label>
+                                    <input type="color" name="color_matter" class="form-control">
+                                    <small class="invalid-feedback"></small>
+                                </div>
 
-                            <div class="col-md-12 form-group">
-                                <label for="room">Nom de la promotion </label>
-                                <select name="promo" class="form-control">
-                                <?php 
-                                    $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
-                                    while($aPromo = $sPromo->fetch()) {
-                                        echo '<option value="'.$aPromo['PromotionID'].'"'. ((isset($_POST['promotion']) && $_POST['promotion'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.$aPromo['NomPromotion'].'</option>';
-                                    } ?>    
-                                </select>
+                                <div class="col-md-12 form-group">
+                                    <label for="room">Nom de la promotion </label>
+                                    <select name="promo" class="form-control">
+                                    <?php 
+                                        $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
+                                        while($aPromo = $sPromo->fetch()) {
+                                            echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
+                                        } ?>    
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <input type="submit" name="add_matter" value="Ajouter" class="btn btn-success">
-                    </form>
-                </div>
+                            <input type="submit" name="add_matter" value="Ajouter" class="btn btn-success">
+                        </form>
+                    </div>
+                <?php } else { ?>
+                    <div class="content-title">Modification d'une matière</div>
+                        <form method="POST" id="form_updateMatter">
+                            <div class="alert" style="display:none"></div>
+                            <div class="row">
+                                <input type="hidden" name="id" value="<?= $uMatter['MatiereID'] ?>">
+                                <div class="col-md-8 form-group" id="name_matter">
+                                    <label for="room">Nom de la matière</label>
+                                    <input type="text" name="name_matter" class="form-control" value="<?= $uMatter['NomMatiere'] ?>">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-4 form-group" id="color_matter">
+                                    <label for="room">Couleur</label>
+                                    <input type="color" name="color_matter" class="form-control" value="<?= $uMatter['CouleurMatiere'] ?>">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-12 form-group">
+                                    <label for="room">Nom de la promotion </label>
+                                    <select name="promo" class="form-control">
+                                    <?php 
+                                        $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
+                                        while($aPromo = $sPromo->fetch()) {
+                                            echo '<option value="'.$aPromo['PromotionID'].'"'. (($uMatter['PromotionID'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.$aPromo['NomPromotion'].'</option>';
+                                        } ?>    
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="submit" name="update_matter" value="Modifier" class="btn btn-success">
+                            <a href="./config.php?removeMatterID=<?= $uMatter['MatiereID'] ?>" class="btn btn-danger" style="float:right">Supprimer</a>
+                        </form>
+                    </div>
+                <?php } ?>
 
                 <div class="box-content">
                     <div class="content-title">Associer une matière et un enseignant</div>
@@ -284,30 +227,25 @@ if (isset($_POST['add_user'])){
                     </form>
                 </div>
             </div>
-            
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="box-content">
-                    <?php 
-                    $sMatter = $bdd->query('SELECT * FROM Matieres m INNER JOIN Promotions p ON m.PromotionID = p.PromotionID ORDER BY NomMatiere ASC');
-                    while($aMatter = $sMatter->fetch()) { ?>
-                        <div class="list-items d-flex flex-row align-items-center justify-content-between">
-                            <div class="item-info">
-                                <p class="nameM"><?= $aMatter['NomMatiere'] ?></p>
-                            </div>
+                    <div class="select-data">
+                        <?php 
+                        $sMatter = $bdd->query('SELECT * FROM Matieres m INNER JOIN Promotions p ON m.PromotionID = p.PromotionID ORDER BY NomMatiere ASC');
+                        while($aMatter = $sMatter->fetch()) { ?>
+                            <div class="list-items d-flex flex-row align-items-center justify-content-between">
+                                <div class="item-info">
+                                    <div class="colorM" style="background-color: <?= $aMatter['CouleurMatiere'] ?>"></div>
+                                    <p class="nameM"><?= $aMatter['NomMatiere'] ?></p>
+                                </div>
 
-                            <div class="item-info">
-                                <p class="promoM"><?= $aMatter['NomPromotion'] ?></p>
+                                <div class="item-info">
+                                    <p class="promoM"><?= $aMatter['NomPromotion'] ?></p>
+                                </div>
+                                <a href="?matterID=<?= $aMatter['MatiereID'] ?>" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>                                
                             </div>
-
-                            <div class="item-info">
-                                <p class="colorM" style="background-color: <?= $aMatter['CouleurMatiere'] ?>"></p>
-                            </div>
-                            
-                            
-                            <a href="?removeMatterID=<?= $aMatter['MatiereID'] ?>" class="btn btn-danger"><i class="mdi mdi-close"></i></a>
-                            
-                        </div>
-                    <?php } ?>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -315,50 +253,146 @@ if (isset($_POST['add_user'])){
         <p>Gestion des usagers</p>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="box-content">
-                    <div class="content-title">Ajout d'un usager</div>
-                    <form method="POST" id="form_user">
+                    <?php if(empty($_GET['usagerID'])) { ?>
+                        <div class="content-title">Ajout d'un usager</div>
+                        <form method="POST" id="form_addUser">
+                            <div class="alert" style="display:none"></div>
+                            <div class="row">    
+                                <div class="form-group" id="userid">
+                                    <label for="room">Identifiant</label>
+                                    <input type="text" name="userid" class="form-control">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-6 form-group" id="lastname">
+                                    <label for="room">Nom</label>
+                                    <input type="text" name="lastname" class="form-control">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-6 form-group" id="firstname">
+                                    <label for="room">Prénom</label>
+                                    <input type="text" name="firstname" class="form-control">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-7 form-group" id="password">
+                                    <label for="room">Mot de passe</label>
+                                    <input type="password" name="password" class="form-control">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-5 form-group">
+                                    <label for="room">Rang</label>
+                                    <select name="rank" class="form-control">
+                                        <?php
+                                        $query = $bdd->query('SELECT * FROM Rangs');
+                                        while ($row = $query->fetch()){
+                                            echo '<option value="' .$row['RangID'] .'">' . $row['NomRang'].'</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="submit" name="add_user" value="Enregistrer cet usager" class="btn btn-success">
+                        </form>
+                    <?php } else { ?>
+                        <div class="content-title">Modification d'un usager</div>
+                        <form method="POST" id="form_updateUser">
+                            <div class="alert" style="display:none"></div>
+                            <div class="row">    
+                                <div class="form-group" id="userid">
+                                    <label for="room">Identifiant</label>
+                                    <input type="text" name="userid" class="form-control" value="<?= $uUser['UsagerID'] ?>">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-6 form-group" id="lastname">
+                                    <label for="room">Nom</label>
+                                    <input type="text" name="lastname" class="form-control" value="<?= $uUser['Nom'] ?>">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="col-md-6 form-group" id="firstname">
+                                    <label for="room">Prénom</label>
+                                    <input type="text" name="firstname" class="form-control" value="<?= $uUser['Prenom'] ?>">
+                                    <small class="invalid-feedback"></small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="room">Rang</label>
+                                    <select name="rank" class="form-control">
+                                        <?php
+                                        $sRank = $bdd->query('SELECT * FROM Rangs');
+                                        while ($aRank = $sRank->fetch()){
+                                            echo '<option value="' .$aRank['RangID'] .'"'.(($uUser['RangID'] == $aRank['RangID']) ? ' selected' : '') .'>'.$aRank['NomRang'].'</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="submit" name="update_user" value="Modifier" class="btn btn-success">
+                            <a href="./config.php?removeUserID=<?= $uUser['UsagerID'] ?>" class="btn btn-danger" style="float:right">Supprimer</a>
+                        </form>
+                    <?php } ?>
+                </div>
+
+                <div class="box-content">
+                    <div class="content-title">Associer un étudiant à une promotion</div>
+                    <form method="POST" id="form_userPromo">
                         <div class="alert" style="display:none"></div>
-                        <div class="row">    
-                            <div class="form-group" id="userid">
-                                <label for="room">Identifiant</label>
-                                <input type="text" name="userid" class="form-control">
-                                <small class="invalid-feedback"></small>
-                            </div>
-
-                            <div class="col-md-6 form-group" id="lastname">
-                                <label for="room">Nom</label>
-                                <input type="text" name="lastname" class="form-control">
-                                <small class="invalid-feedback"></small>
-                            </div>
-
-                            <div class="col-md-6 form-group" id="firstname">
-                                <label for="room">Prénom</label>
-                                <input type="text" name="firstname" class="form-control">
-                                <small class="invalid-feedback"></small>
-                            </div>
-
-                            <div class="col-md-7 form-group" id="password">
-                                <label for="room">Mot de passe</label>
-                                <input type="password" name="password" class="form-control">
-                                <small class="invalid-feedback"></small>
-                            </div>
-
-                            <div class="col-md-5 form-group">
-                                <label for="room">Rang</label>
-                                <select name="rank" class="form-control">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="userid">Etudiant</label>
+                                <select name="userid" class="form-control">
                                     <?php
-                                    $query = $bdd->query('SELECT * FROM Rangs');
+                                    $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 1');
                                     while ($row = $query->fetch()){
-                                        echo '<option value="' .$row['RangID'] .'">' . $row['NomRang'].'</option>';
+                                        echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
                                     }
                                     ?>
                                 </select>
                             </div>
+
+                            <div class="col-md-12 form-group">
+                                <label for="promo">Promotion</label>
+                                <select name="promo" class="form-control">
+                                    <?php
+                                    $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY NomPromotion');
+                                    while($aPromo = $sPromo->fetch()) {
+                                        echo '<option value="'.$aPromo['PromotionID'].'">'.$aPromo['NomPromotion'].'</option>';
+                                    } ?> 
+                                </select>
+                            </div>
                         </div>
-                        <input type="submit" name="add_user" value="Enregistrer cet usager" class="btn btn-success">
+                        <input type="submit" name="add_userPromo" value="Associer" class="btn btn-success">
+                        <input type="submit" name="remove_userPromo" value="Dissocier" class="btn btn-danger" style="float: right">
                     </form>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="box-content">
+                    <div class="select-data">
+                        <?php 
+                        $sUsers = $bdd->query('SELECT * FROM Usagers INNER JOIN Rangs USING(RangID) ORDER BY Nom ASC');
+                        while($aUsers = $sUsers->fetch()) { ?>
+                            <div class="list-items d-flex flex-row align-items-center justify-content-between">
+                                <div class="item-info">
+                                    <p class="nameM"><?= $aUsers['Nom'] ?> <?= $aUsers['Prenom'] ?></p>
+                                    <span><?= $aUsers['UsagerID'] ?></span>
+                                </div>
+
+                                <div class="item-info">
+                                    <p class="promoM"><?= $aUsers['NomRang'] ?></p>
+                                </div>
+                                
+                                
+                                <a href="?usagerID=<?= $aUsers['UsagerID'] ?>" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
+                            </div>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         </div>

@@ -22,7 +22,8 @@ class FormMatter extends Validator {
     /** Méthode qui va renvoie toutes les erreurs trouvées pour ajouter une matière, 
      * @return array : le tableau d'erreurs.
      */
-    public function checkAddMatter():array {
+    public function checkMatter():array {
+        $this->isValide('name_matter', 'minLength', 2);
         $this->isValide('name_matter', 'matterExist');
         return $this->errors;
     }
@@ -61,7 +62,11 @@ class FormMatter extends Validator {
      * @param string $name > le nom de la matière.
      */
     public function matterExist(string $name) {
-        $mExist = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres WHERE NomMatiere = ?');
+        $opt = '';
+        if(isset($this->data['id'])) {
+            $opt = ' AND MatiereID != "'. $this->data['id'].'" ';
+        }
+        $mExist = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres WHERE NomMatiere = ? ' .$opt);
         $mExist->execute(array($this->data[$name]));
         $count = $mExist->fetchColumn();
         if($count > 0) {
@@ -69,11 +74,18 @@ class FormMatter extends Validator {
         }  
     }
 
-    /** Méthode qui insère une matière contenant les données reçu en paramètre.
+    /** Méthode qui insère une matière avec les données reçu en paramètre.
      */
     public function insertMatter() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Matieres (NomMatiere, CouleurMatiere, PromotionID) VALUES (?,?,?)');
         $sInsertEvent->execute([$this->data['name_matter'], $this->data['color_matter'], $this->data['promo']]);  
+    }
+
+    /** Méthode qui insère un cours avec les données reçu en paramètre.
+     */
+    public function updateMatter() {            
+        $sUpdateMatter = $this->bdd->prepare('UPDATE Matieres SET NomMatiere = ?, CouleurMatiere = ?, PromotionID = ? WHERE MatiereID = :id');
+        $sUpdateMatter->execute([$this->data['name_matter'], $this->data['color_matter'], $this->data['promo'], ':id' => $this->data['id']]);  
     }
 
     /** Méthode qui supprime une matière.
