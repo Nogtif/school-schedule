@@ -94,8 +94,8 @@ class FormEvent extends Validator {
         if(isset($this->data['id'])) {
             $opt = ' AND CourID != "'. $this->data['id'].'" ';
         }
-        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE DateDebut = :date AND (HeureDebut < :fin AND HeureFin > :debut) '.$opt.' AND PromotionID = (SELECT PromotionID FROM Matieres WHERE MatiereID = :matter)');
-        $cFree->execute(array(':date' => strtotime($this->data[$date]), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':matter' => $this->data[$matter]));
+        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE (DateDebut <= :dateDeb AND (DateDebut + (NbSemaines * 604800)) <= :dateFin) AND (HeureDebut < :fin AND HeureFin > :debut) '.$opt.' AND PromotionID = (SELECT PromotionID FROM Matieres WHERE MatiereID = :matter)');
+        $cFree->execute(array(':dateDeb' => strtotime($this->data[$date]), ':dateFin' => strtotime('+'.$this->data['nbweek'].' weeks', strtotime($this->data[$date])), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':matter' => $this->data[$matter]));
         $count = $cFree->fetchColumn();
         if($count > 0) {
             $this->errors['global'] = 'Le créneau n\'est pas disponible !';      
@@ -121,33 +121,34 @@ class FormEvent extends Validator {
         }
     }
 
-    /** Méthode qui verifie si un enseignant enseigne bien la matière. 
-     * @param string $user > l'enseignant.
+    /** Méthode qui verifie si un enseignant enseigne bien la matière.
+     * @param string $userid > l'id de l'enseignant.
+     * @param string $matter > l'id de la matière.
     */
     public function teachMatter(string $user, string $matter) {
-        $tMatter = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres INNER JOIN Enseigne USING(MatiereID) WHERE UsagerID = :enseignant AND MatiereID = :matiere');
-        $tMatter->execute(array(':enseignant' => $this->data[$user], ':matiere' => $this->data[$matter]));
+        $tMatter = $this->bdd->prepare('SELECT COUNT(*) FROM Matieres INNER JOIN Enseigne USING(MatiereID) WHERE UsagerID = :userid AND MatiereID = :matiere');
+        $tMatter->execute(array(':userid' => $this->data[$user], ':matiere' => $this->data[$matter]));
         $count = $tMatter->fetchColumn();
         if($count == 0) {
             $this->errors['global'] = 'Cet enseignant(e) ne s\'occupe pas de cette matière !';
         }
     }
 
-    /** Méthode qui insère un cours contenant les données reçu en paramètre.
+    /** Méthode qui insère un cours avec les données reçus.
      */
     public function insertEvent() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Cours (DateDebut, NbSemaines, HeureDebut, HeureFin, TypeID, SalleID, UsagerID, MatiereID) VALUES (?,?,?,?,?,?,?,?)');
         $sInsertEvent->execute([strtotime($this->data['firstdate']), $this->data['nbweek'], $this->data['start'], $this->data['end'], $this->data['type'], $this->data['room'], $this->data['user'], $this->data['matter']]);  
     }
 
-    /** Méthode qui insère un cours contenant les données reçu en paramètre.
+    /** Méthode qui met à jour un cours avec les données reçus.
      */
     public function updateEvent() {
         $sUpdateEvent = $this->bdd->prepare('UPDATE Cours SET DateDebut = ?, NbSemaines = ?, HeureDebut = ?, HeureFin = ?, TypeID = ?, SalleID = ?, UsagerID = ?, MatiereID = ? WHERE CourID = :id');
         $sUpdateEvent->execute([strtotime($this->data['firstdate']), $this->data['nbweek'], $this->data['start'], $this->data['end'], $this->data['type'], $this->data['room'], $this->data['user'], $this->data['matter'], ':id' => $this->data['id']]);  
     }
 
-    /** Méthode qui supprime un cours.
+    /** Méthode qui supprime le cours avec son id passé en paramètre.
      * @param int $id > l'id du cours.
      */
     public function deleteEvent(int $id) {
@@ -155,3 +156,4 @@ class FormEvent extends Validator {
         $sDeleteEvent->execute([':id' => $id]);
     }
 }
+?>

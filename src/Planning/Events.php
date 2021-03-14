@@ -26,7 +26,7 @@ class Events {
     private function genereList():array {
         $events = array();
         for($i = 0; $i < 7; $i++) {
-            $events[date('j', $this->firstDay + ($i * 86400))%7] = array();
+            $events[date('d', $this->firstDay + ($i * 86400))] = array();
         }
         return $events;
     }
@@ -38,13 +38,14 @@ class Events {
      */
     public function getEvents(string $promo):array {
         $events = $this->genereList();
-        $sPromo = $this->bdd->query('SELECT * FROM Cours 
+        $sEvent = $this->bdd->query('SELECT * FROM Cours 
             INNER JOIN Matieres USING(MatiereID)
             LEFT JOIN Usagers USING(UsagerID) LEFT JOIN Salles USING(SalleID) LEFT JOIN TypeCours USING(TypeID) 
-            WHERE PromotionID  = '. $promo.' AND ((DateDebut <= '.$this->firstDay .' AND (DateDebut + (NbSemaines * 604800)) >= ' .$this->lastDay. ')) ORDER BY DateDebut'
+            WHERE PromotionID  = '. $promo.' AND (DateDebut <= '.$this->firstDay .' AND (DateDebut + (NbSemaines * 604800)) >= ' .$this->lastDay. ') ORDER BY DateDebut'
         );
-        while($aPromo = $sPromo->fetch()) {
-            $events[date('j', strtotime('+'.$aPromo['NbSemaines'].' weeks', $aPromo['DateDebut']))%7][] = $aPromo;
+        while($aEvent = $sEvent->fetch()) {
+            $events[date('d', strtotime('+'. (date('W', $this->firstDay) - date('W', $aEvent['DateDebut'])).' weeks', $aEvent['DateDebut']))][] = $aEvent;
+
         }
         return $events;
     }

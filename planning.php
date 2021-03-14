@@ -8,10 +8,8 @@ $events = new Planning\Events($bdd,$week->getFirstDay(), $week->getLastDay());
 $mypromo = (isset($_SESSION['promo'])) ? $_SESSION['promo'] : 0;
 $promo = (isset($_GET['promo'])) ? $_GET['promo'] : $mypromo;
 ?>
-
 <h4 class="planning-title"><?= htmlspecialchars($week->toString()) ?></h4>
 <div class="box-content">
-<?= print_r($events->getEvents($promo)); ?>
     <table>
         <thead>
             <tr>

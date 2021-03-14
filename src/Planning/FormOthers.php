@@ -56,7 +56,7 @@ class FormOthers extends Validator {
         }
     }
 
-    /** Méthode qui vérifie si le nom de la nouvelle salle n'existe pas déjà.
+    /** Méthode qui vérifie si le nom de la salle n'existe pas déjà.
      * @param string $name > le nom de la salle.
      */
     public function roomExist(string $name, bool $check) {
@@ -70,7 +70,7 @@ class FormOthers extends Validator {
         }
     }
 
-    /** Méthode qui vérifie si le nom de la nouvelle promotion n'existe pas déjà.
+    /** Méthode qui vérifie si le nom de la promotion n'existe pas déjà.
      * @param string $name > le nom de la promotion.
      */
     public function promoExist(string $name) {
@@ -103,7 +103,7 @@ class FormOthers extends Validator {
         $sInsertEvent->execute([strtoupper($this->data['name_promo']), $this->data['depid']]);  
     }
 
-    /** Méthode qui supprime une salle de cours.
+    /** Méthode qui supprime une promotion.
      */
     public function deletePromo() {
         $sDeleteEvent = $this->bdd->prepare('DELETE FROM Promotions WHERE PromotionID = ?');

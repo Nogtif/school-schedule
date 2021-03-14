@@ -19,7 +19,7 @@ class FormUser extends Validator {
         $this->bdd = $db;
     }
 
-    /** Méthode qui va renvoie toutes les erreurs trouvées pour ajouter une salle, 
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour ajouter un usager, 
      * @return array : le tableau d'erreurs.
      */
     public function checkAddUser():array {
@@ -30,6 +30,9 @@ class FormUser extends Validator {
         return $this->errors;
     }
 
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour mettre à jour un usager, 
+     * @return array : le tableau d'erreurs.
+     */
     public function checkUpdateUser():array {
         $this->isValide('userid', 'userExist');
         $this->isValide('firstname', 'minLength', 3);
@@ -37,7 +40,7 @@ class FormUser extends Validator {
         return $this->errors;
     }
 
-    /** Méthode qui va renvoie toutes les erreurs trouvées pour associer une matière et un enseignant, 
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour associer un usager et une promotion, 
      * @return array : le tableau d'erreurs.
      */
     public function checkAddLinkPromo():array {
@@ -45,7 +48,7 @@ class FormUser extends Validator {
         return $this->errors;
     }
 
-    /** Méthode qui va renvoie toutes les erreurs trouvées pour dissocier une matière à un enseignant, 
+    /** Méthode qui va renvoie toutes les erreurs trouvées pour dissocier un usager à une promotion, 
      * @return array : le tableau d'erreurs.
      */
     public function checkRemoveLinkPromo():array {
@@ -83,21 +86,21 @@ class FormUser extends Validator {
         } 
     }
 
-    /** Méthode qui insère insère une salle avec les données reçu en paramètre.
+    /** Méthode qui insère un usager avec les données reçus.
      */
     public function insertUser() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Usagers (UsagerID, MotDePasse, Nom, Prenom, RangID) VALUES (?,?,?,?,?)');
         $sInsertEvent->execute([$this->data['userid'], password_hash($this->data['password'], PASSWORD_DEFAULT), $this->data['lastname'], $this->data['firstname'], $this->data['rank']]);  
     }
 
-    /** Méthode qui modifie un usager avec les données reçu en paramètre.
+    /** Méthode qui modifie un usager avec les données reçus.
      */
     public function updateUser() {            
         $sUpdateUser = $this->bdd->prepare('UPDATE Usagers SET UsagerID = ?, Nom = ?, Prenom = ?, RangID = ? WHERE UsagerID = :id');
         $sUpdateUser->execute([$this->data['userid'], $this->data['lastname'], $this->data['firstname'], $this->data['rank'], ':id' => $this->data['userid']]);  
     }
 
-    /** Méthode qui supprime une salle de cours.
+    /** Méthode qui supprime un usager avec son id passé en paramètre.
      * @param int $id > l'id de l'usager.
      */
     public function deleteUser(int $id) {

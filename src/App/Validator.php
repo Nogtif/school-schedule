@@ -36,7 +36,10 @@ abstract class Validator {
         }
     }
 
-
+    /** Méthode qui prend en vérifie si la valeur dans le champ $name à une longueur d'au moins $size.
+     * @param string $name > le nom du champ contenant la valeur.
+     * @param int $size > la taille minimale à vérifiée.
+     */
     public function minLength(string $name, int $size) {
         if(strlen($this->data[$name]) < $size) {
             $this->errors[$name] = 'Le champ doit contenent au moins ' . $size . ' caractères !';

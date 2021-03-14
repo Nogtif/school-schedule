@@ -74,21 +74,21 @@ class FormMatter extends Validator {
         }  
     }
 
-    /** Méthode qui insère une matière avec les données reçu en paramètre.
+    /** Méthode qui insère une matière avec les données reçus.
      */
     public function insertMatter() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Matieres (NomMatiere, CouleurMatiere, PromotionID) VALUES (?,?,?)');
         $sInsertEvent->execute([$this->data['name_matter'], $this->data['color_matter'], $this->data['promo']]);  
     }
 
-    /** Méthode qui insère un cours avec les données reçu en paramètre.
+    /** Méthode qui insère un cours avec les données reçus.
      */
     public function updateMatter() {            
         $sUpdateMatter = $this->bdd->prepare('UPDATE Matieres SET NomMatiere = ?, CouleurMatiere = ?, PromotionID = ? WHERE MatiereID = :id');
         $sUpdateMatter->execute([$this->data['name_matter'], $this->data['color_matter'], $this->data['promo'], ':id' => $this->data['id']]);  
     }
 
-    /** Méthode qui supprime une matière.
+    /** Méthode qui supprime une matière avec son id passé en paramètre.
      * @param int $id > l'id de la matière.
      */
     public function deleteMatter($id) {
