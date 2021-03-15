@@ -8,11 +8,10 @@ Pour ce projet, nous avons simplifié le contenu des données en nous concentran
 
 Pour se accéder au site web modélisant les emplois du temps de la faculté des sciences, vous aurez la possibilité de vous connecter à une quarantaine de comptes. En tout, il y a 1 compte administrateur, 39 comptes enseignants de chaque département, et 2 comptes enseignants qui sont respectivement nos comptes à nous deux.
 
-
 |Identifiant | Mot de Passe | Type de compte |
 |------------|--------------|----------------|
 | root_root  |     root     | Administrateur |
-| prenom_nom |    azerty    | Etudiant ou Enseignant <br>(exemple : karim_tadia,quentin_carpentier, tiago_delima |
+| prenom_nom |    azerty    | Etudiant ou Enseignant (exemple : karim_tadia,quentin_carpentier, tiago_delima) |
 
 ### 1. Les choix techniques
 
