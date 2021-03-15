@@ -17,7 +17,7 @@ if(isset($_POST['login'])) {
 
 	if(empty($errors)) {
 
-        $sUsers = $bdd->prepare('SELECT * FROM Usagers LEFT JOIN Appartient USING(UsagerID) WHERE UsagerID = ? LIMIT 0,1');
+        $sUsers = $bdd->prepare('SELECT * FROM Usagers WHERE UsagerID = ? LIMIT 0,1');
         $sUsers->execute([$_POST['userid']]);
         $aUser = $sUsers->fetch();
 
@@ -26,7 +26,6 @@ if(isset($_POST['login'])) {
         $_SESSION['nom'] = $aUser['Nom'];
         $_SESSION['prenom'] = $aUser['Prenom'];
         $_SESSION['rang'] = $aUser['RangID'];
-        $_SESSION['promo'] = $aUser['PromotionID'];
         header('Location: ./');
     }
 }
