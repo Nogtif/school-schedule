@@ -6,11 +6,11 @@ require_once('./src/App/Validator.php');
 
 use App\Validator;
 
-/** Classe qui hérite de Validator et s'occupe de la vérification des formulaire pour la gestion d'une salle de cours.
+/** Classe qui hérite de Validator et s'occupe de la vérification des formulaire pour la gestion d'un usager.
 */
 class FormUser extends Validator {
 
-    /** Constructeur de la classe FormRoom.
+    /** Constructeur de la classe FormUser.
      * @param \PDO $db > la base de donnée.
      * @param array $data > le tableau contenant les données. 
      */
@@ -56,8 +56,10 @@ class FormUser extends Validator {
         return $this->errors;
     }
 
-    /** Méthode qui vérifie si le nom de la nouvelle matière n'existe pas déjà.
-     * @param string $name > le nom de la matière.
+    /** Méthode qui vérifie si l'usager apaprtient ou non à une promotion.
+     * @param string $promo > l'id de la promotion.
+     * @param string $userid > l'id de l'usager.
+     * @param bool $check > Vrai regarde si il est bien dans la promotion, faux si il n'appartient pas encore.
      */
     public function bindExist(string $promo, string $user, bool $check) {
         $bExist = $this->bdd->prepare('SELECT COUNT(*) FROM Appartient WHERE PromotionID = :m AND UsagerID = :u');

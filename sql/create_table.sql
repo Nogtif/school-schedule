@@ -1,8 +1,6 @@
-/* Table des Promotions. 
-    -- PromotionID : l'id de la promo (clé primaire).
-    -- NomPromotion : le nom du role.
-    -- FormationID : l'id de la formation.
-    (clée étrangère associant la promotion à une formation : FormationID)
+/* Table des Départments. 
+    -- DepartementID : l'id du département (clé primaire).
+    -- NomDepartement : le nom du département.
 */
 DROP TABLE IF EXISTS Departements;
 CREATE TABLE Departements (
@@ -21,7 +19,7 @@ CREATE TABLE Promotions (
     PromotionID INTEGER  PRIMARY KEY AUTOINCREMENT,
     NomPromotion VARCHAR(25) NOT NULL,
     DepartementID INTEGER NOT NULL,
-    CONSTRAINT departement_fk FOREIGN KEY (DepartementID) REFERENCES Departements(DepartementID) ON DELETE CASCADE
+    CONSTRAINT promo_departement_fk FOREIGN KEY (DepartementID) REFERENCES Departements(DepartementID) ON DELETE CASCADE
 );
 
 /* Table des roleUsager. 
