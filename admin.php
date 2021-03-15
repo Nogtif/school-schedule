@@ -115,7 +115,7 @@ $uUser = $uUsers->fetch();
             </div>
         </div>
 
-        <p>Gestion des matières</p>
+        <p id="matter">Gestion des matières</p>
 
         <div class="row">
             <div class="col-md-5">
@@ -242,7 +242,7 @@ $uUser = $uUsers->fetch();
                                 <div class="item-info">
                                     <p class="promoM"><?= htmlspecialchars($aMatter['NomPromotion']) ?></p>
                                 </div>
-                                <a href="?matterID=<?= $aMatter['MatiereID'] ?>" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>                                
+                                <a href="?matterID=<?= $aMatter['MatiereID'] ?>#matter" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>                                
                             </div>
                         <?php } ?>
                     </div>
@@ -250,7 +250,7 @@ $uUser = $uUsers->fetch();
             </div>
         </div>
 
-        <p>Gestion des usagers</p>
+        <p id="user">Gestion des usagers</p>
 
         <div class="row">
             <div class="col-md-5">
@@ -387,7 +387,7 @@ $uUser = $uUsers->fetch();
                                 <div class="item-info">
                                     <p class="promoM"><?= htmlspecialchars($aUsers['NomRang']) ?></p>
                                 </div>                               
-                                <a href="?usagerID=<?= $aUsers['UsagerID'] ?>" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
+                                <a href="?usagerID=<?= $aUsers['UsagerID'] ?>#user" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
                             </div>
                         <?php } ?>
                     </div>
