@@ -55,7 +55,7 @@ $uEvent = $uEvents->fetch();
                                     <p>du <?= date('d-m-Y', $aCours['DateDebut']) ?> au <?= date('d-m-Y', ($aCours['DateDebut'] + ($aCours['NbSemaines'] * 604800))) ?></p>
                                     <span>de  <?= $aCours['HeureDebut'] ?> à <?= $aCours['HeureFin'] ?></span>
                                 </div>
-                                <a href="?courID=<?= $aCours['CourID'] ?>" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
+                                <a href="?courID=<?= $aCours['CourID'] ?>#form" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
                             </div>
                         <?php } ?>
                     </div>
