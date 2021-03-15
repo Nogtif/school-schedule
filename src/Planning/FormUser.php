@@ -64,14 +64,14 @@ class FormUser extends Validator {
         $bExist->execute(array(':m' => $this->data[$promo], ':u' => $this->data[$user]));
         $count = $bExist->fetchColumn();
         if($count > 0) {
-            if($check == false) $this->errors['global'] = 'Cet étudiant étudie déjà dans cette promotion !';
+            if($check == false) $this->errors['global'] = 'Cet usager étudie déjà dans cette promotion !';
         } else {
-            if($check == true) $this->errors['global'] = 'Cet étudiant n\'étudie pas dans cette promotion !';
+            if($check == true) $this->errors['global'] = 'Cet usager n\'étudie pas dans cette promotion !';
         }
     }
 
-    /** Méthode qui vérifie si le nom de la nouvelle matière n'existe pas déjà.
-     * @param string $name > le nom de la matière.
+    /** Méthode qui vérifie si un usager n'existe pas déjà dans la base de donnée.
+     * @param string $name > l'identifiant de l'usager.
      */
     public function userExist(string $name) {
         $opt = '';
@@ -108,14 +108,14 @@ class FormUser extends Validator {
         $sDeleteUser->execute(array($id));
     }
 
-    /** Méthode qui insère une association entre un étudiant et une promotion.
+    /** Méthode qui insère une association entre un usager et une promotion.
      */
     public function linkUserToPromo() {            
         $sAddLink = $this->bdd->prepare('INSERT INTO Appartient (PromotionID, UsagerID) VALUES (?,?)');
         $sAddLink->execute([$this->data['promo'], $this->data['userid']]);  
     }
 
-    /** Méthode qui supprime l'association entre un étudiant et une promotion.
+    /** Méthode qui supprime l'association entre un usager et une promotion.
      */
     public function unlinkUserToPromo() {
         $sRemoveLink = $this->bdd->prepare('DELETE FROM Appartient WHERE PromotionID = :m AND UsagerID = :u');

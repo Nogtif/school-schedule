@@ -1,7 +1,18 @@
 ## Rapport Technique
+##### _Par Quentin Carpentier & Paul-Joseph Krogulec_
 ---
 Voici un mini-rapport vous indiquant diverses informations sur le projet de PWEB2 où l'ojectif été de crée un site web dynamique les emplois du temps de la faculté des sciences.
 Pour ce projet, nous avons simplifié le contenu des données en nous concentrant sur les promotions : Maths, Info, SVT, Chimie et sans prendre en compte une répartition TD / TP.
+
+#### Infos Pratiques
+
+Pour se accéder au site web modélisant les emplois du temps de la faculté des sciences, vous aurez la possibilité de vous connecter à une quarantaine de comptes. En tout, il y a 1 compte administrateur, 39 comptes enseignants de chaque département, et 2 comptes enseignants qui sont respectivement nos comptes à nous deux.
+
+
+|Identifiant | Mot de Passe | Type de compte |
+|------------|--------------|----------------|
+| root_root  |     root     | Administrateur |
+| prenom_nom |    azerty    | Etudiant ou Enseignant <br>(exemple : karim_tadia,quentin_carpentier, tiago_delima |
 
 ### 1. Les choix techniques
 

@@ -36,10 +36,7 @@ if(!isOnline()) {
                 <select name="promo" class="form-select">
                 <option value="0">Promotions</option>
                     <?php
-                    if($_SESSION['rang'] == 1){
-                        $sPromo = $bdd->query('SELECT * FROM Promotions WHERE PromotionID='.$_SESSION['promo']);
-
-                    } else if ($_SESSION['rang'] == 2){
+                    if($_SESSION['rang'] < 3){
                         $sPromo = $bdd->query('SELECT * FROM Promotions INNER JOIN Appartient USING(PromotionID) WHERE UsagerID = "'. $_SESSION['id'] .'" ORDER BY PromotionID');
                     } else {
                         $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');

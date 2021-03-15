@@ -122,7 +122,7 @@ $uEvent = $uEvents->fetch();
                                             }
                                             $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
                                             while ($row = $query->fetch()){
-                                                echo '<option value="' .$row['UsagerID'] .'">' . $row['Prenom'] . ' ' .  $row['Nom'] . '</option>';
+                                                echo '<option value="' .$row['UsagerID'] .'">'.htmlspecialchars($row['Prenom'].' '.$row['Nom']).'</option>';
                                             }
                                         ?>
                                     </select>
@@ -132,7 +132,7 @@ $uEvent = $uEvents->fetch();
                                     <select name="room" class="form-control">
                                         <?php $query = $bdd->query('SELECT * FROM Salles');
                                             while ($row = $query->fetch()){
-                                                echo '<option value="' . $row['SalleID'].'">' . $row['NomSalle'] . '</option>';
+                                                echo '<option value="'.$row['SalleID'].'">'.htmlspecialchars($row['NomSalle']).'</option>';
                                             }
                                         ?>
                                     </select>
@@ -200,7 +200,7 @@ $uEvent = $uEvents->fetch();
                                             }
                                             $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
                                             while ($row = $query->fetch()){
-                                                echo '<option value="'.$row['UsagerID'].'"'.($uEvent['UsagerID'] == $row['UsagerID'] ? ' selected' : '').'>'.$row['Prenom'].' '.$row['Nom'].'</option>';
+                                                echo '<option value="'.$row['UsagerID'].'"'.($uEvent['UsagerID'] == $row['UsagerID'] ? ' selected' : '').'>'.htmlspecialchars($row['Prenom'].' '.$row['Nom']).'</option>';
                                             }
                                         ?>
                                     </select>
@@ -210,7 +210,7 @@ $uEvent = $uEvents->fetch();
                                     <select name="room" class="form-control">
                                         <?php $query = $bdd->query('SELECT * FROM Salles');
                                             while ($row = $query->fetch()){
-                                                echo '<option value="'.$row['SalleID'].'"'.($uEvent['SalleID'] == $row['SalleID'] ? ' selected' : '').'>'.$row['NomSalle'].'</option>';
+                                                echo '<option value="'.$row['SalleID'].'"'.($uEvent['SalleID'] == $row['SalleID'] ? ' selected' : '').'>'.htmlspecialchars($row['NomSalle']).'</option>';
                                             }
                                         ?>
                                     </select>

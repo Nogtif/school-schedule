@@ -1,38 +1,33 @@
 <!DOCTYPE html>
 <?php 
 require_once('./config.php');
+require_once('./src/App/FormLogin.php');
 
 // Si l'utilisateur est déjà connecté, on le redirige.
 if(isOnline()) {
     header('Location: ./');
 }
 
-// Variable affiant le message d'erreur.
-$msg_error = '';
-
 // Lors de la connexion...
-if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
+if(isset($_POST['login'])) {
 
-    // On vérifie si l'usager est bien enregistré.
-    $verif = $bdd->prepare('SELECT * FROM Usagers LEFT JOIN Appartient USING(UsagerID) WHERE UsagerID = ? LIMIT 0,1');
-	$verif->execute(array($_POST['identifiant']));
-    $userExist = $verif->fetch();
+    // On crée et vérifie si il n'y a aucune erreur dans le formulaire.
+    $form = new App\FormLogin($bdd, $_POST);
+    $errors = $form->checkLogin();
 
-    // Si l'usager existe et que le mot de passe correspond, on le connecte.
-    if($userExist && password_verify($_POST['mdp'], $userExist['MotDePasse'])) {
+	if(empty($errors)) {
 
-        $_SESSION['id'] = $userExist['UsagerID'];
-        $_SESSION['password'] = $userExist['MotDePasse'];
-        $_SESSION['nom'] = $userExist['Nom'];
-        $_SESSION['prenom'] = $userExist['Prenom'];
-        $_SESSION['rang'] = $userExist['RangID'];
-        $_SESSION['promo'] = $userExist['PromotionID'];
+        $sUsers = $bdd->prepare('SELECT * FROM Usagers LEFT JOIN Appartient USING(UsagerID) WHERE UsagerID = ? LIMIT 0,1');
+        $sUsers->execute([$_POST['userid']]);
+        $aUser = $sUsers->fetch();
 
-        // Une fois l'usager connecté, on le redirige.
+        $_SESSION['id'] = $aUser['UsagerID'];
+        $_SESSION['password'] = $aUser['MotDePasse'];
+        $_SESSION['nom'] = $aUser['Nom'];
+        $_SESSION['prenom'] = $aUser['Prenom'];
+        $_SESSION['rang'] = $aUser['RangID'];
+        $_SESSION['promo'] = $aUser['PromotionID'];
         header('Location: ./');
-    // Sinon, on affiche le message d'erreur.
-    } else {
-        $msg_error = 'Identifiant ou Mot de passe invalide !';
     }
 }
 ?>
@@ -54,14 +49,23 @@ if(isset($_POST['mylogin']) && !empty($_POST['identifiant']) && !empty('mdp')) {
     <div class="wrapper">
         <div class="content login">
             <h2>Service d'Authentification</h2>
-            <form method="post" action="">
-                <label for="identifiant">Identifiant</label>
-                <input type="text" name="identifiant" required>
-                <label for="mdp">Mot de passe</label>
-                <input type="password" name="mdp" required>
-                <input class="btn btn-primary" type="submit" name="mylogin" value="Connexion">
+            <form method="POST" id="form_login">
+                <div class="form-group" id="userid">
+                    <label for="identifiant">Identifiant</label>
+                    <input type="text" name="userid" class="form-control <?= (isset($errors['userid']) ? ' is-invalid' : '') ?>" value="<?= (isset($_POST['userid']) ? htmlspecialchars($_POST['userid']) : '') ?>">
+                    <?php if(isset($errors['userid'])) {
+                        echo '<small class="invalid-feedback">'.htmlspecialchars($errors['userid']).'</small>';
+                    } ?>
+                </div>
+                <div class="form-group" id="password">
+                    <label for="mdp">Mot de passe</label>
+                    <input type="password" name="password" class="form-control <?= (isset($errors['password']) ? ' is-invalid' : '') ?>" value="<?= (isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '') ?>">
+                    <?php if(isset($errors['password'])) {
+                        echo '<small class="invalid-feedback">'.htmlspecialchars($errors['password']).'</small>';
+                    } ?>
+                </div>
+                <input class="btn btn-primary" type="submit" name="login" value="Connexion">
             </form>
-            <span><?= $msg_error; ?></span>
         </div>
     </div>
 </body>
