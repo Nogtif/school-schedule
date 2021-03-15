@@ -66,7 +66,10 @@ $('#form_addEvent').submit(function(e) {
 $('#form_updateEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {update_event: 1, post}, (data) => {alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !')});
+    $.post('config.php', {update_event: 1, post}, (data) => {console.log(data);
+        alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !');        
+        $('#list-event').load('gestion.php #list-event>.select-data');
+    });
 });
 
 $('#form_room').submit(function(e) {
@@ -114,7 +117,10 @@ $('#form_addMatter').submit(function(e){
 $('#form_updateMatter').submit(function(e){
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {update_matter: 1, post}, (data) => {alertForm(data, '#form_updateMatter', 'La matière a bien été mise à jour !')});
+    $.post('config.php', {update_matter: 1, post}, (data) => {
+        alertForm(data, '#form_updateMatter', 'La matière a bien été mise à jour !');
+        $('#list-matter').load('admin.php #list-matter>.select-data');
+    });
 });
 
 $('#form_linkMatter').submit(function(e){
@@ -132,7 +138,10 @@ $('#form_addUser').submit(function(e){
 $('#form_updateUser').submit(function(e){
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {update_user: 1, post}, (data) => {alertForm(data, '#form_updateUser', 'L\'usager a bien été mise à jour !')});
+    $.post('config.php', {update_user: 1, post}, (data) => {
+        alertForm(data, '#form_updateUser', 'L\'usager a bien été mise à jour !');
+        $('#list-users').load('admin.php #list-users>.select-data');
+    });
 });
 
 $('#form_userPromo').submit(function(e) {

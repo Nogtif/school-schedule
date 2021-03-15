@@ -88,16 +88,14 @@ class FormEvent extends Validator {
      * @return bool : Vrai si le créneau est libre, faux sinon.
     */
     public function timeSlotFree(string $date, string $start, string $end, string $matter) {
-        $firstDay = strtotime($this->data[$date]);
-        $lastDay = ($firstDay + ($this->data['nbweek'] * 604800));
         $opt = '';
         if(isset($this->data['id'])) {
             $opt = ' AND CourID != "'. $this->data['id'].'" ';
         }
-        $cFree = $this->bdd->prepare('SELECT COUNT(*) FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE (DateDebut <= :dateDeb AND (DateDebut + (NbSemaines * 604800)) <= :dateFin) AND (HeureDebut < :fin AND HeureFin > :debut) '.$opt.' AND PromotionID = (SELECT PromotionID FROM Matieres WHERE MatiereID = :matter)');
+        $cFree = $this->bdd->prepare('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID) WHERE (DateDebut <= :dateDeb AND (DateDebut + (NbSemaines * 604800)) <= :dateFin) AND (HeureDebut < :fin AND HeureFin > :debut) '.$opt.' AND PromotionID = (SELECT PromotionID FROM Matieres WHERE MatiereID = :matter)');
         $cFree->execute(array(':dateDeb' => strtotime($this->data[$date]), ':dateFin' => strtotime('+'.$this->data['nbweek'].' weeks', strtotime($this->data[$date])), ':fin' => $this->data[$end], ':debut' => $this->data[$start], ':matter' => $this->data[$matter]));
-        $count = $cFree->fetchColumn();
-        if($count > 0) {
+        $count = $cFree->fetch();
+        if($count && !strcmp(date('d', strtotime('+'. (date('W', strtotime($this->data[$date])) - date('W', $count['DateDebut'])).' weeks', $count['DateDebut'])), date('d', strtotime($this->data[$date])))) {
             $this->errors['global'] = 'Le créneau n\'est pas disponible !';      
         }
     }

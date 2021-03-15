@@ -39,8 +39,8 @@ $uEvent = $uEvents->fetch();
         <h4>Gestion des cours</h4>
         <div class="row">
             <div class="col-md-7"> 
-                <div class="box-content">
-                    <div class="select-data" id="list-events">
+                <div class="box-content" id="list-event">
+                    <div class="select-data">
                         <?php 
                         $where = '';
                         if($_SESSION['rang'] == 2)  $where = 'WHERE UsagerID ="'. $_SESSION['id'] . '"';

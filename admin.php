@@ -228,7 +228,7 @@ $uUser = $uUsers->fetch();
                 </div>
             </div>
             <div class="col-md-7">
-                <div class="box-content">
+                <div class="box-content" id="list-matter">
                     <div class="select-data">
                         <?php 
                         $sMatter = $bdd->query('SELECT * FROM Matieres m INNER JOIN Promotions p ON m.PromotionID = p.PromotionID ORDER BY NomMatiere ASC');
@@ -305,7 +305,7 @@ $uUser = $uUsers->fetch();
                             <div class="row">    
                                 <div class="form-group" id="userid">
                                     <label for="room">Identifiant</label>
-                                    <input type="text" name="userid" class="form-control" value="<?= $uUser['UsagerID'] ?>">
+                                    <input type="text" name="userid" class="form-control" value="<?= htmlspecialchars($uUser['UsagerID']) ?>" readonly>
                                     <small class="invalid-feedback"></small>
                                 </div>
 
@@ -373,7 +373,7 @@ $uUser = $uUsers->fetch();
                 </div>
             </div>
             <div class="col-md-7">
-                <div class="box-content">
+                <div class="box-content" id="list-users">
                     <div class="select-data">
                         <?php 
                         $sUsers = $bdd->query('SELECT * FROM Usagers INNER JOIN Rangs USING(RangID) ORDER BY Nom ASC');

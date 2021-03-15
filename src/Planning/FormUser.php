@@ -98,8 +98,8 @@ class FormUser extends Validator {
     /** Méthode qui modifie un usager avec les données reçus.
      */
     public function updateUser() {            
-        $sUpdateUser = $this->bdd->prepare('UPDATE Usagers SET UsagerID = ?, Nom = ?, Prenom = ?, RangID = ? WHERE UsagerID = :id');
-        $sUpdateUser->execute([$this->data['userid'], $this->data['lastname'], $this->data['firstname'], $this->data['rank'], ':id' => $this->data['userid']]);  
+        $sUpdateUser = $this->bdd->prepare('UPDATE Usagers SET Nom = ?, Prenom = ?, RangID = ? WHERE UsagerID = :id');
+        $sUpdateUser->execute([$this->data['lastname'], $this->data['firstname'], $this->data['rank'], ':id' => $this->data['userid']]);  
     }
 
     /** Méthode qui supprime un usager avec son id passé en paramètre.
