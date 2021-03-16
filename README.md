@@ -1,23 +1,28 @@
-## Rapport Technique
-##### _Par Quentin Carpentier & Paul-Joseph Krogulec_
----
+# PWEB2 : Rapport Technique
+
 Voici un mini-rapport vous indiquant diverses informations sur le projet de PWEB2 où l'ojectif été de crée un site web dynamique les emplois du temps de la faculté des sciences.
 Pour ce projet, nous avons simplifié le contenu des données en nous concentrant sur les promotions : Maths, Info, SVT, Chimie et sans prendre en compte une répartition TD / TP.
 
-#### Infos Pratiques
+_Projet réalisé par Quentin Carpentier & Paul-Joseph Krogulec_
+
+### Infos Pratiques
 
 Pour se accéder au site web modélisant les emplois du temps de la faculté des sciences, vous aurez la possibilité de vous connecter à une quarantaine de comptes. En tout, il y a 1 compte administrateur, 39 comptes enseignants de chaque département, et 2 comptes enseignants qui sont respectivement nos comptes à nous deux.
 
-|Identifiant | Mot de Passe | Type de compte |
-|------------|--------------|----------------|
-| root_root  |     root     | Administrateur |
-| prenom_nom |    azerty    | Etudiant ou Enseignant (exemple : karim_tadia,quentin_carpentier, tiago_delima) |
+| Identifiant | Mot de Passe | Type de compte |
+|-------------|--------------|----------------|
+|  root_root  |     root     | Administrateur |
+|  prenom_nom |    azerty    | Etudiant / Enseignant |
 
-### 1. Les choix techniques
+__Compte disponible :__
+- Enseignants : karim_tabia, tiago_delima, julien_caronboily, etc...
+- Etudiants : quentin_carpentier et pauljoseph_krogulec.
+
+## 1. Les choix techniques
 
 Pour les choix techniques utilisés lors de la réalisation du projet, nous avons utilisés une base Bootstrap comme css pour la mise en page et les styles des formulaires. Nous avons ensuite réaliser notre propre css au sein du dossier style.css. Pour le JavaScript, nous avons utilisé JQuery et plus particulièrement l'Ajax permettant de rendre le site dynamique et fluide sans rechargement de page. Pour le reste, nous nous sommes basé sur le langage PHP pour ce qui est de la réalisation de L'EDT et d'autres requêtes.
 
-### 2. L'architecture choisie
+## 2. L'architecture choisie
 
 Pour l'architecture du site, nous l'avons décomposée en plusieurs dossiers.
 
@@ -34,7 +39,7 @@ Pour l'architecture du site, nous l'avons décomposée en plusieurs dossiers.
 * Enfin dans la racine, se trouve l'ensemble des pages (index, gestion, admin, etc...), un .htaccess qui s'occupe d'empêcher l'accès à certains dossier et de pouvoir accéder aux pages sans le '.php' dans l'url. 
   
 
-### 3. La base de donnée
+## 3. La base de donnée
 
 Ci-dessous vous trouverez le schéma de la base de donnée utilisé pour le projet.
 Vous pourrez également consulter ce schéma depuis le dossier **sql** du site (schema_db.png).
