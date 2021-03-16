@@ -60,14 +60,17 @@ $('input[type=\'submit\']').click(function(e){
 $('#form_addEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {add_event: 1, post}, (data) => {alertForm(data, '#form_addEvent' , 'Le cours a bien été ajouté !')});
+    $.post('config.php', {add_event: 1, post}, (data) => {
+        alertForm(data, '#form_addEvent' , 'Le cours a bien été ajouté !');
+        $('#list-event').load('gestion.php #list-event>.select-data');
+    });
 });
 
 $('#form_updateEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
     $.post('config.php', {update_event: 1, post}, (data) => {console.log(data);
-        alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !');        
+        alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !');
         $('#list-event').load('gestion.php #list-event>.select-data');
     });
 });
@@ -111,7 +114,10 @@ $('#form_teachMatter').submit(function(e) {
 $('#form_addMatter').submit(function(e){
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {add_matter: 1, post}, (data) => {alertForm(data, '#form_addMatter', 'La matière a bien été crée !')});
+    $.post('config.php', {add_matter: 1, post}, (data) => {
+        alertForm(data, '#form_addMatter', 'La matière a bien été crée !');
+        $('#list-matter').load('admin.php #list-matter>.select-data');
+    });
 });
 
 $('#form_updateMatter').submit(function(e){
@@ -132,7 +138,10 @@ $('#form_linkMatter').submit(function(e){
 $('#form_addUser').submit(function(e){
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {add_user: 1, post}, (data) => {alertForm(data, '#form_addUser', 'L\'usager a bien été ajouté !')});
+    $.post('config.php', {add_user: 1, post}, (data) => {
+        alertForm(data, '#form_addUser', 'L\'usager a bien été ajouté !');
+        $('#list-users').load('admin.php #list-users>.select-data');
+    });
 });
 
 $('#form_updateUser').submit(function(e){

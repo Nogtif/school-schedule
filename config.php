@@ -2,19 +2,22 @@
 session_start();
 require_once(__DIR__.'/config/pdo.php');
 
+// On importe les classes nécessaires pour la vérification des divers formulaires
 require_once('./src/Planning/FormEvent.php');
 require_once('./src/Planning/FormOthers.php');
 require_once('./src/Planning/FormMatter.php');
 require_once('./src/Planning/FormUser.php');
 
+/** Fonction qui renvoie vrai si l'usager est connecté, faux sinon. */
 function isOnline() {
 	if(isset($_SESSION['id'])) {
 		return true;
 	}
     return false;
 }
+
 /** === Requête de la page Gestion === */
-// Ajout d'un cours.
+// Ajout ou mise à jour d'un cours.
 if(isset($_POST['add_event']) || isset($_POST['update_event'])) {
 
     // On récupère les données reçu en js.
@@ -84,7 +87,7 @@ if(isset($_POST['add_promo']) || isset($_POST['remove_promo'])) {
     exit;
 }
 
-// Ajout d'une matière.
+// Ajout ou mise à jour d'une matière.
 if (isset($_POST['add_matter']) || isset($_POST['update_matter'])) {
 
     // On récupère les données reçu en js.
@@ -129,7 +132,7 @@ if (isset($_POST['add_teachMatter']) || isset($_POST['remove_teachMatter'])) {
     exit;
 }
 
-// Ajout et modification d'un usager.
+// Ajout ou mise à jour d'un usager.
 if(isset($_POST['add_user']) || isset($_POST['update_user'])){
 
     // On récupère les données reçu en js.
@@ -160,7 +163,7 @@ if(isset($_GET['removeUserID'])){
     header('Location: ./admin');
 }
 
-// Ajout ou suppression d'une association entre une matière et un enseignant.
+// Ajout ou suppression d'une association entre une matière et un usager.
 if (isset($_POST['add_userPromo']) || isset($_POST['remove_userPromo'])) {
 
     // On récupère les données reçu en js.
@@ -177,6 +180,7 @@ if (isset($_POST['add_userPromo']) || isset($_POST['remove_userPromo'])) {
         $errorsLinkPromo = $formLinkPromo->checkRemoveLinkPromo();
         if(empty($errorsLinkPromo)) $formLinkPromo->unlinkUserToPromo();
     }
+    
     echo json_encode($errorsLinkPromo);
     exit;
 }

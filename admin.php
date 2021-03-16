@@ -80,11 +80,11 @@ $uUser = $uUsers->fetch();
                             <div class="form-group col-md-7">
                                 <label for="depid">Département</label>
                                 <select name="depid" class="form-control">
-                                    <?php
-                                    $sDeps = $bdd->query('SELECT * FROM Departements ORDER BY NomDepartement');
-                                    while($aDep = $sDeps->fetch()) {
-                                        echo '<option value="'.$aDep['DepartementID'].'">'.htmlspecialchars($aDep['NomDepartement']).'</option>';
-                                    } ?>
+                                    <?php $sDeps = $bdd->query('SELECT * FROM Departements ORDER BY NomDepartement');
+                                        while($aDep = $sDeps->fetch()) {
+                                            echo '<option value="'.$aDep['DepartementID'].'">'.htmlspecialchars($aDep['NomDepartement']).'</option>';
+                                        } 
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -101,11 +101,11 @@ $uUser = $uUsers->fetch();
                             <label for="promo">Promotion</label>
                             <select name="promo" class="form-control">
                                 <option value="0">Choisir...</option>
-                                <?php
-                                $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
-                                while($aPromo = $sPromo->fetch()) {
-                                    echo '<option value="'.$aPromo['PromotionID'].'">'.htmlspecialchars($aPromo['NomPromotion']).'</option>';
-                                } ?>
+                                <?php $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
+                                    while($aPromo = $sPromo->fetch()) {
+                                        echo '<option value="'.$aPromo['PromotionID'].'">'.htmlspecialchars($aPromo['NomPromotion']).'</option>';
+                                    } 
+                                ?>
                             </select>
                         </div>
                         <input type="submit" name="remove_promo" value="Supprimer" class="btn btn-danger">                    
@@ -140,11 +140,11 @@ $uUser = $uUsers->fetch();
                                 <div class="col-md-12 form-group">
                                     <label for="room">Nom de la promotion </label>
                                     <select name="promo" class="form-control">
-                                    <?php 
-                                        $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
-                                        while($aPromo = $sPromo->fetch()) {
-                                            echo '<option value="'.$aPromo['PromotionID'].'">'.htmlspecialchars($aPromo['NomPromotion']).'</option>';
-                                        } ?>    
+                                        <?php $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
+                                            while($aPromo = $sPromo->fetch()) {
+                                                echo '<option value="'.$aPromo['PromotionID'].'">'.htmlspecialchars($aPromo['NomPromotion']).'</option>';
+                                            } 
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -156,32 +156,32 @@ $uUser = $uUsers->fetch();
                         <form method="POST" id="form_updateMatter">
                             <div class="alert" style="display:none"></div>
                             <div class="row">
-                                <input type="hidden" name="id" value="<?= $uMatter['MatiereID'] ?>">
+                                <input type="hidden" name="id" value="<?php echo $uMatter['MatiereID'] ?>">
                                 <div class="col-md-8 form-group" id="name_matter">
                                     <label for="room">Nom de la matière</label>
-                                    <input type="text" name="name_matter" class="form-control" value="<?= htmlspecialchars($uMatter['NomMatiere']) ?>">
+                                    <input type="text" name="name_matter" class="form-control" value="<?php echo htmlspecialchars($uMatter['NomMatiere']) ?>">
                                     <small class="invalid-feedback"></small>
                                 </div>
 
                                 <div class="col-md-4 form-group" id="color_matter">
                                     <label for="room">Couleur</label>
-                                    <input type="color" name="color_matter" class="form-control" value="<?= htmlspecialchars($uMatter['CouleurMatiere']) ?>">
+                                    <input type="color" name="color_matter" class="form-control" value="<?php echo htmlspecialchars($uMatter['CouleurMatiere']) ?>">
                                     <small class="invalid-feedback"></small>
                                 </div>
 
                                 <div class="col-md-12 form-group">
                                     <label for="room">Nom de la promotion </label>
                                     <select name="promo" class="form-control">
-                                    <?php 
-                                        $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
+                                    <?php $sPromo = $bdd->query('SELECT * FROM Promotions '.$option.' ORDER BY PromotionID');
                                         while($aPromo = $sPromo->fetch()) {
                                             echo '<option value="'.$aPromo['PromotionID'].'"'. (($uMatter['PromotionID'] == $aPromo['PromotionID']) ? ' selected' : '') .'>'.htmlspecialchars($aPromo['NomPromotion']).'</option>';
-                                        } ?>    
+                                        }
+                                    ?>    
                                     </select>
                                 </div>
                             </div>
                             <input type="submit" name="update_matter" value="Modifier" class="btn btn-success">
-                            <a href="./config.php?removeMatterID=<?= $uMatter['MatiereID'] ?>" class="btn btn-danger" style="float:right">Supprimer</a>
+                            <a href="./config.php?removeMatterID=<?php echo $uMatter['MatiereID'] ?>" class="btn btn-danger" style="float:right">Supprimer</a>
                         </form>
                     </div>
                 <?php } ?>
@@ -195,13 +195,10 @@ $uUser = $uUsers->fetch();
                                 <label for="room">Nom de la matière</label>
                                 <select name="matiere" class="form-control">
                                     <?php
-                                    $option = '';
-                                    if($_SESSION['rang'] == 2) {
-                                        $option = 'INNER JOIN Enseigne ON Matieres.MatiereID = Enseigne.MatiereID AND UsagerID = "'.$_SESSION['id'].'"';   
-                                    }
-                                    $sMatieres = $bdd->query('SELECT * FROM Matieres '.$option. ' ORDER BY NomMatiere');
-                                    while($aMatieres = $sMatieres->fetch()) {
-                                        echo '<option value="'.$aMatieres['MatiereID'].'">'.htmlspecialchars($aMatieres['NomMatiere']).'</option>';
+                                    $opt = ($_SESSION['rang'] == 2) ? 'INNER JOIN Enseigne ON Matieres.MatiereID = Enseigne.MatiereID AND UsagerID = "'.$_SESSION['id'].'"' : '';
+                                    $query = $bdd->query('SELECT * FROM Matieres '.$opt. ' ORDER BY NomMatiere');
+                                    while($row = $query->fetch()) {
+                                        echo '<option value="'.$row['MatiereID'].'">'.htmlspecialchars($row['NomMatiere']).'</option>';
                                     } ?> 
                                 </select>
                             </div>
@@ -209,15 +206,12 @@ $uUser = $uUsers->fetch();
                             <div class="col-md-12 form-group">
                                 <label for="room">Enseignant</label>
                                 <select name="enseignant" class="form-control">
-                                    <?php if($_SESSION['rang'] == 2) {
-                                            $sql = 'AND UsagerID = "'.$_SESSION['id'].'"';
-                                        } else {
-                                            $sql = '';
-                                        }
-                                        $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $sql);
-                                        while ($row = $query->fetch()){
-                                            echo '<option value="' .$row['UsagerID'] .'">' . htmlspecialchars($row['Prenom'] . ' ' .  $row['Nom']) . '</option>';
-                                        }
+                                    <?php 
+                                    $opt = ($_SESSION['rang'] == 2) ? 'AND UsagerID = "'.$_SESSION['id'].'"' : '';
+                                    $query = $bdd->query('SELECT * FROM Usagers WHERE RangID = 2 ' . $opt);
+                                    while ($row = $query->fetch()){
+                                        echo '<option value="' .$row['UsagerID'] .'">' . htmlspecialchars($row['Prenom'] . ' ' .  $row['Nom']) . '</option>';
+                                    }
                                     ?>
                                 </select>
                             </div>
@@ -232,19 +226,19 @@ $uUser = $uUsers->fetch();
                     <div class="select-data">
                         <?php 
                         $sMatter = $bdd->query('SELECT * FROM Matieres m INNER JOIN Promotions p ON m.PromotionID = p.PromotionID ORDER BY NomMatiere ASC');
-                        while($aMatter = $sMatter->fetch()) { ?>
-                            <div class="list-items d-flex flex-row align-items-center justify-content-between">
-                                <div class="item-info">
-                                    <div class="colorM" style="background-color: <?= $aMatter['CouleurMatiere'] ?>"></div>
-                                    <p class="nameM"><?= htmlspecialchars($aMatter['NomMatiere']) ?></p>
-                                </div>
+                        while($aMatter = $sMatter->fetch()) {                            
+                            echo '<div class="list-items d-flex flex-row align-items-center justify-content-between">';
+                            echo '<div class="item-info">';
+                            echo '<div class="colorM" style="background-color:'. $aMatter['CouleurMatiere'].'"></div>';
 
-                                <div class="item-info">
-                                    <p class="promoM"><?= htmlspecialchars($aMatter['NomPromotion']) ?></p>
-                                </div>
-                                <a href="?matterID=<?= $aMatter['MatiereID'] ?>#matter" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>                                
-                            </div>
-                        <?php } ?>
+                            echo '<p>'.htmlspecialchars($aMatter['NomMatiere']).'</p>';
+                            echo '</div>';
+                            echo '<div class="item-info">';
+                            echo '<p>'.htmlspecialchars($aMatter['NomPromotion']).'</p>';
+                            echo '</div>';
+                            echo '<a href="?matterID='.$aMatter['MatiereID'].'#matter" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>';
+                            echo '</div>';
+                        } ?>
                     </div>
                 </div>
             </div>
@@ -287,11 +281,10 @@ $uUser = $uUsers->fetch();
                                 <div class="col-md-5 form-group">
                                     <label for="room">Rang</label>
                                     <select name="rank" class="form-control">
-                                        <?php
-                                        $query = $bdd->query('SELECT * FROM Rangs');
-                                        while ($row = $query->fetch()){
-                                            echo '<option value="' .$row['RangID'] .'">' . htmlspecialchars($row['NomRang']).'</option>';
-                                        }
+                                        <?php $query = $bdd->query('SELECT * FROM Rangs');
+                                            while ($row = $query->fetch()){
+                                                echo '<option value="' .$row['RangID'] .'">' . htmlspecialchars($row['NomRang']).'</option>';
+                                            }
                                         ?>
                                     </select>
                                 </div>
@@ -305,36 +298,35 @@ $uUser = $uUsers->fetch();
                             <div class="row">    
                                 <div class="form-group" id="userid">
                                     <label for="room">Identifiant</label>
-                                    <input type="text" name="userid" class="form-control" value="<?= htmlspecialchars($uUser['UsagerID']) ?>" readonly>
+                                    <input type="text" name="userid" class="form-control" value="<?php echo htmlspecialchars($uUser['UsagerID']) ?>" readonly>
                                     <small class="invalid-feedback"></small>
                                 </div>
 
                                 <div class="col-md-6 form-group" id="lastname">
                                     <label for="room">Nom</label>
-                                    <input type="text" name="lastname" class="form-control" value="<?= htmlspecialchars($uUser['Nom']) ?>">
+                                    <input type="text" name="lastname" class="form-control" value="<?php echo htmlspecialchars($uUser['Nom']) ?>">
                                     <small class="invalid-feedback"></small>
                                 </div>
 
                                 <div class="col-md-6 form-group" id="firstname">
                                     <label for="room">Prénom</label>
-                                    <input type="text" name="firstname" class="form-control" value="<?= htmlspecialchars($uUser['Prenom']) ?>">
+                                    <input type="text" name="firstname" class="form-control" value="<?php echo htmlspecialchars($uUser['Prenom']) ?>">
                                     <small class="invalid-feedback"></small>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="room">Rang</label>
                                     <select name="rank" class="form-control">
-                                        <?php
-                                        $sRank = $bdd->query('SELECT * FROM Rangs');
-                                        while ($aRank = $sRank->fetch()) {
-                                            echo '<option value="' .$aRank['RangID'] .'"'.(($uUser['RangID'] == $aRank['RangID']) ? ' selected' : '') .'>'.htmlspecialchars($aRank['NomRang']).'</option>';
-                                        }
+                                        <?php $query = $bdd->query('SELECT * FROM Rangs');
+                                            while ($row = $query->fetch()) {
+                                                echo '<option value="' .$row['RangID'] .'"'.(($uUser['RangID'] == $row['RangID']) ? ' selected' : '') .'>'.htmlspecialchars($row['NomRang']).'</option>';
+                                            }
                                         ?>
                                     </select>
                                 </div>
                             </div>
                             <input type="submit" name="update_user" value="Modifier" class="btn btn-success">
-                            <a href="./config.php?removeUserID=<?= $uUser['UsagerID'] ?>" class="btn btn-danger" style="float:right">Supprimer</a>
+                            <a href="./config.php?removeUserID=<?php echo $uUser['UsagerID'] ?>" class="btn btn-danger" style="float:right">Supprimer</a>
                         </form>
                     <?php } ?>
                 </div>
@@ -347,11 +339,10 @@ $uUser = $uUsers->fetch();
                             <div class="form-group">
                                 <label for="userid">Etudiant</label>
                                 <select name="userid" class="form-control">
-                                    <?php
-                                    $query = $bdd->query('SELECT * FROM Usagers WHERE RangID < 3');
-                                    while ($row = $query->fetch()) {
-                                        echo '<option value="' .$row['UsagerID'] .'">'.htmlspecialchars($row['Prenom']. ' ' .$row['Nom']).'</option>';
-                                    }
+                                    <?php $query = $bdd->query('SELECT * FROM Usagers WHERE RangID < 3');
+                                        while ($row = $query->fetch()) {
+                                            echo '<option value="' .$row['UsagerID'] .'">'.htmlspecialchars($row['Prenom']. ' ' .$row['Nom']).'</option>';
+                                        }
                                     ?>
                                 </select>
                             </div>
@@ -359,11 +350,11 @@ $uUser = $uUsers->fetch();
                             <div class="col-md-12 form-group">
                                 <label for="promo">Promotion</label>
                                 <select name="promo" class="form-control">
-                                    <?php
-                                    $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY NomPromotion');
-                                    while($aPromo = $sPromo->fetch()) {
-                                        echo '<option value="'.$aPromo['PromotionID'].'">'.htmlspecialchars($aPromo['NomPromotion']).'</option>';
-                                    } ?> 
+                                    <?php $query = $bdd->query('SELECT * FROM Promotions ORDER BY NomPromotion');
+                                        while($row = $query->fetch()) {
+                                            echo '<option value="'.$row['PromotionID'].'">'.htmlspecialchars($row['NomPromotion']).'</option>';
+                                        } 
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -377,19 +368,18 @@ $uUser = $uUsers->fetch();
                     <div class="select-data">
                         <?php 
                         $sUsers = $bdd->query('SELECT * FROM Usagers INNER JOIN Rangs USING(RangID) ORDER BY Nom ASC');
-                        while($aUsers = $sUsers->fetch()) { ?>
-                            <div class="list-items d-flex flex-row align-items-center justify-content-between">
-                                <div class="item-info">
-                                    <p class="nameM"><?= htmlspecialchars($aUsers['Nom'] . ' '. $aUsers['Prenom']) ?></p>
-                                    <span><?= $aUsers['UsagerID'] ?></span>
-                                </div>
-
-                                <div class="item-info">
-                                    <p class="promoM"><?= htmlspecialchars($aUsers['NomRang']) ?></p>
-                                </div>                               
-                                <a href="?usagerID=<?= $aUsers['UsagerID'] ?>#user" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>
-                            </div>
-                        <?php } ?>
+                        while($aUsers = $sUsers->fetch()) {
+                            echo '<div class="list-items d-flex flex-row align-items-center justify-content-between">';
+                            echo '<div class="item-info">';
+                            echo '<p>'.htmlspecialchars($aUsers['Nom'] . ' '. $aUsers['Prenom']).'</p>';
+                            echo '<span>'.$aUsers['UsagerID'].'</span>';
+                            echo '</div>';
+                            echo '<div class="item-info">';
+                            echo '<p>'.htmlspecialchars($aUsers['NomRang']).'</p>';
+                            echo '</div>';
+                            echo '<a href="?usagerID='.$aUsers['UsagerID'].'#user" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>';
+                            echo '</div>';
+                        } ?>
                     </div>
                 </div>
             </div>

@@ -51,14 +51,14 @@ if(isset($_POST['login'])) {
             <form method="POST" id="form_login">
                 <div class="form-group" id="userid">
                     <label for="identifiant">Identifiant</label>
-                    <input type="text" name="userid" class="form-control <?= (isset($errors['userid']) ? ' is-invalid' : '') ?>" value="<?= (isset($_POST['userid']) ? htmlspecialchars($_POST['userid']) : '') ?>">
+                    <input type="text" name="userid" class="form-control <?php echo (isset($errors['userid']) ? ' is-invalid' : '') ?>" value="<?php echo (isset($_POST['userid']) ? htmlspecialchars($_POST['userid']) : '') ?>">
                     <?php if(isset($errors['userid'])) {
                         echo '<small class="invalid-feedback">'.htmlspecialchars($errors['userid']).'</small>';
                     } ?>
                 </div>
                 <div class="form-group" id="password">
                     <label for="mdp">Mot de passe</label>
-                    <input type="password" name="password" class="form-control <?= (isset($errors['password']) ? ' is-invalid' : '') ?>" value="<?= (isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '') ?>">
+                    <input type="password" name="password" class="form-control <?php echo (isset($errors['password']) ? ' is-invalid' : '') ?>" value="<?php echo (isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '') ?>">
                     <?php if(isset($errors['password'])) {
                         echo '<small class="invalid-feedback">'.htmlspecialchars($errors['password']).'</small>';
                     } ?>

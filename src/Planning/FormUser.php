@@ -103,11 +103,11 @@ class FormUser extends Validator {
     }
 
     /** Méthode qui supprime un usager avec son id passé en paramètre.
-     * @param int $id > l'id de l'usager.
+     * @param string $id > l'id de l'usager.
      */
-    public function deleteUser(int $id) {
+    public function deleteUser(string $userid) {
         $sDeleteUser = $this->bdd->prepare('DELETE FROM Usagers WHERE UsagerID = ?');
-        $sDeleteUser->execute(array($id));
+        $sDeleteUser->execute(array($userid));
     }
 
     /** Méthode qui insère une association entre un usager et une promotion.

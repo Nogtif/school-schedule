@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php 
 require_once('./config.php');
 
@@ -6,7 +7,6 @@ if(!isOnline()) {
     header('Location: ./login');
 }
 ?>
-<!DOCTYPE html>
 <html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
@@ -30,17 +30,14 @@ if(!isOnline()) {
     <div class="container">
         <div class="planning">
             <div class="planning-tools">
-                <a href="javascript:void(0)" data-id="<?= date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
-                <a href="javascript:void(0)" data-id="<?= date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
+                <a href="javascript:void(0)" data-id="<?php echo date('W') - 1 ?>" class="btn btn-primary previousPage"><i class="mdi mdi-chevron-left"></i></a>  
+                <a href="javascript:void(0)" data-id="<?php echo date('W') + 1 ?>" class="btn btn-primary nextPage"><i class="mdi mdi-chevron-right"></i></a>
                 
                 <select name="promo" class="form-select">
                 <option value="0">Promotions</option>
-                    <?php
-                    if($_SESSION['rang'] < 3){
-                        $sPromo = $bdd->query('SELECT * FROM Promotions INNER JOIN Appartient USING(PromotionID) WHERE UsagerID = "'. $_SESSION['id'] .'" ORDER BY PromotionID');
-                    } else {
-                        $sPromo = $bdd->query('SELECT * FROM Promotions ORDER BY PromotionID');
-                    }
+                    <?php 
+                    $opt = ($_SESSION['rang'] < 3) ? 'INNER JOIN Appartient USING(PromotionID) WHERE UsagerID = "'. $_SESSION['id'] .'"' : '';
+                    $sPromo = $bdd->query('SELECT * FROM Promotions '.$opt.' ORDER BY PromotionID');
                     while($aPromo = $sPromo->fetch()) {
                         if($_SESSION['promo'] == $aPromo['PromotionID']) {
                             echo '<option value="'.$aPromo['PromotionID'].'" selected>'.$aPromo['NomPromotion'].'</option>';
