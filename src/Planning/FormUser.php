@@ -81,7 +81,7 @@ class FormUser extends Validator {
             $opt = ' AND UsagerID != "'. $this->data['userid'].'" ';
         }
         $sUserExist = $this->bdd->prepare('SELECT COUNT(*) FROM Usagers WHERE UsagerID = ? ' .$opt);
-        $sUserExist->execute(array($this->data[$name]));
+        $sUserExist->execute(array(trim($this->data[$name])));
         $count = $sUserExist->fetchColumn();
         if($count > 0) {
             $this->errors[$name] = 'Cet usager existe déjà !';
@@ -92,14 +92,14 @@ class FormUser extends Validator {
      */
     public function insertUser() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Usagers (UsagerID, MotDePasse, Nom, Prenom, RangID) VALUES (?,?,?,?,?)');
-        $sInsertEvent->execute([$this->data['userid'], password_hash($this->data['password'], PASSWORD_DEFAULT), $this->data['lastname'], $this->data['firstname'], $this->data['rank']]);  
+        $sInsertEvent->execute([trim($this->data['userid']), password_hash($this->data['password'], PASSWORD_DEFAULT), trim($this->data['lastname']), trim($this->data['firstname']), $this->data['rank']]);  
     }
 
     /** Méthode qui modifie un usager avec les données reçus.
      */
     public function updateUser() {            
         $sUpdateUser = $this->bdd->prepare('UPDATE Usagers SET Nom = ?, Prenom = ?, RangID = ? WHERE UsagerID = :id');
-        $sUpdateUser->execute([$this->data['lastname'], $this->data['firstname'], $this->data['rank'], ':id' => $this->data['userid']]);  
+        $sUpdateUser->execute([trim($this->data['lastname']), trim($this->data['firstname']), $this->data['rank'], ':id' => $this->data['userid']]);  
     }
 
     /** Méthode qui supprime un usager avec son id passé en paramètre.

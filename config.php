@@ -16,6 +16,28 @@ function isOnline() {
     return false;
 }
 
+/** Fonction qui prend en paramètre un usager de type enseignant et calculer ses EDT.
+ * (1h de CM = 1h30 EDT et 1h de TP/TD = 1h de EDT). */
+function coutEDT(string $userid) {
+    global $bdd;
+    $duree = 0;
+    $countEDT = $bdd->prepare('SELECT * FROM Cours INNER JOIN TypeCours USING(TypeID) WHERE UsagerID = ?');
+    $countEDT->execute([$userid]);
+    while($cEDT = $countEDT->fetch()) {
+        $duree = ((abs(strtotime($cEDT['HeureDebut']) - strtotime($cEDT['HeureFin']))) * $cEDT['NbSemaines']);
+
+        if($cEDT['NomType'] == 'CM') {
+            $duree = intval($duree / 3600) * 5400;
+        }
+    }    
+    
+    $nbh = intval($duree / 3600);
+    $nbm = intval(($duree % 3600) / 60);
+
+    return sprintf('%02dh%02d', $nbh, $nbm);
+
+}
+
 /** === Requête de la page Gestion === */
 // Ajout ou mise à jour d'un cours.
 if(isset($_POST['add_event']) || isset($_POST['update_event'])) {

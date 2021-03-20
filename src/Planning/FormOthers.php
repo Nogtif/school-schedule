@@ -61,7 +61,7 @@ class FormOthers extends Validator {
      */
     public function roomExist(string $name, bool $check) {
         $rExist = $this->bdd->prepare('SELECT COUNT(*) FROM Salles WHERE NomSalle = ?');
-        $rExist->execute(array(strtoupper($this->data[$name])));
+        $rExist->execute(array(strtoupper(trim($this->data[$name]))));
         $count = $rExist->fetchColumn();
         if($count > 0) {
             if($check == false) $this->errors[$name] = 'Cette salle existe déjà !';
@@ -75,7 +75,7 @@ class FormOthers extends Validator {
      */
     public function promoExist(string $name) {
         $pExist = $this->bdd->prepare('SELECT COUNT(*) FROM Promotions WHERE NomPromotion = ?');
-        $pExist->execute(array(strtoupper($this->data[$name])));
+        $pExist->execute(array(strtoupper(trim($this->data[$name]))));
         $count = $pExist->fetchColumn();
         if($count > 0) {
             $this->errors[$name] = 'Cette promotion existe déjà !';
@@ -86,21 +86,21 @@ class FormOthers extends Validator {
      */
     public function insertRoom() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Salles (NomSalle) VALUES (?)');
-        $sInsertEvent->execute([strtoupper($this->data['room'])]);  
+        $sInsertEvent->execute([strtoupper(trim($this->data['room']))]);  
     }
 
     /** Méthode qui supprime une salle de cours.
      */
     public function deleteRoom() {
         $sDeleteEvent = $this->bdd->prepare('DELETE FROM Salles WHERE NomSalle = ?');
-        $sDeleteEvent->execute(array(strtoupper($this->data['room'])));
+        $sDeleteEvent->execute(array(strtoupper(trim($this->data['room']))));
     }
 
     /** Méthode qui insère une promotion.
      */
     public function insertPromo() {            
         $sInsertEvent = $this->bdd->prepare('INSERT INTO Promotions (NomPromotion, DepartementID) VALUES (?,?)');
-        $sInsertEvent->execute([strtoupper($this->data['name_promo']), $this->data['depid']]);  
+        $sInsertEvent->execute([strtoupper(trim($this->data['name_promo'])), $this->data['depid']]);  
     }
 
     /** Méthode qui supprime une promotion.

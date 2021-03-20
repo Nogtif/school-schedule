@@ -38,29 +38,7 @@ $uEvent = $uEvents->fetch();
     <div class="container">
         <h4>Gestion des cours</h4>
         <div class="row">
-            <div class="col-md-7"> 
-                <div class="box-content" id="list-event">
-                    <div class="select-data">
-                        <?php 
-                        $where = ($_SESSION['rang'] == 2) ? 'WHERE UsagerID ="'. $_SESSION['id'] . '"' : '';
-                        $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID), Salles USING(SalleID) '.$where.' ORDER BY DateDebut DESC, HeureDebut DESC');
-                        while($aCours = $sCours->fetch()) { 
-                            echo '<div class="list-items d-flex flex-row align-items-center justify-content-between">';
-                            echo '<div class="item-info">';
-                            echo '<p>'.$aCours['NomType'].' '.$aCours['NomMatiere'].'</p>';
-                            echo '<span>Par '.htmlspecialchars($aCours['Prenom']). ' '.htmlspecialchars($aCours['Nom']). ', en '.htmlspecialchars($aCours['NomSalle']).'</span>';
-                            echo '</div>';
-                            echo '<div class="item-info">';
-                            echo '<p>'.date('d-m-Y', $aCours['DateDebut']).' au '.date('d-m-Y', ($aCours['DateDebut'] + ($aCours['NbSemaines'] * 604800))).'</p>';
-                            echo '<span>de '.$aCours['HeureDebut']. ' à '.$aCours['HeureFin'].'</span>';
-                            echo '</div>';
-                            echo '<a href="?courID='.$aCours['CourID'].'#form" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>';
-                            echo '</div>';
-                        } ?>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-5" id="form">
+            <div class="col-md-5">
                 <div class="box-content getEvent">
                     <?php if(empty($_GET['courID'])) {?>
                         <div class="content-title">Ajouter un cours</div>
@@ -205,6 +183,29 @@ $uEvent = $uEvents->fetch();
                             <a href="?removeEventID=<?php echo $uEvent['CourID'] ?>" class="btn btn-danger" style="float:right">Supprimer ce cour</a>
                         </form>
                     <?php } ?>
+                </div>
+            </div>
+
+            <div class="col-md-7"> 
+                <div class="box-content" id="list-event">
+                    <div class="select-data">
+                        <?php 
+                        $where = ($_SESSION['rang'] == 2) ? 'WHERE UsagerID ="'. $_SESSION['id'] . '"' : '';
+                        $sCours = $bdd->query('SELECT * FROM Cours INNER JOIN Matieres USING(MatiereID), TypeCours USING(TypeID), Usagers USING(UsagerID), Promotions USING(PromotionID), Salles USING(SalleID) '.$where.' ORDER BY DateDebut DESC, HeureDebut DESC');
+                        while($aCours = $sCours->fetch()) { 
+                            echo '<div class="list-items d-flex flex-row align-items-center justify-content-between">';
+                            echo '<div class="item-info">';
+                            echo '<p>'.$aCours['NomType'].' '.$aCours['NomMatiere'].'</p>';
+                            echo '<span>Par '.htmlspecialchars($aCours['Prenom']). ' '.htmlspecialchars($aCours['Nom']). ', en '.htmlspecialchars($aCours['NomSalle']).'</span>';
+                            echo '</div>';
+                            echo '<div class="item-info">';
+                            echo '<p>'.date('d-m-Y', $aCours['DateDebut']).' au '.date('d-m-Y', ($aCours['DateDebut'] + ($aCours['NbSemaines'] * 604800))).'</p>';
+                            echo '<span>de '.$aCours['HeureDebut']. ' à '.$aCours['HeureFin'].'</span>';
+                            echo '</div>';
+                            echo '<a href="?courID='.$aCours['CourID'].'" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>';
+                            echo '</div>';
+                        } ?>
+                    </div>
                 </div>
             </div>
         </div>

@@ -375,7 +375,7 @@ $uUser = $uUsers->fetch();
                             echo '<span>'.$aUsers['UsagerID'].'</span>';
                             echo '</div>';
                             echo '<div class="item-info">';
-                            echo '<p>'.htmlspecialchars($aUsers['NomRang']).'</p>';
+                            echo '<p>'.htmlspecialchars($aUsers['NomRang']).' '. ($aUsers['RangID'] > 1 ? '(EDT : '.(coutEDT($aUsers['UsagerID'])).')' : ''). '</p>';
                             echo '</div>';
                             echo '<a href="?usagerID='.$aUsers['UsagerID'].'#user" class="btn btn-primary"><i class="mdi mdi-pencil-outline"></i></a>';
                             echo '</div>';
