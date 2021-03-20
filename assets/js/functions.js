@@ -69,7 +69,7 @@ $('#form_addEvent').submit(function(e) {
 $('#form_updateEvent').submit(function(e) {
     e.preventDefault();
     var post = $(this).serialize();
-    $.post('config.php', {update_event: 1, post}, (data) => {console.log(data);
+    $.post('config.php', {update_event: 1, post}, (data) => {
         alertForm(data, '#form_updateEvent' , 'Le cours a bien été mis à jour !');
         $('#list-event').load('gestion.php #list-event>.select-data');
     });
